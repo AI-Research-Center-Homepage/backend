@@ -1,14 +1,16 @@
 package byuntil.backend.entity;
 
-import byuntil.backend.entity.member.Member;
-
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-import static javax.persistence.FetchType.*;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 public class Thesis {
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "THESIS_ID")
     private Long id;
 
@@ -18,13 +20,12 @@ public class Thesis {
 
     private String title;
 
-    private String ko_name;
-    private String en_name;
+    private String koName;
+    private String enName;
     private String journal;
-    private String publish;
+    private LocalDateTime publish;
     private String url;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "MEMBER_ID")
-    private Member member;
+    @OneToMany(mappedBy = "thesis")
+    private List<Member_Thesis> members = new ArrayList<>();
 }
