@@ -11,4 +11,6 @@ public class Professor extends Member{
     private String location;
     //phoneNum < 이런게 더 직관적이지 않나요
     private String number;
+
+    private String test;
 }
