@@ -6,13 +6,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class Field {
-    @Id @GeneratedValue
-    @Column(name = "FIELD_ID")
+public class Board {
+    @Id@GeneratedValue
+    @Column(name = "BOARD_ID")
     private Long id;
 
     private String name;
-
-    @Column(columnDefinition = "LONGTEXT")
-    private String description;
 }

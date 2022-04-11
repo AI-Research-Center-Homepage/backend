@@ -4,5 +4,6 @@ import javax.persistence.Entity;
 
 @Entity
 public class Graduate extends Member{
+    //int로..?
     private String admission;
 }
