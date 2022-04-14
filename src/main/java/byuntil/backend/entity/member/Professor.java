@@ -19,7 +19,6 @@ public class Professor extends Member {
     private String number;
 
     @Builder
-
     public Professor(Long id, String name, String major, String email, String image, List<Member_Thesis> theses, List<Image> profile, List<Image> images, String doctorate, String location, String number) {
         super(id, name, major, email, image, theses, profile, images);
         this.doctorate = doctorate;
