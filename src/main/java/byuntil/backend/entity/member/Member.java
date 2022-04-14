@@ -1,9 +1,8 @@
 package byuntil.backend.entity.member;
 
-import lombok.AccessLevel;
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -11,7 +10,8 @@ import javax.persistence.*;
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "DTYPE")
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Setter
+@AllArgsConstructor
 public abstract class Member {
     @Id
     @GeneratedValue
@@ -24,12 +24,7 @@ public abstract class Member {
     private String email;
     private String image;
 
-    @Builder
-    public Member(Long id, String name, String major, String email, String image) {
-        this.id = id;
-        this.name = name;
-        this.major = major;
-        this.email = email;
-        this.image = image;
+    protected Member() {
+
     }
 }

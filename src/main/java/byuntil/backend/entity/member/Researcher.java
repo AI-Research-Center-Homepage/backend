@@ -14,7 +14,8 @@ public class Researcher extends Member {
     private String research;
 
     @Builder
-    public Researcher(String research) {
+    public Researcher(Long id, String name, String major, String email, String image, String research) {
+        super(id, name, major, email, image);
         this.research = research;
     }
 }

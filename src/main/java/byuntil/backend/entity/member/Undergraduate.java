@@ -15,7 +15,8 @@ public class Undergraduate extends Member {
     private String research;
 
     @Builder
-    public Undergraduate(String admission, String research) {
+    public Undergraduate(Long id, String name, String major, String email, String image, String admission, String research) {
+        super(id, name, major, email, image);
         this.admission = admission;
         this.research = research;
     }
