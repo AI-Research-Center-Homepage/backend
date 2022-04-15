@@ -1,6 +1,7 @@
-package byuntil.backend.entity;
+package byuntil.backend.research.domain;
 
-import byuntil.backend.entity.member.Member;
+import byuntil.backend.member.domain.entity.Member_Thesis;
+import byuntil.backend.member.domain.entity.member.Member;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,8 +12,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import java.time.LocalDateTime;
-
 import static javax.persistence.FetchType.LAZY;
 
 
@@ -20,7 +19,8 @@ import static javax.persistence.FetchType.LAZY;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Thesis {
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "THESIS_ID")
     private Long id;
 
@@ -52,6 +52,7 @@ public class Thesis {
         this.url = url;
         this.member = member;
     }
+
     @OneToMany(mappedBy = "thesis")
     private List<Member_Thesis> members = new ArrayList<>();
 }

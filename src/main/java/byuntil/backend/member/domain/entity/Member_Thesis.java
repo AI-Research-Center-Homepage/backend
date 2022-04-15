@@ -1,6 +1,7 @@
-package byuntil.backend.entity;
+package byuntil.backend.member.domain.entity;
 
-import byuntil.backend.entity.member.Member;
+import byuntil.backend.member.domain.entity.member.Member;
+import byuntil.backend.research.domain.Thesis;
 
 import javax.persistence.*;
 

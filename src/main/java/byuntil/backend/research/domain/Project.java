@@ -1,4 +1,6 @@
-package byuntil.backend.entity;
+package byuntil.backend.research.domain;
+
+import byuntil.backend.s3.domain.Image;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -6,7 +8,8 @@ import java.util.List;
 
 @Entity
 public class Project {
-    @Id@GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "PROJECT_ID")
     private Long id;
 
