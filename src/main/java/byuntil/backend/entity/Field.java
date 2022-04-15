@@ -19,6 +19,7 @@ public class Field {
     @Enumerated(EnumType.STRING)
     private Category category;
 
+    @Column(columnDefinition = "LONGTEXT")
     private String description;
 
     @Builder

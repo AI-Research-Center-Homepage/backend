@@ -7,15 +7,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import java.time.LocalDateTime;
 
 import static javax.persistence.FetchType.LAZY;
+
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Thesis {
-    @Id
-    @GeneratedValue
+    @Id @GeneratedValue
     @Column(name = "THESIS_ID")
     private Long id;
 
@@ -25,10 +30,10 @@ public class Thesis {
 
     private String title;
 
-    private String ko_name;
-    private String en_name;
+    private String koName;
+    private String enName;
     private String journal;
-    private String publish;
+    private LocalDateTime publishDate;
     private String url;
 
     @ManyToOne(fetch = LAZY)
@@ -36,15 +41,17 @@ public class Thesis {
     private Member member;
 
     @Builder
-    public Thesis(Long id, Field field, String title, String ko_name, String en_name, String journal, String publish, String url, Member member) {
+    public Thesis(Long id, Field field, String title, String koName, String enName, String journal, LocalDateTime publishDate, String url, Member member) {
         this.id = id;
         this.field = field;
         this.title = title;
-        this.ko_name = ko_name;
-        this.en_name = en_name;
+        this.koName = koName;
+        this.enName = enName;
         this.journal = journal;
-        this.publish = publish;
+        this.publishDate = publishDate;
         this.url = url;
         this.member = member;
     }
+    @OneToMany(mappedBy = "thesis")
+    private List<Member_Thesis> members = new ArrayList<>();
 }
