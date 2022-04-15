@@ -77,13 +77,12 @@ class MemberServiceTest {
                 .build();
 
         memberService.saveMember(professor);
-        //when
         Member beforeMember = memberRepository.findById(professor.getId()).get();
-        beforeMember.setName("구성재"); //나중에 바꿔야함 이거 setter로 임의로 바꿔놓은 것..
+        //when
+        memberRepository.save(Professor.builder().id(beforeMember.getId()).name("구성재").build());
         //then
         Member afterMember = memberRepository.findById(professor.getId()).get();
+        Assertions.assertThat(beforeMember.getId()).isEqualTo(afterMember.getId());
         Assertions.assertThat(beforeMember.getName()).isNotEqualTo(afterMember.getName());
-        System.out.println("afterMember.getId() = " + afterMember.getId());
-        System.out.println("beforeMember.getId() = " + beforeMember.getId());
     }
 }
