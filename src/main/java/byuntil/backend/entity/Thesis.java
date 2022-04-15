@@ -1,5 +1,11 @@
 package byuntil.backend.entity;
 
+import byuntil.backend.entity.member.Member;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -7,13 +13,14 @@ import java.util.List;
 
 import java.time.LocalDateTime;
 
-import static javax.persistence.FetchType.*;
+import static javax.persistence.FetchType.LAZY;
 
 
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Thesis {
-    @Id
-    @GeneratedValue
+    @Id @GeneratedValue
     @Column(name = "THESIS_ID")
     private Long id;
 
@@ -29,6 +36,22 @@ public class Thesis {
     private LocalDateTime publishDate;
     private String url;
 
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
+
+    @Builder
+    public Thesis(Long id, Field field, String title, String koName, String enName, String journal, LocalDateTime publishDate, String url, Member member) {
+        this.id = id;
+        this.field = field;
+        this.title = title;
+        this.koName = koName;
+        this.enName = enName;
+        this.journal = journal;
+        this.publishDate = publishDate;
+        this.url = url;
+        this.member = member;
+    }
     @OneToMany(mappedBy = "thesis")
     private List<Member_Thesis> members = new ArrayList<>();
 }
