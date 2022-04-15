@@ -1,11 +1,10 @@
-package byuntil.backend.entity.member;
+package byuntil.backend.member.domain.entity.member;
 
+import byuntil.backend.member.domain.entity.Member_Thesis;
+import byuntil.backend.s3.domain.Image;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-
-import byuntil.backend.entity.Member_Thesis;
-import byuntil.backend.entity.Image;
 
 import javax.persistence.*;
 import java.util.ArrayList;

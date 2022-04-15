@@ -1,7 +1,7 @@
-package byuntil.backend.service;
+package byuntil.backend.member.service;
 
-import byuntil.backend.entity.member.Member;
-import byuntil.backend.repository.MemberRepository;
+import byuntil.backend.member.domain.entity.member.Member;
+import byuntil.backend.member.domain.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

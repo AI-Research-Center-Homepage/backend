@@ -1,7 +1,7 @@
-package byuntil.backend.entity.member;
+package byuntil.backend.member.domain.entity.member;
 
-import byuntil.backend.entity.Image;
-import byuntil.backend.entity.Member_Thesis;
+import byuntil.backend.member.domain.entity.Member_Thesis;
+import byuntil.backend.s3.domain.Image;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

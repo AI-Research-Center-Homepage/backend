@@ -1,8 +1,9 @@
 package byuntil.backend.service;
 
-import byuntil.backend.entity.member.Member;
-import byuntil.backend.entity.member.Professor;
-import byuntil.backend.repository.MemberRepository;
+import byuntil.backend.member.domain.entity.member.Member;
+import byuntil.backend.member.domain.entity.member.Professor;
+import byuntil.backend.member.domain.repository.MemberRepository;
+import byuntil.backend.member.service.MemberService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

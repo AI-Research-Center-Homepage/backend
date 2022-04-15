@@ -1,12 +1,15 @@
-package byuntil.backend.entity;
+package byuntil.backend.s3.domain;
 
-import byuntil.backend.entity.member.Member;
+import byuntil.backend.member.domain.entity.member.Member;
+import byuntil.backend.post.domain.Post;
+import byuntil.backend.research.domain.Project;
 
 import javax.persistence.*;
 
 @Entity
 public class Image {
-    @Id@GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "IMAGE_ID")
     private Long id;
 

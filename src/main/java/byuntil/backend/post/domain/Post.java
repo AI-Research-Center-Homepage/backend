@@ -1,6 +1,7 @@
-package byuntil.backend.entity;
+package byuntil.backend.post.domain;
 
-import byuntil.backend.entity.member.Member;
+import byuntil.backend.member.domain.entity.member.Member;
+import byuntil.backend.s3.domain.Image;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

@@ -1,6 +1,4 @@
-package byuntil.backend.entity;
-
-import byuntil.backend.entity.member.Member;
+package byuntil.backend.post.domain;
 
 import javax.persistence.*;
 
