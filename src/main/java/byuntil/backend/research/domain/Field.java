@@ -1,6 +1,5 @@
 package byuntil.backend.research.domain;
 
-import byuntil.backend.member.domain.entity.Category;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
