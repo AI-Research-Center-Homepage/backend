@@ -1,21 +1,17 @@
 package byuntil.backend.member.domain.entity.member;
 
-import byuntil.backend.member.domain.entity.Member_Thesis;
-import byuntil.backend.s3.domain.Image;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "DTYPE")
 @Getter
-@Setter
 @AllArgsConstructor
+@DynamicUpdate
 public abstract class Member {
     @Id
     @GeneratedValue
@@ -34,7 +30,13 @@ public abstract class Member {
 
     }
 
-    @OneToMany(mappedBy = "member")
+    @Column(name = "DTYPE", insertable = false, updatable = false)
+    private String dtype;
+
+    public String getDtype() {
+        return dtype;
+    }
+    /*@OneToMany(mappedBy = "member")
     private List<Member_Thesis> theses = new ArrayList<>();
 
     //private String image;
@@ -44,7 +46,14 @@ public abstract class Member {
 
     //project
     @OneToMany(mappedBy = "project")
-    private List<Image> images = new ArrayList<>();
+    private List<Image> images = new ArrayList<>();*/
 
     //field 추가해주세요
+
+    public void update(String name, String email, String major, String image) {
+        this.name = name;
+        this.email = email;
+        this.major = major;
+        this.image = image;
+    }
 }
