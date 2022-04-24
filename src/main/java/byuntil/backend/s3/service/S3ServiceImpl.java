@@ -1,0 +1,137 @@
+package byuntil.backend.s3.service;
+
+import byuntil.backend.common.exception.s3.InvalidExtensionException;
+import byuntil.backend.common.exception.s3.InvalidFileNameException;
+import byuntil.backend.common.exception.s3.UploadFailException;
+import byuntil.backend.s3.domain.FileStatus;
+import byuntil.backend.s3.domain.FileType;
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.annotation.PostConstruct;
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
+
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+
+
+@Service
+public class S3ServiceImpl implements S3Service {
+
+    private static final List<String> PERMISSION_IMG_EXTENSIONS = List.of("png", "jpg", "jpeg", "gif", "tif", "ico", "svg", "bmp", "webp", "tiff", "jfif");
+    private static final List<String> PERMISSION_FILE_EXTENSIONS = List.of("doc", "docx", "xls", "xlsx", "hwp", "pdf", "txt", "md", "ppt", "pptx", "key");
+
+    @Value("${cloud.aws.credentials.accessKey}")
+    private String accessKey;
+
+    @Value("${cloud.aws.credentials.secretKey}")
+    private String secretKey;
+
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
+
+    @Value("${cloud.aws.region.static}")
+    private String region;
+
+    private AmazonS3 s3Client;
+
+    @PostConstruct
+    private void setS3Client() {
+        final AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
+
+        s3Client = AmazonS3ClientBuilder.standard()
+                .withCredentials(new AWSStaticCredentialsProvider(credentials))
+                .withRegion(this.region)
+                .build();
+    }
+
+    //Image
+    @Transactional
+    public Optional<String> uploadUserImage(MultipartFile image) throws IOException {
+        return image.isEmpty()
+                ? Optional.empty()
+                : Optional.ofNullable(uploadImg(image));
+    }
+
+    private String uploadImg(final MultipartFile file) throws IOException {
+        final String fileName = getFileName(file);
+        final String extension = getFileExtension(fileName);
+        validateImageExtension(extension);
+
+        return upload(file, fileName);
+    }
+
+    private String getFileName(final MultipartFile file) {
+        final String fileName = file.getOriginalFilename();
+        if (isEmpty(fileName)) {
+            throw new InvalidFileNameException();
+        }
+        return fileName;
+    }
+
+    private String getFileExtension(String fileName) {
+        final int index = fileName.lastIndexOf(".");
+        if (index > 0 && fileName.length() > index + 1) {
+            return fileName.substring(index + 1);
+        } else {
+            throw new InvalidExtensionException();
+        }
+    }
+
+    private void validateImageExtension(final String extension) {
+        if (!PERMISSION_IMG_EXTENSIONS.contains(extension)) {
+            throw new InvalidExtensionException();
+        }
+    }
+
+    //File
+    @Transactional
+    public Optional<FileStatus> uploadPostFile(MultipartFile file) throws IOException {
+        if (file.isEmpty()) {
+            return Optional.empty();
+        }
+
+        String fileUrl = uploadFile(file);
+        if (isNotEmpty(fileUrl)) {
+            return Optional.of(new FileStatus(fileUrl, FileType.FILE));
+        }
+        fileUrl = uploadImg(file);
+        if (isNotEmpty(fileUrl)) {
+            return Optional.of(new FileStatus(fileUrl, FileType.IMAGE));
+        }
+
+        throw new UploadFailException();
+    }
+
+    private String uploadFile(final MultipartFile file) throws IOException {
+        final String fileName = getFileName(file);
+        final String extension = getFileExtension(fileName);
+
+        if (validateFileExtension(extension)) {
+            return upload(file, fileName);
+        } else {
+            return null;
+        }
+    }
+
+    private boolean validateFileExtension(final String extension) {
+        return PERMISSION_FILE_EXTENSIONS.contains(extension);
+    }
+
+    private String upload(final MultipartFile file, final String fileName) throws IOException {
+        s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
+                .withCannedAcl(CannedAccessControlList.PublicRead));
+        return String.valueOf(s3Client.getUrl(bucket, fileName));
+    }
+}
