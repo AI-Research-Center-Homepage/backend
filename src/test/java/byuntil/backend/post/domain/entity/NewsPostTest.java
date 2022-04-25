@@ -52,7 +52,7 @@ class NewsPostTest {
         String author = "author2";
         String title = "title2";
         String content = "newsPostContent";
-        post.updatePost(createMockNewsPostDto(title, author, content, 2));
+        post.updatePost(createMockNewsPostDto(title, author, content));
         //then
         assertAll("news 게시글 업데이트 테스트",
                 () -> assertThat(post.getAuthor()).isEqualTo(author),

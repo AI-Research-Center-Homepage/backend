@@ -1,10 +1,10 @@
-package byuntil.backend.service;
+package byuntil.backend.member.service;
 
 import byuntil.backend.member.domain.entity.member.Member;
+import byuntil.backend.member.domain.entity.member.Professor;
 import byuntil.backend.member.domain.repository.MemberRepository;
 import byuntil.backend.member.dto.request.MemberUpdateRequestDto;
 import byuntil.backend.member.dto.request.ProfessorSaveRequestDto;
-import byuntil.backend.member.service.MemberService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,9 @@ class MemberServiceTest {
         Long id = memberService.saveMember(professor);
 
         //then
-        Member member = (Member) memberService.findOneMember(id).get();
+        System.out.println("=============");
+        Professor member = memberService.findOneProfessor(id);
+        System.out.println(professor.getLocation() + " / " + professor.getDoctorate() + " / " + professor.getNumber());
         Assertions.assertThat(member.getName()).isEqualTo(professor.getName());
 
     }
@@ -91,5 +93,4 @@ class MemberServiceTest {
         System.out.println("beforeMember.getName() = " + beforeMember.getName());
         System.out.println("afterMember.getName() = " + afterMember.getName());
     }
-
 }

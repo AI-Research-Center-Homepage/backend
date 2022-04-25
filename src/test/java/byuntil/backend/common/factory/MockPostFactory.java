@@ -44,30 +44,27 @@ public class MockPostFactory {
                 .build();
     }
 
-    public static NewsPostDto createMockNewsPostDto(String title, String author, String content, int view) {
+    public static NewsPostDto createMockNewsPostDto(String title, String author, String content) {
         return NewsPostDto.builder()
                 .title(title)
                 .author(author)
                 .content(content)
-                .viewNum(view)
                 .build();
     }
 
-    public static NoticePostDto createMockNoticePostDto(String title, String author, String content, int view) {
+    public static NoticePostDto createMockNoticePostDto(String title, String author, String content) {
         return NoticePostDto.builder()
                 .title(title)
                 .author(author)
                 .content(content)
-                .viewNum(view)
                 .build();
     }
 
-    public static SourcePostDto createMockSourcePostDto(String title, String author, String content, int view) {
+    public static SourcePostDto createMockSourcePostDto(String title, String author, String content) {
         return SourcePostDto.builder()
                 .title(title)
                 .author(author)
                 .content(content)
-                .viewNum(view)
                 .build();
     }
 

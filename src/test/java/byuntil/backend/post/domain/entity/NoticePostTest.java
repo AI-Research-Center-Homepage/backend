@@ -49,7 +49,7 @@ class NoticePostTest {
         String author = "author2";
         String title = "title2";
         String content = "noticePostContent";
-        post.updatePost(createMockNoticePostDto(title, author, content, 2));
+        post.updatePost(createMockNoticePostDto(title, author, content));
         //then
         assertAll("notice 게시글 업데이트 테스트",
                 () -> assertThat(post.getAuthor()).isEqualTo(author),

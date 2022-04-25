@@ -111,5 +111,4 @@ public class NewsPostRepositoryTest {
             assertThat(newsPostRepository.findAll().size()).isEqualTo(0);
         }
     }
-
 }
