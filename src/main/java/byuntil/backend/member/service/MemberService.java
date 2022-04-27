@@ -27,6 +27,27 @@ public class MemberService {
         return memberRepository.findById(id);
     }
 
+    public Professor findOneProfessor(Long id) {
+        return (Professor) memberRepository.findById(id).get();
+    }
+
+    public Graduate findOneGraduate(Long id) {
+        return (Graduate) memberRepository.findById(id).get();
+    }
+
+    public Researcher findOneResearcher(Long id) {
+        return (Researcher) memberRepository.findById(id).get();
+    }
+
+    public Undergraduate findOneUndergraduate(Long id) {
+        return (Undergraduate) memberRepository.findById(id).get();
+    }
+
+    public Committee findOneCommittee(Long id) {
+        return (Committee) memberRepository.findById(id).get();
+    }
+
+
     public List<Member> findAllMember() {
         return memberRepository.findAll();
     }
