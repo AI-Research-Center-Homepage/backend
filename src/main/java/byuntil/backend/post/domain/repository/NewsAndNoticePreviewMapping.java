@@ -1,4 +1,4 @@
-package byuntil.backend.post.dto;
+package byuntil.backend.post.domain.repository;
 
 public interface NewsAndNoticePreviewMapping {
     Long getId();
