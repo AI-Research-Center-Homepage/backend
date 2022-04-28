@@ -1,4 +1,4 @@
-package byuntil.backend.post.dto;
+package byuntil.backend.post.domain.repository;
 
 import java.time.LocalDateTime;
 

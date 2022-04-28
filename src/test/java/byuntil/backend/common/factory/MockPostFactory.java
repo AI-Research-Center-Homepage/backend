@@ -46,6 +46,7 @@ public class MockPostFactory {
 
     public static NewsPostDto createMockNewsPostDto(String title, String author, String content) {
         return NewsPostDto.builder()
+                .id(1L)
                 .title(title)
                 .author(author)
                 .content(content)
@@ -54,6 +55,7 @@ public class MockPostFactory {
 
     public static NoticePostDto createMockNoticePostDto(String title, String author, String content) {
         return NoticePostDto.builder()
+                .id(1L)
                 .title(title)
                 .author(author)
                 .content(content)
@@ -62,6 +64,7 @@ public class MockPostFactory {
 
     public static SourcePostDto createMockSourcePostDto(String title, String author, String content) {
         return SourcePostDto.builder()
+                .id(1L)
                 .title(title)
                 .author(author)
                 .content(content)
