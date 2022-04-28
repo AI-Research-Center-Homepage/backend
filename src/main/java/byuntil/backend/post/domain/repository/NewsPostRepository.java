@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 public interface NewsPostRepository extends JpaRepository<NewsPost, Long> {
-    //List<NewsAndNoticePreviewMapping> findNewById(Long id);
+    //List<NewsAndNoticePreviewMapping> findNewById();
 
     @Modifying
     @Query("update NewsPost p set p.viewNum = p.viewNum + 1 where p.id = :id")
