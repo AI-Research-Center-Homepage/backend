@@ -12,7 +12,9 @@ public class Admin {
     @Column(name = "ADMIN_ID")
     private Long id;
 
+    @Column(nullable = false)
     private String loginId;
 
+    @Column(nullable = false)
     private String loginPw;
 }

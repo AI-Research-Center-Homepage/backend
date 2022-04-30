@@ -5,12 +5,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Professor extends Member {
+    @Column(nullable = false)
     private String doctorate;
     private String location;
     private String number;
@@ -23,8 +25,8 @@ public class Professor extends Member {
     }*/
 
     @Builder
-    public Professor(Long id, String name, String major, String email, String image, String dtype, String doctorate, String location, String number) {
-        super(id, name, major, email, image, dtype);
+    public Professor(String name, String major, String email, String image, String dtype, String doctorate, String location, String number) {
+        super(name, major, email, image, dtype);
         this.doctorate = doctorate;
         this.location = location;
         this.number = number;

@@ -1,14 +1,16 @@
-package byuntil.backend.member.service;
+package byuntil.backend.common.member.service;
 
 import byuntil.backend.member.domain.entity.member.Member;
 import byuntil.backend.member.domain.entity.member.Professor;
 import byuntil.backend.member.domain.repository.MemberRepository;
 import byuntil.backend.member.dto.request.MemberUpdateRequestDto;
 import byuntil.backend.member.dto.request.ProfessorSaveRequestDto;
+import byuntil.backend.member.service.MemberService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 class MemberServiceTest {
@@ -63,12 +65,12 @@ class MemberServiceTest {
     }
 
     @Test
-    public void 멤버업데이트() throws Exception {
+    public void 멤버업데이트() throws Throwable {
         //given
         ProfessorSaveRequestDto professor = ProfessorSaveRequestDto.builder()
                 .email("asdfa")
                 .image("asdfasdfa")
-                .name("나승훈")
+                .name("홍홍홍")
                 .major("asdfasdfsa")
                 .doctorate("A")
                 .location("전주")
@@ -79,7 +81,7 @@ class MemberServiceTest {
         MemberUpdateRequestDto updateMember = MemberUpdateRequestDto.builder()
                 .email("asdfa")
                 .image("asdfasdfa")
-                .name("구성재")
+                .name("홍길동")
                 .major("asdfasdfsa")
                 .doctorate("A")
                 .location("서울")
@@ -90,7 +92,6 @@ class MemberServiceTest {
         memberService.updateMember(id, updateMember);
         //then
         Member afterMember = (Member) memberService.findOneMember(id).get();
-        System.out.println("beforeMember.getName() = " + beforeMember.getName());
-        System.out.println("afterMember.getName() = " + afterMember.getName());
+        Assertions.assertThat(beforeMember.getName()).isNotEqualTo(afterMember.getName());
     }
 }

@@ -1,10 +1,14 @@
 package byuntil.backend.member.domain.entity.member;
 
+import byuntil.backend.member.domain.entity.Member_Thesis;
+import byuntil.backend.member.dto.request.MemberUpdateRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -18,6 +22,7 @@ public abstract class Member {
     @Column(name = "MEMBER_ID")
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
     private String major;
@@ -33,27 +38,28 @@ public abstract class Member {
     @Column(name = "DTYPE", insertable = false, updatable = false)
     private String dtype;
 
+    public Member(String name, String major, String email, String image, String dtype) {
+        this.name = name;
+        this.major = major;
+        this.email = email;
+        this.image = image;
+        this.dtype = dtype;
+    }
+
     public String getDtype() {
         return dtype;
     }
-    /*@OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member")
     private List<Member_Thesis> theses = new ArrayList<>();
 
-    //private String image;
-    //연관관계의 주인이 아닌쪽을 mappedby 속성 지정
-    @OneToMany(mappedBy = "member")
-    private List<Image> profile = new ArrayList<>();
 
-    //project
-    @OneToMany(mappedBy = "project")
-    private List<Image> images = new ArrayList<>();*/
-
-    //field 추가해주세요
-
-    public void update(String name, String email, String major, String image) {
-        this.name = name;
-        this.email = email;
-        this.major = major;
-        this.image = image;
+    public void update(MemberUpdateRequestDto dto) {
+        this.name = dto.getName();
+        this.email = dto.getEmail();
+        this.major = dto.getMajor();
+        this.image = dto.getImage();
+    }
+    public void addMemberThesis(Member_Thesis memberThesis){
+        this.theses.add(memberThesis);
     }
 }

@@ -1,4 +1,4 @@
-package byuntil.backend.research.domain;
+package byuntil.backend.research.domain.entity;
 
 public enum Category {
     //기계학습, 자연언어처리, 컴퓨터비전, 증강현실AI, 의료AI, 에너지AI

@@ -14,8 +14,8 @@ public class Graduate extends Member {
     private String admission;
 
     @Builder
-    public Graduate(Long id, String name, String major, String email, String image, String dtype, String admission) {
-        super(id, name, major, email, image, dtype);
+    public Graduate(String name, String major, String email, String image, String dtype, String admission) {
+        super(name, major, email, image, dtype);
         this.admission = admission;
     }
 
