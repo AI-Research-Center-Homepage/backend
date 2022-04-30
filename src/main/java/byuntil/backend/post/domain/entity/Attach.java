@@ -16,10 +16,13 @@ public class Attach {
     @Column(name = "ATTACH_ID")
     private Long id;
 
+    @Column(nullable = false)
     private String originFileName;
 
+    @Column(nullable = false)
     private String serverFileName;
 
+    @Column(nullable = false)
     private String filePath;
 
     @ManyToOne(fetch = FetchType.LAZY)

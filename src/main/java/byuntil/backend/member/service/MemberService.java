@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,9 +54,9 @@ public class MemberService {
     }
 
     @Transactional
-    public void updateMember(Long id, MemberUpdateRequestDto requestDto) {
-        Member member = (Member) memberRepository.findById(id).get();
-        member.update(requestDto.getName(), requestDto.getEmail(), requestDto.getMajor(), requestDto.getImage());
+    public void updateMember(Long id, MemberUpdateRequestDto requestDto) throws Throwable {
+        Member member = (Member) memberRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        member.update(requestDto);
 
         if (member instanceof Professor) {
             Professor professor = (Professor) member;

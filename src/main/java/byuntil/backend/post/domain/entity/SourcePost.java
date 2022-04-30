@@ -18,11 +18,13 @@ public class SourcePost extends BaseTimeEntity {
     @Column(name = "SOURCE_POST_ID")
     private Long id;
 
+    @Column(nullable = false)
     private String title;
 
     @Column(columnDefinition = "LONGTEXT")
     private String content;
 
+    @Column(nullable = false)
     private int viewNum;
 
     //게시판, 프로젝트
