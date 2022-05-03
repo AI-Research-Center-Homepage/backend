@@ -29,8 +29,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     //타임리프
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-
-
+    // https://mvnrepository.com/artifact/io.findify/s3mock
+    testImplementation group: 'io.findify', name: 's3mock_2.13', version: '0.2.6'
 
 }
 

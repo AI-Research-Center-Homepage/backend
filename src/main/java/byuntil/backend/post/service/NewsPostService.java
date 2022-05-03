@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -62,8 +63,9 @@ public class NewsPostService {
 
     private String createStoreFilename(String originalFilename) {
         String uuid = UUID.randomUUID().toString();
-        String ext = extractExt(originalFilename);
-        String storeFilename = uuid + ext;
+        /*String ext = extractExt(originalFilename);
+        String storeFilename = uuid + ext;*/
+        String storeFilename = uuid + originalFilename;
 
         return storeFilename;
     }
@@ -78,8 +80,12 @@ public class NewsPostService {
         return newsPostRepository.findAllNews();
     }*/
 
+    public List<NewsPost> findAllNews() {
+        return newsPostRepository.findAll();
+    }
+
     @Transactional
-    public void newsUpdate(final Long postId, final NewsPostDto request, final MultipartFile file) {
+    public void updateNews(final Long postId, final NewsPostDto request, final MultipartFile file) {
         Optional<NewsPost> postOptional = newsPostRepository.findById(postId);
         postOptional.ifPresent(newsPost -> {
             newsPost.updatePost(request);
@@ -99,7 +105,7 @@ public class NewsPostService {
     }
 
     @Transactional
-    public void newsDelete(final Long postId) {
+    public void deleteNews(final Long postId) {
         final NewsPost newsPost = newsPostRepository.findById(postId).orElseThrow(PostNotFoundException::new);
         newsPostRepository.delete(newsPost);
     }

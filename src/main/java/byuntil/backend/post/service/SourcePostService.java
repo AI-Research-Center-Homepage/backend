@@ -64,8 +64,9 @@ public class SourcePostService {
 
     private String createStoreFilename(String originalFilename) {
         String uuid = UUID.randomUUID().toString();
-        String ext = extractExt(originalFilename);
-        String storeFilename = uuid + ext;
+        /*String ext = extractExt(originalFilename);
+        String storeFilename = uuid + ext;*/
+        String storeFilename = uuid + originalFilename;
 
         return storeFilename;
     }
