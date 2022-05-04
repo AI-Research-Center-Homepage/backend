@@ -1,11 +1,20 @@
 package byuntil.backend.admin.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.apache.catalina.User;
+
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
+@Builder
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Admin {
     @Id
     @GeneratedValue
@@ -17,4 +26,13 @@ public class Admin {
 
     @Column(nullable = false)
     private String loginPw;
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    @Builder.Default
+    private Set<UserRole> roleSet = new HashSet<>();
+
+    public void addUserRole(UserRole role){
+        roleSet.add(role);
+    }
+
 }
