@@ -1,6 +1,6 @@
 package byuntil.backend.member.domain.entity.member;
 
-import byuntil.backend.member.domain.entity.Member_Thesis;
+import byuntil.backend.member_thesis.entity.Member_Thesis;
 import byuntil.backend.member.dto.request.MemberUpdateRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -50,7 +50,7 @@ public abstract class Member {
         return dtype;
     }
     @OneToMany(mappedBy = "member")
-    private List<Member_Thesis> theses = new ArrayList<>();
+    private List<Member_Thesis> member_theses = new ArrayList<>();
 
 
     public void update(MemberUpdateRequestDto dto) {
@@ -60,6 +60,6 @@ public abstract class Member {
         this.image = dto.getImage();
     }
     public void addMemberThesis(Member_Thesis memberThesis){
-        this.theses.add(memberThesis);
+        this.member_theses.add(memberThesis);
     }
 }

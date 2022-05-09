@@ -1,7 +1,6 @@
 package byuntil.backend.research.domain.entity;
 
-import byuntil.backend.member.domain.entity.Member_Thesis;
-import byuntil.backend.member.domain.entity.member.Member;
+import byuntil.backend.member_thesis.entity.Member_Thesis;
 import byuntil.backend.research.dto.ThesisDto;
 import lombok.*;
 
@@ -15,7 +14,6 @@ import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Thesis {
@@ -43,11 +41,23 @@ public class Thesis {
     @JoinColumn(name = "MEMBER_ID")
     private Member member;*/
 
+    //builder로 만들면 밑에 new로 할당해준게 무시됨
     @OneToMany(mappedBy = "thesis")
-    private List<Member_Thesis> members = new ArrayList<>();
+    private List<Member_Thesis> member_theses = new ArrayList<>();
+
+    //builder어노테이션을 class단위로 하지 않은 이유 : 그러면 위의 member_thesis가 new할당을 안받아서 null이 됨
+    @Builder
+    public Thesis(String title, String koName, String enName, String journal, LocalDateTime publishDate, String url){
+        this.title = title;
+        this.koName = koName;
+        this.enName = enName;
+        this.journal = journal;
+        this.publishDate = publishDate;
+        this.url = url;
+    }
 
     public void addMemberThesis(Member_Thesis memberThesis){
-        members.add(memberThesis);
+        member_theses.add(memberThesis);
     }
     public void update(ThesisDto dto){
         this.title = dto.getTitle();

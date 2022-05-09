@@ -26,7 +26,10 @@ dependencies {
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
     // https://mvnrepository.com/artifact/io.findify/s3mock
-    testImplementation group: 'io.findify', name: 's3mock_2.13', version: '0.2.6'
+    //testImplementation group: 'io.findify', name: 's3mock_2.13', version: '0.2.6'
+    // https://mvnrepository.com/artifact/io.findify/s3mock
+    testImplementation group: 'io.findify', name: 's3mock_2.12', version: '0.2.4'
+
 
 
 }
