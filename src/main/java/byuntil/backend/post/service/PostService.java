@@ -1,13 +1,12 @@
 package byuntil.backend.post.service;
 
-
 import byuntil.backend.common.exception.ApplicationException;
 import byuntil.backend.common.exception.post.PostNotFoundException;
 import byuntil.backend.common.exception.s3.UploadFailException;
 import byuntil.backend.post.domain.entity.Attach;
-import byuntil.backend.post.domain.entity.SourcePost;
-import byuntil.backend.post.domain.repository.SourcePostRepository;
-import byuntil.backend.post.dto.SourcePostDto;
+import byuntil.backend.post.domain.entity.Post;
+import byuntil.backend.post.domain.repository.PostRepository;
+import byuntil.backend.post.dto.PostDto;
 import byuntil.backend.s3.domain.FileStatus;
 import byuntil.backend.s3.service.S3Service;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -22,14 +22,13 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class SourcePostService {
-    private final SourcePostRepository sourcePostRepository;
-
+public class PostService {
+    private final PostRepository newsPostRepository;
     private final S3Service s3Service;
 
     @Transactional
-    public Long saveSource(SourcePostDto request, MultipartFile file) {
-        SourcePost sourcePost = request.toEntity();
+    public Long saveNews(PostDto request, MultipartFile file) {
+        Post newsPost = request.toEntity();
         Optional<FileStatus> fileStatusOptional = fileUpload(file);
         fileStatusOptional.ifPresent(fileStatus -> {
             String url = fileStatus.fileUrl();
@@ -38,10 +37,10 @@ public class SourcePostService {
                     .originFileName(file.getName())
                     .serverFileName(createStoreFilename(file.getName()))
                     .build();
-            build.setSourcePost(sourcePost);
-            sourcePost.addAttaches(build);
+            build.setPost(newsPost);
+            newsPost.addAttaches(build);
         });
-        return sourcePostRepository.save(sourcePost).getId();
+        return newsPostRepository.save(newsPost).getId();
     }
 
     private Optional<FileStatus> fileUpload(MultipartFile file) {
@@ -77,38 +76,42 @@ public class SourcePostService {
         return ext;
     }
 
-    /*public List<SourcePreviewMapping> findAllSourcePost() {
-        return sourcePostRepository.findAllSource();
+    /*public List<NewsAndNoticePreviewMapping> findAllNewsPost() {
+        return newsPostRepository.findAllNews();
     }*/
 
+    public List<Post> findAllNews() {
+        return newsPostRepository.findAll();
+    }
+
     @Transactional
-    public void sourceUpdate(final Long postId, final SourcePostDto request, final MultipartFile file) {
-        Optional<SourcePost> postOptional = sourcePostRepository.findById(postId);
-        postOptional.ifPresent(sourcePost -> {
-            sourcePost.updatePost(request);
+    public void updateNews(final Long postId, final PostDto request, final MultipartFile file) {
+        Optional<Post> postOptional = newsPostRepository.findById(postId);
+        postOptional.ifPresent(newsPost -> {
+            newsPost.updatePost(request);
             fileUpload(file).ifPresent(fileStatus -> {
                 //todo: 이게 표면적으로 지워지긴 하지만 s3에는 지워지지 않음 나중에 추가
-                sourcePost.deleteAttaches();
+                newsPost.deleteAttaches();
                 String url = fileStatus.fileUrl();
                 Attach build = Attach.builder()
                         .filePath(url)
                         .originFileName(file.getName())
                         .serverFileName(createStoreFilename(file.getName()))
                         .build();
-                build.setSourcePost(sourcePost);
-                sourcePost.addAttaches(build);
+                build.setPost(newsPost);
+                newsPost.addAttaches(build);
             });
         });
     }
 
     @Transactional
-    public void sourceDelete(final Long postId) {
-        final SourcePost sourcePost = sourcePostRepository.findById(postId).orElseThrow(PostNotFoundException::new);
-        sourcePostRepository.delete(sourcePost);
+    public void deleteNews(final Long postId) {
+        final Post newsPost = newsPostRepository.findById(postId).orElseThrow(PostNotFoundException::new);
+        newsPostRepository.delete(newsPost);
     }
 
     @Transactional
     public int updateView(Long id) {
-        return sourcePostRepository.updateView(id);
+        return newsPostRepository.updateView(id);
     }
 }

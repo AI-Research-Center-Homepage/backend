@@ -3,9 +3,9 @@ package byuntil.backend.post.service;
 
 import byuntil.backend.common.S3MockConfig;
 import byuntil.backend.post.domain.entity.Attach;
-import byuntil.backend.post.domain.entity.NewsPost;
-import byuntil.backend.post.domain.repository.NewsPostRepository;
-import byuntil.backend.post.dto.NewsPostDto;
+import byuntil.backend.post.domain.entity.Post;
+import byuntil.backend.post.domain.repository.PostRepository;
+import byuntil.backend.post.dto.PostDto;
 import byuntil.backend.s3.domain.FileStatus;
 import byuntil.backend.s3.domain.FileType;
 import byuntil.backend.s3.service.S3Service;
@@ -32,14 +32,14 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class NewsPostServiceMockTest {
+class PostServiceMockTest {
     @Mock
-    private NewsPostRepository repository;
+    private PostRepository repository;
 
     @Mock
     private S3Service s3Service;
     @InjectMocks
-    private NewsPostService service;
+    private PostService service;
 
     @Autowired
     S3Mock s3Mock;
@@ -57,12 +57,12 @@ class NewsPostServiceMockTest {
         @Test
         void createNewPostWithFile_success() throws IOException {
             //given
-            final NewsPost post = mock(NewsPost.class);
-            final NewsPostDto postDto = createMockNewsPostDto("title2", "author2", "content2");
+            final Post post = mock(Post.class);
+            final PostDto postDto = createMockNewsPostDto("title2", "author2", "content2");
             final MockMultipartFile textFile = new MockMultipartFile("file", "testText.txt", "text/plain", "test data".getBytes());
             Optional<FileStatus> fileStatus = Optional.of(new FileStatus("url", FileType.FILE));
 
-            when(repository.save(any(NewsPost.class))).thenReturn(post);
+            when(repository.save(any(Post.class))).thenReturn(post);
             when(post.getId()).thenReturn(1L);
             when(s3Service.uploadPostFile(textFile)).thenReturn(fileStatus);
             //when
@@ -70,7 +70,7 @@ class NewsPostServiceMockTest {
 
             //then
             verify(repository, times(1))
-                    .save(any(NewsPost.class));
+                    .save(any(Post.class));
             verify(s3Service, times(1))
                     .uploadPostFile(any(MultipartFile.class));
             assertThat(postId).isEqualTo(1L);
@@ -80,33 +80,33 @@ class NewsPostServiceMockTest {
         @Test
         void createNewPostWihtNoFile_success() throws IOException {
             //given
-            final NewsPost post = mock(NewsPost.class);
-            final NewsPostDto postDto = createMockNewsPostDto("title2", "author2", "content2");
+            final Post post = mock(Post.class);
+            final PostDto postDto = createMockNewsPostDto("title2", "author2", "content2");
             final MockMultipartFile textFile = new MockMultipartFile("file", null, null, new byte[0]);
 
-            when(repository.save(any(NewsPost.class))).thenReturn(post);
+            when(repository.save(any(Post.class))).thenReturn(post);
             when(post.getId()).thenReturn(1L);
             //when
             final Long postId = service.saveNews(postDto, textFile);
 
             //then
             verify(repository, times(1))
-                    .save(any(NewsPost.class));
+                    .save(any(Post.class));
             verify(s3Service, times(0))
                     .uploadPostFile(any());
             assertThat(postId).isEqualTo(1L);
         }
     }
 
-    @DisplayName("updateNews 메서드는")
+    @DisplayName("update 메서드는")
     @Nested
     class UpdateMethod {
-        @DisplayName("News 게시글을 수정할 수 있다. 파일 첨부 O")
+        @DisplayName("post 게시글을 수정할 수 있다. 파일 첨부 O")
         @Test
         void updateNewsPostWihtFile_success() throws IOException {
             //given
-            final NewsPost post = mock(NewsPost.class);
-            final NewsPostDto postDto = createMockNewsPostDto("title2", "author2", "content2");
+            final Post post = mock(Post.class);
+            final PostDto postDto = createMockNewsPostDto("title2", "author2", "content2");
             final MockMultipartFile textFile = new MockMultipartFile("file", "testText.txt", "text/plain", "test data".getBytes());
             Optional<FileStatus> fileStatus = Optional.of(new FileStatus("url", FileType.FILE));
 
@@ -119,7 +119,7 @@ class NewsPostServiceMockTest {
             verify(repository, times(1))
                     .findById(anyLong());
             verify(post, times(1))
-                    .updatePost(any(NewsPostDto.class));
+                    .updatePost(any(PostDto.class));
             verify(s3Service, times(1))
                     .uploadPostFile(any(MultipartFile.class));
             verify(post, times(1))
@@ -132,11 +132,11 @@ class NewsPostServiceMockTest {
     @DisplayName("deleteNews 메소드는")
     @Nested
     class DeleteMethod {
-        @DisplayName("News 게시글을 지울수 있다.")
+        @DisplayName("post 게시글을 지울수 있다.")
         @Test
         void deleteNewsPost() {
             //given
-            final NewsPost post = mock(NewsPost.class);
+            final Post post = mock(Post.class);
             when(repository.findById(anyLong()))
                     .thenReturn(Optional.of(post));
 
@@ -147,7 +147,7 @@ class NewsPostServiceMockTest {
             verify(repository, times(1))
                     .findById(anyLong());
             verify(repository, times(1))
-                    .delete(any(NewsPost.class));
+                    .delete(any(Post.class));
         }
     }
 

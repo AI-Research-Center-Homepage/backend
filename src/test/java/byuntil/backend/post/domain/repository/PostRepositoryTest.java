@@ -1,6 +1,6 @@
 package byuntil.backend.post.domain.repository;
 
-import byuntil.backend.post.domain.entity.NewsPost;
+import byuntil.backend.post.domain.entity.Post;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -20,10 +20,10 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
-public class NewsPostRepositoryTest {
+public class PostRepositoryTest {
 
     @Autowired
-    private NewsPostRepository newsPostRepository;
+    private PostRepository newsPostRepository;
     @Autowired
     private AttachRepository attachRepository;
     @Autowired
@@ -37,7 +37,7 @@ public class NewsPostRepositoryTest {
         void saveNewsPost_success() {
             //given
             LocalDateTime now = LocalDateTime.now();
-            final NewsPost newsPost = NewsPost.builder()
+            final Post newsPost = Post.builder()
                     .title("title")
                     .content("content")
                     .author("author")
@@ -46,7 +46,7 @@ public class NewsPostRepositoryTest {
             //when
             newsPostRepository.save(newsPost);
             //then
-            final List<NewsPost> posts = newsPostRepository.findAll();
+            final List<Post> posts = newsPostRepository.findAll();
             assertAll("게시글 등록 테스트",
                     () -> assertThat(posts.size()).isEqualTo(1),
                     () -> assertThat(posts.get(0).getTitle()).isEqualTo(newsPost.getTitle()),
@@ -67,10 +67,10 @@ public class NewsPostRepositoryTest {
         @Test
         void findByIdNewsPost_success() {
             //given
-            final NewsPost newsPost = createMockNewsPost();
+            final Post newsPost = createMockNewsPost();
             final Long postId = testEntityManager.persist(newsPost).getId();
             //when
-            final Optional<NewsPost> findedPost = newsPostRepository.findById(postId);
+            final Optional<Post> findedPost = newsPostRepository.findById(postId);
             //then
             assertAll(
                     () -> assertThat(findedPost).isNotEmpty(),
@@ -84,7 +84,7 @@ public class NewsPostRepositoryTest {
         @Test
         void findByIdNewsPost_fail() {
             //when
-            final Optional<NewsPost> post = newsPostRepository.findById(1L);
+            final Optional<Post> post = newsPostRepository.findById(1L);
 
             //then
             assertThat(post).isEmpty();
@@ -98,7 +98,7 @@ public class NewsPostRepositoryTest {
         @Test
         void deleteNewsPost_success() {
             //given
-            final NewsPost newsPost = createMockNewsPost();
+            final Post newsPost = createMockNewsPost();
             testEntityManager.persist(newsPost);
 
             assertThat(newsPostRepository.findAll().size()).isEqualTo(1);

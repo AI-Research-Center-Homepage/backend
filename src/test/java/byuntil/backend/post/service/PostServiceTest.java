@@ -1,8 +1,8 @@
 package byuntil.backend.post.service;
 
-import byuntil.backend.post.domain.entity.NewsPost;
-import byuntil.backend.post.domain.repository.NewsPostRepository;
-import byuntil.backend.post.dto.NewsPostDto;
+import byuntil.backend.post.domain.entity.Post;
+import byuntil.backend.post.domain.repository.PostRepository;
+import byuntil.backend.post.dto.PostDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,19 +12,19 @@ import java.util.List;
 import static byuntil.backend.common.factory.MockPostFactory.createMockNewsPostDto;
 
 @SpringBootTest
-class NewsPostServiceTest {
+class PostServiceTest {
     @Autowired
-    private NewsPostService service;
+    private PostService service;
     @Autowired
-    private NewsPostRepository repository;
+    private PostRepository repository;
 
     @Test
     void findAllNewsPost() {
         //given
-        NewsPostDto request = createMockNewsPostDto("title2", "author2", "content2");
+        PostDto request = createMockNewsPostDto("title2", "author2", "content2");
         service.saveNews(request, null);
         //when
-        List<NewsPost> allNews = service.findAllNews();
+        List<Post> allNews = service.findAllNews();
         //List<NewsAndNoticePreviewMapping> newsPostById = repository.findNewById(1L);
         //then
         System.out.println("allNews.get(0) = " + allNews.get(0));

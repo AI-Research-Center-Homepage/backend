@@ -1,20 +1,20 @@
 package byuntil.backend.post.dto;
 
 import byuntil.backend.post.domain.entity.Attach;
-import byuntil.backend.post.domain.entity.NewsPost;
+import byuntil.backend.post.domain.entity.Post;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class NewsAttachDto {
+public class AttachDto {
     private Long id;
     private String originFileName;
     private String serverFileName;
     private String filePath;
-    private NewsPost post;
+    private Post post;
 
     @Builder
-    public NewsAttachDto(Long id, String originFileName, String serverFileName, String filePath, NewsPost post) {
+    public AttachDto(Long id, String originFileName, String serverFileName, String filePath, Post post) {
         this.id = id;
         this.originFileName = originFileName;
         this.serverFileName = serverFileName;
@@ -29,7 +29,7 @@ public class NewsAttachDto {
                 .serverFileName(serverFileName)
                 .filePath(filePath)
                 .build();
-        build.setNewsPost(post);
+        build.setPost(post);
         return build;
     }
 }

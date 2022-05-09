@@ -1,9 +1,10 @@
 package byuntil.backend.post.domain.entity;
 
-import byuntil.backend.post.dto.NoticePostDto;
+import byuntil.backend.post.dto.PostDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.w3c.dom.Text;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,10 +13,10 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
-public class NoticePost extends BaseTimeEntity {
+public class Post extends BaseTimeEntity {
     @Id
     @GeneratedValue
-    @Column(name = "NOTICE_POST_ID")
+    @Column(name = "NEWS_POST_ID")
     private Long id;
 
     @Column(nullable = false)
@@ -30,11 +31,12 @@ public class NoticePost extends BaseTimeEntity {
     //게시판, 프로젝트
     private String author;
 
-    @OneToMany(mappedBy = "noticePost", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Attach> attaches = new ArrayList<>();
 
+
     @Builder
-    public NoticePost(Long id, String title, String content, int viewNum, String author) {
+    public Post(Long id, String title, String content, int viewNum, String author) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -42,7 +44,7 @@ public class NoticePost extends BaseTimeEntity {
         this.author = author;
     }
 
-    public void addAttaches(Attach attach) {
+    public void addAttaches(final Attach attach) {
         attaches.add(attach);
     }
 
@@ -50,7 +52,7 @@ public class NoticePost extends BaseTimeEntity {
         attaches.clear();
     }
 
-    public void updatePost(final NoticePostDto dto) {
+    public void updatePost(final PostDto dto) {
         this.title = dto.getTitle();
         this.author = dto.getAuthor();
         this.content = dto.getContent();

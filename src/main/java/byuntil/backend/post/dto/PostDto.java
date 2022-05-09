@@ -1,18 +1,19 @@
 package byuntil.backend.post.dto;
 
-import byuntil.backend.post.domain.entity.NewsPost;
+import byuntil.backend.post.domain.entity.Post;
 import lombok.Builder;
 import lombok.Getter;
+import org.w3c.dom.Text;
 
 @Getter
-public class NewsPostDto {
+public class PostDto {
     private Long id;
     private String author;
     private String title;
     private String content;
 
     @Builder
-    public NewsPostDto(Long id, String author, String title, String content) {
+    public PostDto(Long id, String author, String title, String content) {
         this.id = id;
         this.author = author;
         this.title = title;
@@ -20,8 +21,8 @@ public class NewsPostDto {
     }
 
 
-    public NewsPost toEntity() {
-        NewsPost build = NewsPost.builder()
+    public Post toEntity() {
+        Post build = Post.builder()
                 .id(id)
                 .author(author)
                 .title(title)

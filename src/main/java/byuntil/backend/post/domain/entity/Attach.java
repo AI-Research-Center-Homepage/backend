@@ -26,16 +26,9 @@ public class Attach {
     private String filePath;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "NEWS_POST_ID")
-    private NewsPost newsPost;
+    @JoinColumn(name = "POST_ID")
+    private Post post;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "NOTICE_POST_ID")
-    private NoticePost noticePost;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "SOURCE_POST_ID")
-    private SourcePost sourcePost;
 
     @Builder
     public Attach(Long id, String originFileName, String serverFileName, String filePath) {
@@ -46,18 +39,9 @@ public class Attach {
     }
 
     //연관관계 편의 메서드
-    public void setNewsPost(final NewsPost newsPost) {
-        this.newsPost = newsPost;
-        newsPost.getAttaches().add(this);
+    public void setPost(final Post post) {
+        this.post = post;
+        post.getAttaches().add(this);
     }
 
-    public void setNoticePost(final NoticePost noticePost) {
-        this.noticePost = noticePost;
-        noticePost.addAttaches(this);
-    }
-
-    public void setSourcePost(final SourcePost sourcePost) {
-        this.sourcePost = sourcePost;
-        sourcePost.addAttaches(this);
-    }
 }
