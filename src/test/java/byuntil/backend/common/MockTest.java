@@ -29,8 +29,8 @@ import java.nio.charset.StandardCharsets;
 @SpringBootTest
 @Import(S3MockConfig.class)
 public class MockTest {
-    //@Value("${cloud.aws.s3.bucket}")
-    static String bucket = "aihomepage";
+    @Value("${cloud.aws.s3.bucket}")
+    static String bucket;
     //mock 객체는 가짜 객체이며 그 안에 메소드 호출해서 사용하려면 반드시 스터빙(stubbing)을 해야합니다.
 
     @Autowired

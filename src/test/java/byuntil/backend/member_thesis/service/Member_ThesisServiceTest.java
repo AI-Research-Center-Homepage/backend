@@ -30,17 +30,8 @@ class Member_ThesisServiceTest {
     @Test
     public void 멤버가논문쓸때(){
         //given
-        ProfessorSaveRequestDto professor = ProfessorSaveRequestDto.builder()
-                .email("asdfa")
-                .image("asdfasdfa")
-                .name("나승훈")
-                .major("asdfasdfsa")
-                .doctorate("A")
-                .location("전주")
-                .number("01096574723")
-                .build();
-        ThesisDto thesisDto = ThesisDto.builder().enName("minji").koName("민지").url("https://localhost:8080").journal("dd")
-                .title("제목1").publishDate(LocalDateTime.now()).build();
+        ProfessorSaveRequestDto professor = makeMemberDto();
+        ThesisDto thesisDto = makeThesisDto();
 
         //when
         Long memberId = memberService.saveMember(professor);
@@ -57,6 +48,23 @@ class Member_ThesisServiceTest {
         Assertions.assertThat(member.getMember_theses().get(0).getId())
                 .isEqualTo(memberThesis.getId())
                 .isEqualTo(thesis.getMember_theses().get(0).getId());
+
+    }
+    public ThesisDto makeThesisDto(){
+        return ThesisDto.builder().enName("minji").koName("민지").url("https://localhost:8080").journal("journal1")
+                .title("제목1").publishDate(LocalDateTime.now()).build();
+    }
+    public ProfessorSaveRequestDto makeMemberDto(){
+        ProfessorSaveRequestDto professor = ProfessorSaveRequestDto.builder()
+                .email("asdfa")
+                .image("asdfasdfa")
+                .name("나승훈")
+                .major("asdfasdfsa")
+                .doctorate("A")
+                .location("전주")
+                .number("01096574723")
+                .build();
+        return professor;
 
     }
 
