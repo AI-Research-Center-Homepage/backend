@@ -5,7 +5,7 @@ import byuntil.backend.post.domain.entity.Post;
 import byuntil.backend.post.dto.PostDto;
 
 public class MockPostFactory {
-    public static Post createMockNewsPost() {
+    public static Post createMockPost() {
         return Post.builder()
                 .title("title")
                 .author("author")
@@ -22,7 +22,7 @@ public class MockPostFactory {
                 .build();
     }
 
-    public static PostDto createMockNewsPostDto(String title, String author, String content) {
+    public static PostDto createMockPostDto(String title, String author, String content) {
         return PostDto.builder()
                 .id(1L)
                 .title(title)

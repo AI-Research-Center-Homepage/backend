@@ -13,7 +13,7 @@ class PostTest {
     @Test
     void addAttaches() {
         //given
-        final Post post = createMockNewsPost();
+        final Post post = createMockPost();
         final Attach attach = createMockAttach();
         attach.setPost(post);
         //when
@@ -31,7 +31,7 @@ class PostTest {
     @Test
     void deleteAttaches() {
         //given
-        final Post post = createMockNewsPost();
+        final Post post = createMockPost();
 
         final Attach attach = createMockAttach();
         attach.setPost(post);
@@ -47,12 +47,12 @@ class PostTest {
     @Test
     void updatePost() {
         //given
-        final Post post = createMockNewsPost();
+        final Post post = createMockPost();
         //when
         String author = "author2";
         String title = "title2";
         String content = "newsPostContent";
-        post.updatePost(createMockNewsPostDto(title, author, content));
+        post.updatePost(createMockPostDto(title, author, content));
         //then
         assertAll("news 게시글 업데이트 테스트",
                 () -> assertThat(post.getAuthor()).isEqualTo(author),

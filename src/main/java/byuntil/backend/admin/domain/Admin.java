@@ -18,6 +18,6 @@ public class Admin {
     private String loginPw;
 
     @OneToOne
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "MEMBER_ID")
     private Member member;
 }

@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static byuntil.backend.common.factory.MockPostFactory.createMockNewsPost;
+import static byuntil.backend.common.factory.MockPostFactory.createMockPost;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -67,7 +67,7 @@ public class PostRepositoryTest {
         @Test
         void findByIdNewsPost_success() {
             //given
-            final Post newsPost = createMockNewsPost();
+            final Post newsPost = createMockPost();
             final Long postId = testEntityManager.persist(newsPost).getId();
             //when
             final Optional<Post> findedPost = newsPostRepository.findById(postId);
@@ -98,7 +98,7 @@ public class PostRepositoryTest {
         @Test
         void deleteNewsPost_success() {
             //given
-            final Post newsPost = createMockNewsPost();
+            final Post newsPost = createMockPost();
             testEntityManager.persist(newsPost);
 
             assertThat(newsPostRepository.findAll().size()).isEqualTo(1);

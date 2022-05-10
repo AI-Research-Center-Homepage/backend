@@ -26,7 +26,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Optional;
 
-import static byuntil.backend.common.factory.MockPostFactory.createMockNewsPostDto;
+import static byuntil.backend.common.factory.MockPostFactory.createMockPostDto;
+import static byuntil.backend.common.factory.MockPostFactory.createMockPostDto;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -58,7 +59,7 @@ class PostServiceMockTest {
         void createNewPostWithFile_success() throws IOException {
             //given
             final Post post = mock(Post.class);
-            final PostDto postDto = createMockNewsPostDto("title2", "author2", "content2");
+            final PostDto postDto = createMockPostDto("title2", "author2", "content2");
             final MockMultipartFile textFile = new MockMultipartFile("file", "testText.txt", "text/plain", "test data".getBytes());
             Optional<FileStatus> fileStatus = Optional.of(new FileStatus("url", FileType.FILE));
 
@@ -81,7 +82,7 @@ class PostServiceMockTest {
         void createNewPostWihtNoFile_success() throws IOException {
             //given
             final Post post = mock(Post.class);
-            final PostDto postDto = createMockNewsPostDto("title2", "author2", "content2");
+            final PostDto postDto = createMockPostDto("title2", "author2", "content2");
             final MockMultipartFile textFile = new MockMultipartFile("file", null, null, new byte[0]);
 
             when(repository.save(any(Post.class))).thenReturn(post);
@@ -106,7 +107,7 @@ class PostServiceMockTest {
         void updateNewsPostWihtFile_success() throws IOException {
             //given
             final Post post = mock(Post.class);
-            final PostDto postDto = createMockNewsPostDto("title2", "author2", "content2");
+            final PostDto postDto = createMockPostDto("title2", "author2", "content2");
             final MockMultipartFile textFile = new MockMultipartFile("file", "testText.txt", "text/plain", "test data".getBytes());
             Optional<FileStatus> fileStatus = Optional.of(new FileStatus("url", FileType.FILE));
 

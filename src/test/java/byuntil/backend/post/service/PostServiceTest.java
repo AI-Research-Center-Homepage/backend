@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
-import static byuntil.backend.common.factory.MockPostFactory.createMockNewsPostDto;
+import static byuntil.backend.common.factory.MockPostFactory.createMockPostDto;
 
 @SpringBootTest
 class PostServiceTest {
@@ -21,7 +21,7 @@ class PostServiceTest {
     @Test
     void findAllNewsPost() {
         //given
-        PostDto request = createMockNewsPostDto("title2", "author2", "content2");
+        PostDto request = createMockPostDto("title2", "author2", "content2");
         service.saveNews(request, null);
         //when
         List<Post> allNews = service.findAllNews();
