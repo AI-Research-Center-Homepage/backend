@@ -1,9 +1,8 @@
 package byuntil.backend.admin.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import byuntil.backend.member.domain.entity.member.Member;
+
+import javax.persistence.*;
 
 @Entity
 public class Admin {
@@ -17,4 +16,8 @@ public class Admin {
 
     @Column(nullable = false)
     private String loginPw;
+
+    @OneToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
 }
