@@ -4,6 +4,7 @@ import byuntil.backend.post.dto.PostDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.w3c.dom.Text;
 
 import javax.persistence.*;
@@ -25,7 +26,8 @@ public class Post extends BaseTimeEntity {
     @Column(columnDefinition = "LONGTEXT")
     private String content;
 
-    @Column(nullable = false)
+
+    @Column(columnDefinition = "integer default 0", nullable = false)
     private int viewNum;
 
     //게시판, 프로젝트

@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.util.Optional;
 
 import static byuntil.backend.common.factory.MockPostFactory.createMockPostDto;
-import static byuntil.backend.common.factory.MockPostFactory.createMockPostDto;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -50,11 +49,11 @@ class PostServiceMockTest {
         s3Mock.stop();
     }
 
-    @DisplayName("saveNews메소드는")
+    @DisplayName("save메소드는")
     @Nested
     @Import(S3MockConfig.class)
     class SaveNewsMethod {
-        @DisplayName("News 게시글을 생성할 수 있다. 파일 첨부 O")
+        @DisplayName("게시글을 생성할 수 있다. 파일 첨부 O")
         @Test
         void createNewPostWithFile_success() throws IOException {
             //given
@@ -67,7 +66,7 @@ class PostServiceMockTest {
             when(post.getId()).thenReturn(1L);
             when(s3Service.uploadPostFile(textFile)).thenReturn(fileStatus);
             //when
-            final Long postId = service.saveNews(postDto, textFile);
+            final Long postId = service.save(postDto, textFile);
 
             //then
             verify(repository, times(1))
@@ -88,7 +87,7 @@ class PostServiceMockTest {
             when(repository.save(any(Post.class))).thenReturn(post);
             when(post.getId()).thenReturn(1L);
             //when
-            final Long postId = service.saveNews(postDto, textFile);
+            final Long postId = service.save(postDto, textFile);
 
             //then
             verify(repository, times(1))
@@ -115,7 +114,7 @@ class PostServiceMockTest {
             when(s3Service.uploadPostFile(textFile)).thenReturn(fileStatus);
             when(repository.findById(any())).thenReturn(Optional.of(post));
             //when
-            service.updateNews(post.getId(), postDto, textFile);
+            service.updatePost(post.getId(), postDto, textFile);
             //then
             verify(repository, times(1))
                     .findById(anyLong());
@@ -142,7 +141,7 @@ class PostServiceMockTest {
                     .thenReturn(Optional.of(post));
 
             //when
-            service.deleteNews(1L);
+            service.deletePost(1L);
 
             //then
             verify(repository, times(1))

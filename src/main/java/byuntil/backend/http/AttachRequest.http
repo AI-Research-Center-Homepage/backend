@@ -1,0 +1,132 @@
+###시도1 - json
+POST /attach/save HTTP/1.1
+Host: localhost:8080
+Content-Length: 327
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="dto"
+Content-Type: application/json
+
+{
+  "originFileName": "원본파일이름.txt",
+  "serverFileName": "서버파일이름.txt",
+  "filePath": "https/~/",
+  "post": {"title": "제목", "content": "내용", "viewNum" : "0", "author":"작가.."}
+
+}
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+###시도2 RequestBody
+POST /attach/save HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+Content-Length: 179
+
+{
+  "originFileName": "원본파일이름.txt",
+  "serverFileName": "서버파일이름.txt",
+  "filePath": "https/~/",
+  "post": {"title": "제목", "content": "내용", "viewNum" : "0", "author":"작가.."}
+}
+###시도3 파일까지
+POST /attach/save HTTP/1.1
+Host: localhost:8080
+Content-Length: 527
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="profile"; filename="/C:/Users/User/Desktop/배경화면/93D40E83-C873-45F4-A2A7-A95B2A878595.jpeg"
+Content-Type: text/plain
+
+< ./test.txt
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="dto"
+Content-Type: application/json
+
+{
+  "originFileName": "원본파일이름.txt",
+  "serverFileName": "서버파일이름.txt",
+  "filePath": "https/~/",
+  "post": {"title": "제목", "content": "내용", "viewNum" : "0", "author":"작가.."}
+
+}
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+###파일만
+POST /attach/save HTTP/1.1
+Host: localhost:8080
+Content-Length: 238
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="profile"; filename="/C:/Users/User/Desktop/배경화면/93D40E83-C873-45F4-A2A7-A95B2A878595.jpeg"
+Content-Type: text/plain
+< ./test.txt
+
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+###파일만2
+POST /attach/save HTTP/1.1
+Host: localhost:8080
+Content-Length: 238
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="profile"; filename="/C:/Users/User/Desktop/배경화면/93D40E83-C873-45F4-A2A7-A95B2A878595.jpeg"
+
+
+< ./test.txt
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+###파일만3 공식문서 참고 -> 성공
+POST /attach/save HTTP/1.1
+Host: localhost:8080
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="profile"; filename="input.txt"
+
+< ./test.txt
+
+--boundary
+###최종
+POST /attach/save HTTP/1.1
+Host: localhost:8080
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="profile"; filename="input.txt"
+
+< ./test.txt
+
+--boundary
+Content-Disposition: form-data; name="originFileName"
+
+원래이름
+
+--boundary
+Content-Disposition: form-data; name="serverFileName"
+
+서버명
+
+--boundary
+Content-Disposition: form-data; name="filePath"
+
+경로1
+
+--boundary
+Content-Disposition: form-data; name="post.title"
+
+제목
+--boundary
+Content-Disposition: form-data; name="post.content"
+
+내용
+--boundary
+Content-Disposition: form-data; name="post.viewNum"
+
+1
+--boundary
+Content-Disposition: form-data; name="post.author"
+
+글쓴사람
+--boundary

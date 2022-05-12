@@ -2,20 +2,18 @@ package byuntil.backend.post.dto;
 
 import byuntil.backend.post.domain.entity.Attach;
 import byuntil.backend.post.domain.entity.Post;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
+@Setter
+@NoArgsConstructor
 public class AttachDto {
-    private Long id;
     private String originFileName;
     private String serverFileName;
     private String filePath;
     private Post post;
-
     @Builder
-    public AttachDto(Long id, String originFileName, String serverFileName, String filePath, Post post) {
-        this.id = id;
+    public AttachDto(String originFileName, String serverFileName, String filePath, Post post) {
         this.originFileName = originFileName;
         this.serverFileName = serverFileName;
         this.filePath = filePath;
@@ -24,7 +22,6 @@ public class AttachDto {
 
     public Attach toEntity() {
         Attach build = Attach.builder()
-                .id(id)
                 .originFileName(originFileName)
                 .serverFileName(serverFileName)
                 .filePath(filePath)

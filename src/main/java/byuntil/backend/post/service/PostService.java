@@ -23,12 +23,12 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class PostService {
-    private final PostRepository newsPostRepository;
+    private final PostRepository postRepository;
     private final S3Service s3Service;
 
     @Transactional
-    public Long saveNews(PostDto request, MultipartFile file) {
-        Post newsPost = request.toEntity();
+    public Long save(PostDto request, MultipartFile file) {
+        Post post = request.toEntity();
         Optional<FileStatus> fileStatusOptional = fileUpload(file);
         fileStatusOptional.ifPresent(fileStatus -> {
             String url = fileStatus.fileUrl();
@@ -37,10 +37,10 @@ public class PostService {
                     .originFileName(file.getName())
                     .serverFileName(createStoreFilename(file.getName()))
                     .build();
-            build.setPost(newsPost);
-            newsPost.addAttaches(build);
+            build.setPost(post);
+            post.addAttaches(build);
         });
-        return newsPostRepository.save(newsPost).getId();
+        return postRepository.save(post).getId();
     }
 
     private Optional<FileStatus> fileUpload(MultipartFile file) {
@@ -80,38 +80,39 @@ public class PostService {
         return newsPostRepository.findAllNews();
     }*/
 
-    public List<Post> findAllNews() {
-        return newsPostRepository.findAll();
+    public List<Post> findAllPosts() {
+        return postRepository.findAll();
     }
 
     @Transactional
-    public void updateNews(final Long postId, final PostDto request, final MultipartFile file) {
-        Optional<Post> postOptional = newsPostRepository.findById(postId);
-        postOptional.ifPresent(newsPost -> {
-            newsPost.updatePost(request);
+    public void updatePost(final Long postId, final PostDto request, final MultipartFile file) {
+        Optional<Post> postOptional = postRepository.findById(postId);
+        postOptional.ifPresent(post -> {
+            post.updatePost(request);
             fileUpload(file).ifPresent(fileStatus -> {
                 //todo: 이게 표면적으로 지워지긴 하지만 s3에는 지워지지 않음 나중에 추가
-                newsPost.deleteAttaches();
+                post.deleteAttaches();
                 String url = fileStatus.fileUrl();
                 Attach build = Attach.builder()
                         .filePath(url)
                         .originFileName(file.getName())
                         .serverFileName(createStoreFilename(file.getName()))
                         .build();
-                build.setPost(newsPost);
-                newsPost.addAttaches(build);
+                build.setPost(post);
+                post.addAttaches(build);
             });
         });
     }
 
     @Transactional
-    public void deleteNews(final Long postId) {
-        final Post newsPost = newsPostRepository.findById(postId).orElseThrow(PostNotFoundException::new);
-        newsPostRepository.delete(newsPost);
+    public void deletePost(final Long postId) {
+        final Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
+        postRepository.delete(post);
     }
 
     @Transactional
     public int updateView(Long id) {
-        return newsPostRepository.updateView(id);
+        return postRepository.updateView(id);
     }
+
 }

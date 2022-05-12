@@ -22,9 +22,9 @@ class PostServiceTest {
     void findAllNewsPost() {
         //given
         PostDto request = createMockPostDto("title2", "author2", "content2");
-        service.saveNews(request, null);
+        service.save(request, null);
         //when
-        List<Post> allNews = service.findAllNews();
+        List<Post> allNews = service.findAllPosts();
         //List<NewsAndNoticePreviewMapping> newsPostById = repository.findNewById(1L);
         //then
         System.out.println("allNews.get(0) = " + allNews.get(0));
