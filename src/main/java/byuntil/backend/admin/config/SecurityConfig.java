@@ -1,5 +1,6 @@
 package byuntil.backend.admin.config;
 
+import byuntil.backend.admin.filter.ApiCheckFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
+//configuration어노테이션이 있으면 해당 클래스 안에 bean을 정의할 수 있다
 @Slf4j
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
@@ -17,6 +19,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public ApiCheckFilter apiCheckFilter(){
+        return new ApiCheckFilter();
+    }
     @Override
     protected void configure(HttpSecurity http)throws Exception{
         //아래의 antMatchers에는 resources/templates하위가 와야하는건가 -> 아님

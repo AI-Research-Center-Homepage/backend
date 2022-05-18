@@ -27,12 +27,11 @@ public class Admin {
     @Column(nullable = false)
     private String loginPw;
 
-    @ElementCollection(fetch = FetchType.LAZY)
-    @Builder.Default
-    private Set<UserRole> roleSet = new HashSet<>();
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 
-    public void addUserRole(UserRole role){
-        roleSet.add(role);
+    public void changePw(String encodedPw){
+        this.loginPw=encodedPw;
     }
 
 }

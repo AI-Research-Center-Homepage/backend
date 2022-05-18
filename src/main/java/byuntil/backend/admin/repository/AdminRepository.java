@@ -9,7 +9,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface AdminRepository extends JpaRepository<Admin, Long> {
-    @EntityGraph(attributePaths = {"roleSet"}, type = EntityGraph.EntityGraphType.LOAD)
     @Query("select m from Admin m where m.loginId = :loginId")
     Optional<Admin> findByLoginId(@Param("loginId") String loginId);
 }
