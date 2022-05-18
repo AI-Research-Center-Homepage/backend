@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class AdminServiceTest {
     @Autowired
-    private AdminService adminService;
+    private UserDetailService userDetailService;
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Test
@@ -32,11 +32,11 @@ class AdminServiceTest {
         Collection<SimpleGrantedAuthority> auths = new ArrayList<>();
         auths.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 
-        AdminDto adminDto = new AdminDto("loId1","비번1", auths);
+        AdminDto adminDto = new AdminDto("l1222","비번1", auths);
 
         //when
-        Long id = adminService.signUp(adminDto);
-        Admin admin = adminService.findById(id).get();
+        Long id = userDetailService.signUp(adminDto);
+        Admin admin = userDetailService.findById(id).get();
         //then
 
         //dto와 entity가 잘 변환됐는가?
@@ -44,7 +44,7 @@ class AdminServiceTest {
         //pw가 잘 변환되었고 dto와 entity가 잘변환되었는가?
         Assertions.assertTrue(passwordEncoder.matches(adminDto.getPassword(), admin.getLoginPw()));
         //뒤에 toString까지 있어야 제대로 test가 성공함
-        Assertions.assertTrue(("ROLE_" + admin.getRole()).equals(auths.toArray()[0].toString()));
+        Assertions.assertTrue(admin.getRole().toString().equals(auths.toArray()[0].toString()));
 
     }
 

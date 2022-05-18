@@ -29,7 +29,7 @@ public class MemberTests {
     private AdminRepository adminRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    
+
     @Test
     public void 권한확인(){
         //given
@@ -37,7 +37,7 @@ public class MemberTests {
         //when
         UserRole roles = result.get().getRole();
         //then
-        Assertions.assertThat(roles.compareTo(UserRole.ADMIN));
+        Assertions.assertThat(roles.compareTo(UserRole.ROLE_ADMIN));
     }
     @Test
     public void testRead(){
@@ -53,7 +53,7 @@ public class MemberTests {
         //10개의 user생성
         //given
         IntStream.rangeClosed(1,10).forEach(i -> {
-            Admin admin = Admin.builder().loginId("user" + i).loginPw(passwordEncoder.encode("111")).role(UserRole.ADMIN).build();
+            Admin admin = Admin.builder().loginId("user" + i).loginPw(passwordEncoder.encode("111")).role(UserRole.ROLE_ADMIN).build();
 
             adminRepository.save(admin);
         });

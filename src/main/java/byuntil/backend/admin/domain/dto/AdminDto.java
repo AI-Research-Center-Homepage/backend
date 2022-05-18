@@ -28,7 +28,7 @@ public class AdminDto extends User {
     //pw는 부모의 pw를 사용하기때문에 넣지 않았다
     public Admin toEntity(){
         //ROLE_이 붙기 때문에 RETURN된 STRING을 잘랐다
-        UserRole searchedValue = UserRole.valueOf(getAuthorities().toArray()[0].toString().substring(5));
+        UserRole searchedValue = UserRole.valueOf(getAuthorities().toArray()[0].toString());
         return Admin.builder().loginId(this.loginId)
                 .loginPw(super.getPassword())
                 .role(searchedValue).build();

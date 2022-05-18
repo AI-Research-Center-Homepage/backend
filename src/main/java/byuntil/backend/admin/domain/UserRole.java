@@ -5,6 +5,6 @@ import org.springframework.security.core.GrantedAuthority;
 import java.util.*;
 
 public enum UserRole {
-    ADMIN
+    ROLE_ADMIN
 
 }
