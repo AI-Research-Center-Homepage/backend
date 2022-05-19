@@ -3,6 +3,7 @@ package byuntil.backend.common.member.service;
 import byuntil.backend.admin.domain.Admin;
 import byuntil.backend.admin.domain.dto.AdminDto;
 import byuntil.backend.admin.repository.AdminRepository;
+import byuntil.backend.admin.service.UserDetailService;
 import byuntil.backend.member.domain.entity.member.Member;
 import byuntil.backend.member.domain.entity.member.Professor;
 import byuntil.backend.member.domain.repository.MemberRepository;
@@ -27,6 +28,8 @@ class MemberServiceTest {
     MemberRepository memberRepository;
     @Autowired
     AdminRepository adminRepository;
+    @Autowired
+    UserDetailService userDetailService;
 
     @Autowired
     MemberService memberService;
@@ -68,38 +71,49 @@ class MemberServiceTest {
         String adminId = beforeMember.getAdmin().getLoginId();
         memberService.delete(beforeMember.getId());
         //then
-
         Assertions.assertThat(!adminRepository.findByLoginId(adminId).isPresent());
-
+        Assertions.assertThat(!memberRepository.findById(beforeMember.getId()).isPresent());
         //Assertions.assertThat(memberService.findAllMember()).isEmpty();
     }
 
     @Test
+    @Transactional
     public void 멤버업데이트() throws Throwable {
         //given
-        ProfessorSaveRequestDto professor = createProfessorDto();
-        Long id = memberService.saveMember(professor);
+        //origin
+        ProfessorSaveRequestDto originMemberDto = createProfessorDto();
+        Long id = memberService.saveMember(originMemberDto);
 
-        MemberUpdateRequestDto updateMember = MemberUpdateRequestDto.builder()
-                .email("asdfa")
+        //new
+        Collection<GrantedAuthority> auth = new ArrayList<>();
+        auth.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        AdminDto updateAdminDto = new AdminDto("새로운 id", "새로운비번", auth);
+
+        MemberUpdateRequestDto updateMemberDto = MemberUpdateRequestDto.builder()
+                .email("변경후")
                 .image("asdfasdfa")
-                .name("홍길동")
+                .name("홍길동2")
                 .major("asdfasdfsa")
                 .doctorate("A")
                 .location("서울")
+                .adminDto(updateAdminDto)
                 .number("01096574723")
                 .build();
+
         Member beforeMember = (Member) memberService.findOneMember(id).get();
         //when
-        memberService.updateMember(id, updateMember);
-        //then
+        Member member = memberService.updateMember(id, updateMemberDto);
+        userDetailService.encodedPw(member.getAdmin());
+        Admin updateAdmin = userDetailService.findByLoginId(member.getAdmin().getLoginId()).get();
         Member afterMember = (Member) memberService.findOneMember(id).get();
-        Assertions.assertThat(beforeMember.getName()).isNotEqualTo(afterMember.getName());
+        //then
+        Assertions.assertThat(updateMemberDto.getName()).isEqualTo(afterMember.getName());
+        Assertions.assertThat(updateAdminDto.getLoginId()).isEqualTo(updateAdmin.getLoginId());
     }
     public ProfessorSaveRequestDto createProfessorDto(){
         Collection<GrantedAuthority> auth = new ArrayList<>();
         auth.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-        AdminDto adminDto = new AdminDto("성공?!", "pw1", auth);
+        AdminDto adminDto = new AdminDto("1234", "pw1", auth);
         return ProfessorSaveRequestDto.builder()
                 .email("asdfa")
                 .image("asdfasdfa")

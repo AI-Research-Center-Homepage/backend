@@ -28,19 +28,19 @@ public class UserDetailService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public Long signUp(AdminDto dto){
+    public Long signUp(Admin admin){
         //중복회원이 있을 시 예외
-        adminRepository.findByLoginId(dto.getLoginId()).ifPresent((m -> {
-            throw new LoginIdDuplicationException("이미 존재하는 회원입니다.");
-        }));
+        String encodedPw = passwordEncoder.encode(admin.getLoginPw());
 
-        String encodedPw = passwordEncoder.encode(dto.getPassword());
-
-        Admin admin = dto.toEntity();
         admin.changePw(encodedPw);
 
-
         return adminRepository.save(admin).getId();
+    }
+    @Transactional
+    public void encodedPw(Admin admin){
+        //암호화하고 update
+        String encodedPw = passwordEncoder.encode(admin.getLoginPw());
+        admin.changePw(encodedPw);
     }
 
     public Optional<Admin> findById(Long id){
@@ -48,6 +48,9 @@ public class UserDetailService implements UserDetailsService {
     }
     public Optional<Admin> findByLoginId(String loginId){
         return adminRepository.findByLoginId(loginId);
+    }
+    public void deleteById(Long id){
+        adminRepository.deleteById(id);
     }
 
     @Override

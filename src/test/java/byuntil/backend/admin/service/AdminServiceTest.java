@@ -35,7 +35,7 @@ class AdminServiceTest {
         AdminDto adminDto = new AdminDto("l1222","비번1", auths);
 
         //when
-        Long id = userDetailService.signUp(adminDto);
+        Long id = userDetailService.signUp(adminDto.toEntity());
         Admin admin = userDetailService.findById(id).get();
         //then
 

@@ -2,11 +2,14 @@ package byuntil.backend.member.service;
 
 import byuntil.backend.admin.domain.Admin;
 import byuntil.backend.admin.repository.AdminRepository;
+import byuntil.backend.admin.service.UserDetailService;
+import byuntil.backend.common.exception.LoginIdDuplicationException;
 import byuntil.backend.member.domain.entity.member.*;
 import byuntil.backend.member.domain.repository.MemberRepository;
 import byuntil.backend.member.dto.request.MemberSaveRequestDto;
 import byuntil.backend.member.dto.request.MemberUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +22,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
-    private final AdminRepository adminRepository;
+    private final UserDetailService userDetailService;
 
     @Transactional
     public Long saveMember(MemberSaveRequestDto dto) {
@@ -27,8 +30,11 @@ public class MemberService {
         Admin admin = dto.getAdminDto().toEntity();
         admin.addMember(member);*/
         //dto를 entity로 만들고 admin도 entity로만든다음에 return함
+        userDetailService.findByLoginId(dto.getAdminDto().getLoginId()).ifPresent((m -> {
+            throw new LoginIdDuplicationException("이미 존재하는 회원입니다.");
+        }));
         Admin admin = dto.dtosToEntity();
-        adminRepository.save(admin);
+        userDetailService.signUp(admin);
         memberRepository.save(admin.getMember());
 
         return admin.getMember().getId();
@@ -64,9 +70,10 @@ public class MemberService {
     }
 
     @Transactional
-    public void updateMember(Long id, MemberUpdateRequestDto requestDto) throws Throwable {
+    public Member updateMember(Long id, MemberUpdateRequestDto requestDto) throws Throwable {
         Member member = (Member) memberRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         member.update(requestDto);
+        //그리고 암호화를 해주어야한다
 
         if (member instanceof Professor) {
             Professor professor = (Professor) member;
@@ -84,10 +91,14 @@ public class MemberService {
             Undergraduate undergraduate = (Undergraduate) member;
             undergraduate.update(requestDto.getAdmission(), requestDto.getResearch());
         }
+        return member;
     }
 
     @Transactional
     public void delete(Long id) {
-        memberRepository.delete(memberRepository.findById(id).get());
+        Member member = (Member) memberRepository.findById(id).get();
+        memberRepository.delete(member);
+        //연관되어있는 admin도 삭제
+        userDetailService.deleteById(member.getAdmin().getId());
     }
 }

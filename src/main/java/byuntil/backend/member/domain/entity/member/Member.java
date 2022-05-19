@@ -1,6 +1,7 @@
 package byuntil.backend.member.domain.entity.member;
 
 import byuntil.backend.admin.domain.Admin;
+import byuntil.backend.admin.domain.UserRole;
 import byuntil.backend.member.domain.entity.Member_Thesis;
 import byuntil.backend.member.dto.request.MemberUpdateRequestDto;
 import lombok.AllArgsConstructor;
@@ -66,6 +67,8 @@ public abstract class Member {
         this.email = dto.getEmail();
         this.major = dto.getMajor();
         this.image = dto.getImage();
+        this.admin.setLoginId(dto.getAdminDto().getLoginId());
+        this.admin.setRole(UserRole.valueOf(dto.getAdminDto().getAuthorities().toArray()[0].toString()));
     }
     public void addMemberThesis(Member_Thesis memberThesis){
         this.theses.add(memberThesis);

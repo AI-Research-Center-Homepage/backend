@@ -1,10 +1,7 @@
 package byuntil.backend.admin.domain;
 
 import byuntil.backend.member.domain.entity.member.Member;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.apache.catalina.User;
 
 import javax.persistence.*;
@@ -14,6 +11,7 @@ import java.util.Set;
 @Entity
 @Builder
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Admin {
