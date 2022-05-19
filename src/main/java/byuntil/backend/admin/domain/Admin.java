@@ -1,5 +1,6 @@
 package byuntil.backend.admin.domain;
 
+import byuntil.backend.member.domain.entity.member.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,7 +22,7 @@ public class Admin {
     @Column(name = "ADMIN_ID")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String loginId;
 
     @Column(nullable = false)
@@ -30,8 +31,18 @@ public class Admin {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
+
     public void changePw(String encodedPw){
         this.loginPw=encodedPw;
+    }
+
+    public void addMember(Member member){
+        this.member = member;
+        member.setAdmin(this);
+
     }
 
 }

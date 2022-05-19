@@ -1,5 +1,6 @@
 package byuntil.backend.member.domain.entity.member;
 
+import byuntil.backend.admin.domain.Admin;
 import byuntil.backend.member.domain.entity.Member_Thesis;
 import byuntil.backend.member.dto.request.MemberUpdateRequestDto;
 import lombok.AllArgsConstructor;
@@ -31,6 +32,9 @@ public abstract class Member {
 
     private String image;
 
+    @OneToOne(mappedBy = "member", fetch = FetchType.LAZY)
+    private Admin admin;
+
     protected Member() {
 
     }
@@ -38,12 +42,13 @@ public abstract class Member {
     @Column(name = "DTYPE", insertable = false, updatable = false)
     private String dtype;
 
-    public Member(String name, String major, String email, String image, String dtype) {
+    public Member(String name, String major, String email, String image, String dtype, Admin admin) {
         this.name = name;
         this.major = major;
         this.email = email;
         this.image = image;
         this.dtype = dtype;
+        this.admin = admin;
     }
 
     public String getDtype() {
@@ -52,6 +57,9 @@ public abstract class Member {
     @OneToMany(mappedBy = "member")
     private List<Member_Thesis> theses = new ArrayList<>();
 
+    public void setAdmin(Admin admin){
+        this.admin = admin;
+    }
 
     public void update(MemberUpdateRequestDto dto) {
         this.name = dto.getName();

@@ -1,5 +1,6 @@
 package byuntil.backend.member.domain.entity.member;
 
+import byuntil.backend.admin.domain.Admin;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,8 +15,8 @@ public class Committee extends Member {
     private String position;
 
     @Builder
-    public Committee(String name, String major, String email, String image, String dtype, String position) {
-        super(name, major, email, image, dtype);
+    public Committee(String name, String major, String email, String image, String dtype, String position, Admin admin) {
+        super(name, major, email, image, dtype, admin);
         this.position = position;
     }
 

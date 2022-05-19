@@ -1,5 +1,7 @@
 package byuntil.backend.member.service;
 
+import byuntil.backend.admin.domain.Admin;
+import byuntil.backend.admin.repository.AdminRepository;
 import byuntil.backend.member.domain.entity.member.*;
 import byuntil.backend.member.domain.repository.MemberRepository;
 import byuntil.backend.member.dto.request.MemberSaveRequestDto;
@@ -17,11 +19,19 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final AdminRepository adminRepository;
 
     @Transactional
     public Long saveMember(MemberSaveRequestDto dto) {
-        Member member = dto.toEntity();
-        return ((Member) memberRepository.save(member)).getId();
+        /*Member member = dto.toEntity();
+        Admin admin = dto.getAdminDto().toEntity();
+        admin.addMember(member);*/
+        //dto를 entity로 만들고 admin도 entity로만든다음에 return함
+        Admin admin = dto.dtosToEntity();
+        adminRepository.save(admin);
+        memberRepository.save(admin.getMember());
+
+        return admin.getMember().getId();
     }
 
     public Optional findOneMember(Long id) {
