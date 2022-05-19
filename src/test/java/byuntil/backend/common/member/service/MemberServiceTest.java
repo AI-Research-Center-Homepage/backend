@@ -30,7 +30,6 @@ class MemberServiceTest {
     AdminRepository adminRepository;
     @Autowired
     UserDetailService userDetailService;
-
     @Autowired
     MemberService memberService;
 

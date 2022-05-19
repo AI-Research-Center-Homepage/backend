@@ -1,11 +1,10 @@
 package byuntil.backend.admin.config;
 
-import byuntil.backend.admin.filter.ApiCheckFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,18 +18,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public ApiCheckFilter apiCheckFilter(){
-        return new ApiCheckFilter();
-    }
+
     @Override
     protected void configure(HttpSecurity http)throws Exception{
         //아래의 antMatchers에는 resources/templates하위가 와야하는건가 -> 아님
-        http.authorizeRequests()
-                .antMatchers("/sample/all").permitAll()
-                .antMatchers("/sample/member").hasRole("ADMIN");
-        http.formLogin();//인가/인증에 문제시 로그인 화면을 보여준다
-        http.csrf().disable();//csrf 공격을 막기 위한 csrf토큰 안보이게 처리
+
+        http
+                .authorizeRequests()
+                .antMatchers("/sample/member").hasRole("ADMIN")
+                .antMatchers("/sample/all").permitAll();
+        http.formLogin();
+        http.csrf().disable();
+        // /logout으로 들어가면 logout됨 어떤 버튼을 누르면 해당 url로 redirect되도록 설계하면 될듯
         http.logout();
+        http.httpBasic();
+
+        http.authorizeRequests().antMatchers("/h2-console/**").permitAll()
+                .and().csrf().ignoringAntMatchers("/h2-console/**")
+                .and().headers().frameOptions().sameOrigin();
     }
 }
