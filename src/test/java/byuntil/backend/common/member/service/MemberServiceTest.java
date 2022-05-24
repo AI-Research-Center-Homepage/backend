@@ -19,6 +19,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.Column;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -61,7 +62,7 @@ class MemberServiceTest {
 
     @Test
     @Transactional
-    public void 멤버삭제() throws Exception {
+    public void 멤버삭제() throws Throwable {
         //given
         ProfessorSaveRequestDto professor = createProfessorDto();
         Long id = memberService.saveMember(professor);
@@ -86,7 +87,7 @@ class MemberServiceTest {
         //new
         Collection<GrantedAuthority> auth = new ArrayList<>();
         auth.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-        AdminDto updateAdminDto = new AdminDto("새로운 id", "새로운비번", auth);
+        AdminDto updateAdminDto = new AdminDto("새로운 id", "새로운비번", auth, false);
 
         MemberUpdateRequestDto updateMemberDto = MemberUpdateRequestDto.builder()
                 .email("변경후")
@@ -109,10 +110,30 @@ class MemberServiceTest {
         Assertions.assertThat(updateMemberDto.getName()).isEqualTo(afterMember.getName());
         Assertions.assertThat(updateAdminDto.getLoginId()).isEqualTo(updateAdmin.getLoginId());
     }
+    @Test
+    @Transactional
+    @Commit
+    public void 탈퇴() throws Throwable {
+
+        //given
+        ProfessorSaveRequestDto professor = createProfessorDto();
+
+        Long memberId = memberService.saveMember(professor);
+        Professor member = memberService.findOneProfessor(memberId);
+
+        //when
+        int s = 2;
+        memberService.secession(memberId);
+
+        //then
+        Assertions.assertThat(member.getName()).isNotEqualTo(professor.getName());
+        Assertions.assertThat(member.getAdmin().getDeleted()).isEqualTo(true);
+        Assertions.assertThat(member.getAdmin().getLoginId()).isNotEqualTo(professor.getAdminDto().getLoginId());
+    }
     public ProfessorSaveRequestDto createProfessorDto(){
         Collection<GrantedAuthority> auth = new ArrayList<>();
         auth.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-        AdminDto adminDto = new AdminDto("1234", "pw1", auth);
+        AdminDto adminDto = new AdminDto("newenwe", "pw1", auth, false);
         return ProfessorSaveRequestDto.builder()
                 .email("asdfa")
                 .image("asdfasdfa")

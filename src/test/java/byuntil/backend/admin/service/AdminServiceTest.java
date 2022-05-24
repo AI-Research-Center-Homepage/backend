@@ -32,7 +32,7 @@ class AdminServiceTest {
         Collection<SimpleGrantedAuthority> auths = new ArrayList<>();
         auths.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 
-        AdminDto adminDto = new AdminDto("l1222","비번1", auths);
+        AdminDto adminDto = new AdminDto("l1222","비번1", auths, false);
 
         //when
         Long id = userDetailService.signUp(adminDto.toEntity());

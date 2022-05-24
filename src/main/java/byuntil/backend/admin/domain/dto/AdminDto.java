@@ -21,9 +21,11 @@ import java.util.stream.Collectors;
 @ToString
 public class AdminDto extends User {
     private String loginId;
-    public AdminDto(String loginId, String loginPw, Collection<? extends GrantedAuthority> authorities){
+    private boolean deleted;
+    public AdminDto(String loginId, String loginPw, Collection<? extends GrantedAuthority> authorities, boolean deleted){
         super(loginId, loginPw, authorities);
         this.loginId = loginId;
+        this.deleted = deleted;
     }
     //pw는 부모의 pw를 사용하기때문에 넣지 않았다
     public Admin toEntity(){
@@ -31,7 +33,7 @@ public class AdminDto extends User {
         UserRole searchedValue = UserRole.valueOf(getAuthorities().toArray()[0].toString());
         return Admin.builder().loginId(this.loginId)
                 .loginPw(super.getPassword())
-                .role(searchedValue).build();
+                .role(searchedValue).deleted(deleted).build();
 
     }
 }

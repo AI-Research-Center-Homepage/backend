@@ -30,7 +30,7 @@ public class SampleController {
         //이 page로 들어와서 member를 생성한다음에 sample/member로 들어가서 로그인하면 로그인 성공
         Collection<GrantedAuthority> auth = new ArrayList<>();
         auth.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-        AdminDto adminDto = new AdminDto("user1", "111", auth);
+        AdminDto adminDto = new AdminDto("user1", "111", auth, false);
         ProfessorSaveRequestDto dto = ProfessorSaveRequestDto.builder()
                 .email("asdfa")
                 .image("asdfasdfa")
@@ -47,7 +47,7 @@ public class SampleController {
     }
     @GetMapping("/member")
     public String exMember(@AuthenticationPrincipal AdminDto user){
-        log.info(user.getUsername());
+        log.info(user.getUsername() + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         return "member";
     }
     @GetMapping("/admin")
