@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.IOException;
 import java.util.List;
 
 import static byuntil.backend.common.factory.MockPostFactory.createMockPostDto;
@@ -19,7 +20,7 @@ class PostServiceTest {
     private PostRepository repository;
 
     @Test
-    void findAllNewsPost() {
+    void findAllNewsPost() throws IOException {
         //given
         PostDto request = createMockPostDto("title2", "author2", "content2");
         service.save(request, null);

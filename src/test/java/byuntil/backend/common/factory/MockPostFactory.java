@@ -8,7 +8,6 @@ public class MockPostFactory {
     public static Post createMockPost() {
         return Post.builder()
                 .title("title")
-                .author("author")
                 .content("newsContent")
                 .viewNum(1)
                 .build();
@@ -24,9 +23,7 @@ public class MockPostFactory {
 
     public static PostDto createMockPostDto(String title, String author, String content) {
         return PostDto.builder()
-                .id(1L)
                 .title(title)
-                .author(author)
                 .content(content)
                 .build();
     }

@@ -15,9 +15,9 @@ class PostTest {
         //given
         final Post post = createMockPost();
         final Attach attach = createMockAttach();
-        attach.setPost(post);
+        attach.addPost(post);
         //when
-        post.addAttaches(attach);
+        post.addAttach(attach);
 
         //then
         assertAll("첨부파일 저장 테스트",
@@ -34,8 +34,8 @@ class PostTest {
         final Post post = createMockPost();
 
         final Attach attach = createMockAttach();
-        attach.setPost(post);
-        post.addAttaches(attach);
+        attach.addPost(post);
+        post.addAttach(attach);
         //when
         post.deleteAttaches();
 
@@ -55,7 +55,6 @@ class PostTest {
         post.updatePost(createMockPostDto(title, author, content));
         //then
         assertAll("news 게시글 업데이트 테스트",
-                () -> assertThat(post.getAuthor()).isEqualTo(author),
                 () -> assertThat(post.getTitle()).isEqualTo(title),
                 () -> assertThat(post.getContent()).isEqualTo(content));
     }

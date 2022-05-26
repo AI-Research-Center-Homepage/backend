@@ -28,6 +28,9 @@ class Member_ThesisServiceTest {
     private Member_ThesisService member_thesisService;
 
     @Test
+    //1. 멤버저장
+    //2. 논문저장
+    //3. member_thesisService에 멤버-논문 매핑
     public void 멤버가논문쓸때(){
         //given
         ProfessorSaveRequestDto professor = makeMemberDto();

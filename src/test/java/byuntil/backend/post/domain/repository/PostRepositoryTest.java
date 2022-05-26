@@ -40,7 +40,6 @@ public class PostRepositoryTest {
             final Post newsPost = Post.builder()
                     .title("title")
                     .content("content")
-                    .author("author")
                     .viewNum(1)
                     .build();
             //when
@@ -50,7 +49,6 @@ public class PostRepositoryTest {
             assertAll("게시글 등록 테스트",
                     () -> assertThat(posts.size()).isEqualTo(1),
                     () -> assertThat(posts.get(0).getTitle()).isEqualTo(newsPost.getTitle()),
-                    () -> assertThat(posts.get(0).getAuthor()).isEqualTo(newsPost.getAuthor()),
                     () -> assertThat(posts.get(0).getContent()).isEqualTo(newsPost.getContent())
             );
             System.out.println("======CreateDate : " + posts.get(0).getCreatedDate() + "=====ModifiedDate : " + posts.get(0).getModifiedDate());
@@ -75,8 +73,7 @@ public class PostRepositoryTest {
             assertAll(
                     () -> assertThat(findedPost).isNotEmpty(),
                     () -> assertThat(findedPost.get().getContent()).isEqualTo(newsPost.getContent()),
-                    () -> assertThat(findedPost.get().getTitle()).isEqualTo(newsPost.getTitle()),
-                    () -> assertThat(findedPost.get().getAuthor()).isEqualTo(newsPost.getAuthor())
+                    () -> assertThat(findedPost.get().getTitle()).isEqualTo(newsPost.getTitle())
             );
         }
 

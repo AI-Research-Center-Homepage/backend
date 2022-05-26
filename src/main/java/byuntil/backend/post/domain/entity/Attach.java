@@ -39,7 +39,7 @@ public class Attach {
     }
 
     //연관관계 편의 메서드
-    public void setPost(final Post post) {
+    public void addPost(final Post post) {
         this.post = post;
         post.getAttaches().add(this);
     }

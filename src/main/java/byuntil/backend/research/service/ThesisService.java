@@ -2,6 +2,7 @@ package byuntil.backend.research.service;
 
 import byuntil.backend.research.domain.entity.Field;
 import byuntil.backend.research.domain.entity.Thesis;
+import byuntil.backend.research.domain.repository.FieldRepository;
 import byuntil.backend.research.domain.repository.ThesisRepository;
 import byuntil.backend.research.dto.FieldDto;
 import byuntil.backend.research.dto.ThesisDto;
@@ -16,12 +17,22 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ThesisService {
-
+    private final FieldRepository fieldRepository;
     private final ThesisRepository thesisRepository;
     @Transactional
     public Long save(ThesisDto thesisDto){
-        Thesis thesis = thesisDto.toEntity();
-        return thesisRepository.save(thesis).getId();
+        if(thesisDto.getFieldDto()==null){
+            //그냥 thesisDto만 저장한다
+            Thesis thesis = thesisDto.toEntity();
+            return thesisRepository.save(thesis).getId();
+        }
+        else{
+            Field field = thesisDto.getFieldDto().toEntity();
+            fieldRepository.save(field);
+            Thesis thesis = thesisDto.toEntity();
+            thesis.setField(field);//연관관계설정
+            return thesisRepository.save(thesis).getId();
+        }
     }
     @Transactional
     public Long update(Long id, ThesisDto thesisDto){

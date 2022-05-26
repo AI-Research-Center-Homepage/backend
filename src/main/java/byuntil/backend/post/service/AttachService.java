@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -19,11 +21,12 @@ public class AttachService {
     private final S3ServiceImpl s3Service;
     private final AttachRepository attachRepository;
 
-    public DefaultRes save(AttachDto dto, MultipartFile multipartFile) {
+    @Transactional
+    public DefaultRes save(AttachDto dto, List<MultipartFile> multipartFileList) {
         try {
-            if (multipartFile != null) {
+            if (!multipartFileList.isEmpty()) {
                 //upload후에 dto에 적절한 serverfilename이 들어가게 된다
-                s3Service.upload(dto, multipartFile);
+                s3Service.upload(multipartFileList);
             }
             //적절한 값이 들어가게 된 dto를 entity로 변환하여 db에 저장한다
             Attach attach = attachRepository.save(dto.toEntity());

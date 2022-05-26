@@ -3,6 +3,7 @@ package byuntil.backend.s3.service;
 import byuntil.backend.common.exception.s3.InvalidExtensionException;
 import byuntil.backend.common.exception.s3.InvalidFileNameException;
 import byuntil.backend.common.exception.s3.UploadFailException;
+import byuntil.backend.post.domain.entity.Attach;
 import byuntil.backend.post.dto.AttachDto;
 import byuntil.backend.s3.domain.*;
 import com.amazonaws.AmazonClientException;
@@ -25,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -150,36 +152,38 @@ public class S3ServiceImpl implements S3Service {
 
     //minji
 
-    public AttachDto upload(AttachDto dto,MultipartFile uploadFile) throws IOException {
-        String origName = uploadFile.getOriginalFilename();
+    public List<Attach> upload(List<MultipartFile> uploadFileList) throws IOException {
+        List<Attach> attachList = new ArrayList<>();
+        if(uploadFileList.isEmpty()) return null;
+        for (MultipartFile uploadFile : uploadFileList) {
+            String origName = uploadFile.getOriginalFilename();
+            String url;
+            try {
+                // 확장자를 찾기 위한 코드
+                final String ext = origName.substring(origName.lastIndexOf('.'));
+                // 파일이름 암호화
+                final String saveFileName = getUuid() + ext;
+                // 파일 객체 생성
+                // System.getProperty => 시스템 환경에 관한 정보를 얻을 수 있다. (user.dir = 현재 작업 디렉토리를 의미함)
+                File file = new File(System.getProperty("user.dir") + saveFileName);
+                // 파일 변환
+                uploadFile.transferTo(file);
+                // S3 파일 업로드
+                uploadOnS3(saveFileName, file);
+                // 주소 할당
+                url = defaultUrl + saveFileName;
+                // 파일 삭제
+                file.delete();
 
-        String url;
-        try {
-            // 확장자를 찾기 위한 코드
-            final String ext = origName.substring(origName.lastIndexOf('.'));
-            // 파일이름 암호화
-            final String saveFileName = getUuid() + ext;
-            // 파일 객체 생성
-            // System.getProperty => 시스템 환경에 관한 정보를 얻을 수 있다. (user.dir = 현재 작업 디렉토리를 의미함)
-            File file = new File(System.getProperty("user.dir") + saveFileName);
-            // 파일 변환
-            uploadFile.transferTo(file);
-            // S3 파일 업로드
-            uploadOnS3(saveFileName, file);
-            // 주소 할당
-            url = defaultUrl + saveFileName;
-            // 파일 삭제
-            file.delete();
+                //dto정보 입력
+                Attach attach = Attach.builder().filePath(url).originFileName(origName).serverFileName(saveFileName).build();
+                attachList.add(attach);
+            } catch (StringIndexOutOfBoundsException e) {
+                url = null;
+            }
 
-            //dto정보 입력
-            dto.setOriginFileName(origName);
-            dto.setServerFileName(saveFileName);
-            dto.setFilePath(url);
-        } catch (StringIndexOutOfBoundsException e) {
-            url = null;
         }
-
-        return dto;
+        return attachList;
     }
     private static String getUuid() {
         return UUID.randomUUID().toString().replaceAll("-", "");

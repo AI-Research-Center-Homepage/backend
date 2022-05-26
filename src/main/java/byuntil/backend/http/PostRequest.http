@@ -1,0 +1,21 @@
+POST /post/save HTTP/1.1
+Host: localhost:8080
+Content-Length: 436
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="profile"; filename="/C:/Users/User/Desktop/배경화면/93D40E83-C873-45F4-A2A7-A95B2A878595.jpeg"
+Content-Type: image/jpeg
+
+< ./image.jpeg
+
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="postDto"
+Content-Type: application/json
+
+{
+    "title": "제목1",
+    "content" : "내용1",
+    "boardDto" : {"name": "게시판1"}
+}
+----WebKitFormBoundary7MA4YWxkTrZu0gW

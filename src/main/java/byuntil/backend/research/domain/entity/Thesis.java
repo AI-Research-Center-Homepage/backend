@@ -36,11 +36,6 @@ public class Thesis {
     @Column(nullable = false)
     private String url;
 
-    /*아래 다대다 테이블있음
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "MEMBER_ID")
-    private Member member;*/
-
     //builder로 만들면 밑에 new로 할당해준게 무시됨
     @OneToMany(mappedBy = "thesis")
     private List<Member_Thesis> member_theses = new ArrayList<>();
