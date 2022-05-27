@@ -11,6 +11,7 @@ public class MemberUpdateRequestDto {
     private String major;
     private String email;
     private String image;
+    private String office;
 
     private String position;
     private String admission;
@@ -20,7 +21,8 @@ public class MemberUpdateRequestDto {
     private String research;
 
     @Builder
-    public MemberUpdateRequestDto(String name, String major, String email, String image, String position, String admission, String doctorate, String location, String number, String research) {
+    public MemberUpdateRequestDto(String name, String major, String email, String image, String position, String office,
+                                  String admission, String doctorate, String location, String number, String research) {
         this.name = name;
         this.major = major;
         this.email = email;
@@ -31,5 +33,6 @@ public class MemberUpdateRequestDto {
         this.location = location;
         this.number = number;
         this.research = research;
+        this.office = office;
     }
 }
