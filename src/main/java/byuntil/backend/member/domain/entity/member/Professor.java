@@ -1,5 +1,6 @@
 package byuntil.backend.member.domain.entity.member;
 
+import byuntil.backend.admin.domain.Admin;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,8 +26,8 @@ public class Professor extends Member {
     }*/
 
     @Builder
-    public Professor(String name, String major, String email, String image, String dtype, String doctorate, String location, String number) {
-        super(name, major, email, image, dtype);
+    public Professor(String name, String major, String email, String image, String dtype, String doctorate, String location, String number, Admin admin) {
+        super(name, major, email, image, dtype, admin);
         this.doctorate = doctorate;
         this.location = location;
         this.number = number;
