@@ -28,7 +28,6 @@ import java.util.Random;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final UserDetailService userDetailService;
-    private final PasswordEncoder passwordEncoder;
 
     //탈퇴
     @Transactional
@@ -89,12 +88,11 @@ public class MemberService {
     }
 
     @Transactional
-    public Member updateMember(Long id, MemberUpdateRequestDto requestDto) throws Throwable {
+    public void updateMember(Long id, MemberUpdateRequestDto requestDto) throws Throwable {
         Member member = (Member) memberRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         member.update(requestDto);
         //그리고 암호화를 해주어야한다
-        String encodedPw = passwordEncoder.encode(member.getAdmin().getLoginPw());
-        member.getAdmin().setLoginPw(encodedPw);
+        userDetailService.encodedPw(member.getAdmin());
 
         if (member instanceof Professor) {
             Professor professor = (Professor) member;
@@ -112,7 +110,6 @@ public class MemberService {
             Undergraduate undergraduate = (Undergraduate) member;
             undergraduate.update(requestDto.getAdmission(), requestDto.getResearch());
         }
-        return member;
     }
 
     @Transactional

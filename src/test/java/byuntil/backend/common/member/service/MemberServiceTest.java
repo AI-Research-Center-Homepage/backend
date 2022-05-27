@@ -78,6 +78,7 @@ class MemberServiceTest {
 
     @Test
     @Transactional
+    @Commit
     public void 멤버업데이트() throws Throwable {
         //given
         //origin
@@ -102,8 +103,8 @@ class MemberServiceTest {
 
         Member beforeMember = (Member) memberService.findOneMember(id).get();
         //when
-        Member member = memberService.updateMember(id, updateMemberDto);
-        userDetailService.encodedPw(member.getAdmin());
+        memberService.updateMember(id, updateMemberDto);
+        Member member = (Member)memberService.findOneMember(id).get();
         Admin updateAdmin = userDetailService.findByLoginId(member.getAdmin().getLoginId()).get();
         Member afterMember = (Member) memberService.findOneMember(id).get();
         //then
@@ -122,7 +123,6 @@ class MemberServiceTest {
         Professor member = memberService.findOneProfessor(memberId);
 
         //when
-        int s = 2;
         memberService.secession(memberId);
 
         //then
