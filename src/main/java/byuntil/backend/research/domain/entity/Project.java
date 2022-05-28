@@ -25,8 +25,12 @@ public class Project {
     @Column(nullable = false)
     private String name;
 
+    @Column(columnDefinition = "LONGTEXT")
+    private String content;
+
     public void update(ProjectDto projectDto){
         this.name = projectDto.getName();
+        this.content = projectDto.getContent();
     }
 
 

@@ -9,9 +9,10 @@ import lombok.Data;
 public class ProjectDto {
     private Long id;
     private String name;
+    private String content;
 
     public Project toEntity(){
-        Project project = Project.builder().name(name).build();
+        Project project = Project.builder().name(name).content(content).build();
         return project;
     }
 }

@@ -8,14 +8,12 @@ import lombok.Getter;
 public class ProfessorSaveRequestDto extends MemberSaveRequestDto {
 
     private String doctorate;
-    private String location;
     private String number;
 
     @Builder
-    public ProfessorSaveRequestDto(String name, String major, String email, String image, String doctorate, String location, String number) {
-        super(name, major, email, image);
+    public ProfessorSaveRequestDto(String name, String major, String email, String image, String doctorate, String office, String number) {
+        super(name, major, email, image, office);
         this.doctorate = doctorate;
-        this.location = location;
         this.number = number;
     }
 
@@ -28,8 +26,8 @@ public class ProfessorSaveRequestDto extends MemberSaveRequestDto {
                 .email(getEmail())
                 .image(getImage())
                 .doctorate(doctorate)
-                .location(location)
                 .number(number)
+                .office(getOffice())
                 .build();
     }
 }

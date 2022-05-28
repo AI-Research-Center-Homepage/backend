@@ -11,8 +11,8 @@ public class GraduateSaveRequestDto extends MemberSaveRequestDto {
     private String admission;
 
     @Builder
-    public GraduateSaveRequestDto(String name, String major, String email, String image, String admission) {
-        super(name, major, email, image);
+    public GraduateSaveRequestDto(String name, String major, String email, String image, String admission, String office) {
+        super(name, major, email, image, office);
         this.admission = admission;
     }
 
@@ -25,6 +25,7 @@ public class GraduateSaveRequestDto extends MemberSaveRequestDto {
                 .email(getEmail())
                 .image(getImage())
                 .admission(admission)
+                .office(getOffice())
                 .build();
     }
 }

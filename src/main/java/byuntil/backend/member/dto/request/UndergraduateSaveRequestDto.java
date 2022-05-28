@@ -12,8 +12,8 @@ public class UndergraduateSaveRequestDto extends MemberSaveRequestDto {
     private String research;
 
     @Builder
-    public UndergraduateSaveRequestDto(String name, String major, String email, String image, String admission, String research) {
-        super(name, major, email, image);
+    public UndergraduateSaveRequestDto(String name, String major, String email, String image, String admission, String research, String office) {
+        super(name, major, email, image, office);
         this.admission = admission;
         this.research = research;
     }
@@ -27,6 +27,7 @@ public class UndergraduateSaveRequestDto extends MemberSaveRequestDto {
                 .image(getImage())
                 .admission(admission)
                 .research(research)
+                .office(getOffice())
                 .build();
     }
 }

@@ -14,7 +14,6 @@ import javax.persistence.Entity;
 public class Professor extends Member {
     @Column(nullable = false)
     private String doctorate;
-    private String location;
     private String number;
 
     /*@Builder
@@ -25,16 +24,14 @@ public class Professor extends Member {
     }*/
 
     @Builder
-    public Professor(String name, String major, String email, String image, String dtype, String doctorate, String location, String number) {
-        super(name, major, email, image, dtype);
+    public Professor(String name, String major, String email, String image, String dtype, String doctorate, String office, String number) {
+        super(name, major, email, image, dtype, office);
         this.doctorate = doctorate;
-        this.location = location;
         this.number = number;
     }
 
     public void update(String doctorate, String location, String number) {
         this.doctorate = doctorate;
-        this.location = location;
         this.number = number;
     }
 }

@@ -10,8 +10,8 @@ public class ResearcherSaveRequestDto extends MemberSaveRequestDto {
     private String research;
 
     @Builder
-    public ResearcherSaveRequestDto(String name, String major, String email, String image, String research) {
-        super(name, major, email, image);
+    public ResearcherSaveRequestDto(String name, String major, String email, String image, String research, String office) {
+        super(name, major, email, image, office);
         this.research = research;
     }
 
@@ -23,6 +23,7 @@ public class ResearcherSaveRequestDto extends MemberSaveRequestDto {
                 .major(getMajor())
                 .email(getEmail())
                 .image(getImage())
+                .office(getOffice())
                 .research(research)
                 .build();
     }

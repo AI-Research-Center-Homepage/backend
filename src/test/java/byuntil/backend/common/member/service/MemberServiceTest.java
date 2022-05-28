@@ -29,7 +29,6 @@ class MemberServiceTest {
                 .name("나승훈")
                 .major("asdfasdfsa")
                 .doctorate("A")
-                .location("전주")
                 .number("01096574723")
                 .build();
 
@@ -39,7 +38,7 @@ class MemberServiceTest {
         //then
         System.out.println("=============");
         Professor member = memberService.findOneProfessor(id);
-        System.out.println(professor.getLocation() + " / " + professor.getDoctorate() + " / " + professor.getNumber());
+        System.out.println(professor.getOffice() + " / " + professor.getDoctorate() + " / " + professor.getNumber());
         Assertions.assertThat(member.getName()).isEqualTo(professor.getName());
 
     }
@@ -53,7 +52,6 @@ class MemberServiceTest {
                 .name("나승훈")
                 .major("asdfasdfsa")
                 .doctorate("A")
-                .location("전주")
                 .number("01096574723")
                 .build();
         Long id = memberService.saveMember(professor);
@@ -73,7 +71,6 @@ class MemberServiceTest {
                 .name("홍홍홍")
                 .major("asdfasdfsa")
                 .doctorate("A")
-                .location("전주")
                 .number("01096574723")
                 .build();
         Long id = memberService.saveMember(professor);
@@ -85,6 +82,7 @@ class MemberServiceTest {
                 .major("asdfasdfsa")
                 .doctorate("A")
                 .location("서울")
+                .office("office1")
                 .number("01096574723")
                 .build();
         Member beforeMember = (Member) memberService.findOneMember(id).get();
