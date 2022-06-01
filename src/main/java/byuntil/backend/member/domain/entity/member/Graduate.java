@@ -1,5 +1,6 @@
 package byuntil.backend.member.domain.entity.member;
 
+import byuntil.backend.admin.domain.Admin;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,8 +18,8 @@ public class Graduate extends Member {
 
     @Builder
     public Graduate(String name, String major, String email, String image, String dtype,
-                    LocalDateTime admission, String office, String fields) {
-        super(name, major, email, image, dtype, office, fields);
+                    LocalDateTime admission, String office, String fields, Admin admin) {
+        super(name, major, email, image, dtype, office, fields,admin);
         this.admission = admission;
     }
 

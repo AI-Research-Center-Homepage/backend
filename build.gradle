@@ -25,6 +25,12 @@ dependencies {
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+    // Spring Security 추가
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    //타임리프
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
     // https://mvnrepository.com/artifact/io.findify/s3mock
     testImplementation group: 'io.findify', name: 's3mock_2.13', version: '0.2.6'
 

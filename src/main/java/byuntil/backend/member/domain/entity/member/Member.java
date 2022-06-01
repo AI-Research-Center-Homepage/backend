@@ -1,5 +1,7 @@
 package byuntil.backend.member.domain.entity.member;
 
+import byuntil.backend.admin.domain.Admin;
+import byuntil.backend.admin.domain.UserRole;
 import byuntil.backend.member.domain.entity.Member_Thesis;
 import byuntil.backend.member.dto.request.MemberUpdateRequestDto;
 import lombok.AllArgsConstructor;
@@ -35,14 +37,16 @@ public abstract class Member {
 
     private String fields;
 
+    @OneToOne(mappedBy = "member", fetch = FetchType.LAZY)
+    private Admin admin;
+
     protected Member() {
 
     }
 
     @Column(name = "DTYPE", insertable = false, updatable = false)
     private String dtype;
-
-    public Member(String name, String major, String email, String image, String dtype, String office, String fields) {
+    public Member(String name, String major, String email, String image, String dtype, String office, String fields, Admin admin) {
         this.name = name;
         this.major = major;
         this.email = email;
@@ -50,6 +54,7 @@ public abstract class Member {
         this.dtype = dtype;
         this.office = office;
         this.fields = fields;
+        this.admin = admin;
     }
 
     public String getDtype() {
@@ -58,6 +63,9 @@ public abstract class Member {
     @OneToMany(mappedBy = "member")
     private List<Member_Thesis> theses = new ArrayList<>();
 
+    public void setAdmin(Admin admin){
+        this.admin = admin;
+    }
 
     public void update(MemberUpdateRequestDto dto) {
         this.name = dto.getName();
@@ -66,7 +74,8 @@ public abstract class Member {
         this.image = dto.getImage();
         this.office = dto.getOffice();
         this.fields = dto.getFields();
-
+        this.admin.setLoginId(dto.getAdminDto().getLoginId());
+        this.admin.setRole(UserRole.valueOf(dto.getAdminDto().getAuthorities().toArray()[0].toString()));
     }
     public void addMemberThesis(Member_Thesis memberThesis){
         this.theses.add(memberThesis);
