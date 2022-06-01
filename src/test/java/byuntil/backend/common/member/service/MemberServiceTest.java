@@ -1,38 +1,62 @@
 package byuntil.backend.common.member.service;
 
-import byuntil.backend.admin.domain.Admin;
-import byuntil.backend.admin.domain.dto.AdminDto;
-import byuntil.backend.admin.repository.AdminRepository;
-import byuntil.backend.admin.service.UserDetailService;
-import byuntil.backend.member.domain.entity.member.Member;
+import byuntil.backend.admin.domain.Login;
+import byuntil.backend.admin.domain.dto.LoginDto;
 import byuntil.backend.member.domain.entity.member.Professor;
 import byuntil.backend.member.domain.repository.MemberRepository;
-import byuntil.backend.member.dto.request.MemberUpdateRequestDto;
 import byuntil.backend.member.dto.request.ProfessorSaveRequestDto;
 import byuntil.backend.member.service.MemberService;
-import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.Column;
 import java.util.ArrayList;
 import java.util.Collection;
 
 @SpringBootTest
 class MemberServiceTest {
     @Autowired
-    MemberRepository memberRepository;
-    @Autowired
-    AdminRepository adminRepository;
-    @Autowired
-    UserDetailService userDetailService;
-    @Autowired
     MemberService memberService;
+
+    @Test
+    @Commit
+    @Transactional//영속성컨텍스트 범위에 있어야 지연로딩이 가능해져서 이 어노테이션이 필요함
+    public void 새로운멤버저장(){
+        //given
+        ProfessorSaveRequestDto professorSaveRequestDto = makeMemberDto();
+        //when
+        Long id =  memberService.saveMember(professorSaveRequestDto);
+        Professor professor = (Professor)memberService.findOneMember(id).get();
+        //then
+        Assertions.assertTrue(professor.getEmail().equals(professorSaveRequestDto.getEmail()));
+
+
+    }
+    public ProfessorSaveRequestDto makeMemberDto(){
+        Collection<SimpleGrantedAuthority> auths = new ArrayList<>();
+        auths.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        LoginDto loginDto = new LoginDto("id1", "111", auths, false);
+              //  LoginDto.builder().username("id1").password("111").authorities(auths).build();이렇게쓰면 에러발생 -> in unnamed module of loader 'app')
+
+        ProfessorSaveRequestDto professor = ProfessorSaveRequestDto.builder()
+                .email("asdfa")
+                .image("asdfasdfa")
+                .name("나승훈")
+                .major("asdfasdfsa")
+                .doctorate("A")
+                .number("01096574723")
+                .fields("여러가지 연구분야 에이아이 등등등")
+                .loginDto(loginDto)
+                .office("주소주소")
+                .build();
+
+        return professor;
+    }
+
 /*admin, member 합치고 나서 다시 test작성
     @Test
     @Commit
@@ -58,7 +82,7 @@ class MemberServiceTest {
         Professor member = memberService.findOneProfessor(id);
 
         adminRepository.findByLoginId(professor.getAdminDto().getLoginId());
-        Admin foundAdmin = adminRepository.findByLoginId(professor.getAdminDto().getLoginId()).get();
+        Login foundAdmin = adminRepository.findByLoginId(professor.getAdminDto().getLoginId()).get();
 
         //then
         System.out.println("=============");
@@ -116,7 +140,7 @@ class MemberServiceTest {
         //new
         Collection<GrantedAuthority> auth = new ArrayList<>();
         auth.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-        AdminDto updateAdminDto = new AdminDto("새로운 id", "새로운비번", auth, false);
+        LoginDto updateAdminDto = new LoginDto("새로운 id", "새로운비번", auth, false);
 
         MemberUpdateRequestDto updateMemberDto = MemberUpdateRequestDto.builder()
                 .email("변경후")
@@ -133,7 +157,7 @@ class MemberServiceTest {
         //when
         memberService.updateMember(id, updateMemberDto);
         Member member = (Member)memberService.findOneMember(id).get();
-        Admin updateAdmin = userDetailService.findByLoginId(member.getAdmin().getLoginId()).get();
+        Login updateAdmin = userDetailService.findByLoginId(member.getAdmin().getLoginId()).get();
         Member afterMember = (Member) memberService.findOneMember(id).get();
         //then
         Assertions.assertThat(updateMemberDto.getName()).isEqualTo(afterMember.getName());
@@ -161,7 +185,7 @@ class MemberServiceTest {
     public ProfessorSaveRequestDto createProfessorDto(){
         Collection<GrantedAuthority> auth = new ArrayList<>();
         auth.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-        AdminDto adminDto = new AdminDto("newenwe", "pw1", auth, false);
+        LoginDto adminDto = new LoginDto("newenwe", "pw1", auth, false);
         return ProfessorSaveRequestDto.builder()
                 .email("asdfa")
                 .image("asdfasdfa")

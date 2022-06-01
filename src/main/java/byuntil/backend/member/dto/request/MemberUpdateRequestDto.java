@@ -1,6 +1,7 @@
 package byuntil.backend.member.dto.request;
 
-import byuntil.backend.admin.domain.dto.AdminDto;
+import byuntil.backend.admin.domain.Login;
+import byuntil.backend.admin.domain.dto.LoginDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,15 +21,14 @@ public class MemberUpdateRequestDto {
     private String position;
     private LocalDateTime admission;
     private String doctorate;
-    private String location;
     private String number;
-    private String research;
 
-    private AdminDto adminDto;
+    private LoginDto loginDto;
 
     @Builder
     public MemberUpdateRequestDto(String name, String major, String email, String image, String position, String office,
-                                  LocalDateTime admission, String doctorate){
+                                  LocalDateTime admission, String doctorate, String number, String fields,
+                                  LoginDto loginDto){
         this.name = name;
         this.major = major;
         this.email = email;
@@ -36,10 +36,9 @@ public class MemberUpdateRequestDto {
         this.position = position;
         this.admission = admission;
         this.doctorate = doctorate;
-        this.location = location;
         this.number = number;
         this.office = office;
         this.fields = fields;
-        this.adminDto = adminDto;
+        this.loginDto = loginDto;
     }
 }

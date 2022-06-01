@@ -1,7 +1,7 @@
 package byuntil.backend.member.dto.request;
 
-import byuntil.backend.admin.domain.Admin;
-import byuntil.backend.admin.domain.dto.AdminDto;
+import byuntil.backend.admin.domain.Login;
+import byuntil.backend.admin.domain.dto.LoginDto;
 import byuntil.backend.member.domain.entity.member.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,14 +15,8 @@ public abstract class MemberSaveRequestDto {
     private String image;
     private String office;
     private String fields;
-    private AdminDto adminDto;
+    private LoginDto loginDto;
 
     abstract public Member toEntity();
 
-    public Admin dtosToEntity() {
-        Member member = this.toEntity();
-        Admin admin = this.getAdminDto().toEntity();
-        admin.addMember(member);
-        return admin;
-    }
 }

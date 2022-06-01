@@ -5,12 +5,12 @@ Date:   Thu May 19 16:30:56 2022 +0900
     backend-22 login 구현
     -> test : admin과 member를 함께 update, delete하는 test작성
 
-[1mdiff --git a/src/main/java/byuntil/backend/admin/domain/Admin.java b/src/main/java/byuntil/backend/admin/domain/Admin.java[m
+[1mdiff --git a/src/main/java/byuntil/backend/login/domain/Admin.java b/src/main/java/byuntil/backend/login/domain/Admin.java[m
 [1mindex ff473d3..f219d32 100644[m
-[1m--- a/src/main/java/byuntil/backend/admin/domain/Admin.java[m
-[1m+++ b/src/main/java/byuntil/backend/admin/domain/Admin.java[m
+[1m--- a/src/main/java/byuntil/backend/login/domain/Admin.java[m
+[1m+++ b/src/main/java/byuntil/backend/login/domain/Admin.java[m
 [36m@@ -1,10 +1,7 @@[m
- package byuntil.backend.admin.domain;[m
+ package byuntil.backend.login.domain;[m
  [m
  import byuntil.backend.member.domain.entity.member.Member;[m
 [31m-import lombok.AllArgsConstructor;[m
@@ -29,35 +29,35 @@ Date:   Thu May 19 16:30:56 2022 +0900
  @AllArgsConstructor[m
  @NoArgsConstructor[m
  public class Admin {[m
-[1mdiff --git a/src/main/java/byuntil/backend/admin/service/UserDetailService.java b/src/main/java/byuntil/backend/admin/service/UserDetailService.java[m
+[1mdiff --git a/src/main/java/byuntil/backend/login/service/UserDetailService.java b/src/main/java/byuntil/backend/login/service/UserDetailService.java[m
 [1mindex 1e867f0..4bed23e 100644[m
-[1m--- a/src/main/java/byuntil/backend/admin/service/UserDetailService.java[m
-[1m+++ b/src/main/java/byuntil/backend/admin/service/UserDetailService.java[m
+[1m--- a/src/main/java/byuntil/backend/login/service/UserDetailService.java[m
+[1m+++ b/src/main/java/byuntil/backend/login/service/UserDetailService.java[m
 [36m@@ -28,20 +28,20 @@[m [mpublic class UserDetailService implements UserDetailsService {[m
      private final PasswordEncoder passwordEncoder;[m
  [m
      @Transactional[m
 [31m-    public Long signUp(AdminDto dto){[m
-[32m+[m[32m    public Long signUp(Admin admin){[m
+[32m+[m[32m    public Long signUp(Admin login){[m
          //중복회원이 있을 시 예외[m
 [31m-        adminRepository.findByLoginId(dto.getLoginId()).ifPresent((m -> {[m
 [31m-            throw new LoginIdDuplicationException("이미 존재하는 회원입니다.");[m
 [31m-        }));[m
-[32m+[m[32m        String encodedPw = passwordEncoder.encode(admin.getLoginPw());[m
+[32m+[m[32m        String encodedPw = passwordEncoder.encode(login.getLoginPw());[m
  [m
 [31m-        String encodedPw = passwordEncoder.encode(dto.getPassword());[m
 [31m-[m
-[31m-        Admin admin = dto.toEntity();[m
-         admin.changePw(encodedPw);[m
+[31m-        Admin login = dto.toEntity();[m
+         login.changePw(encodedPw);[m
  [m
 [31m-[m
-         return adminRepository.save(admin).getId();[m
+         return adminRepository.save(login).getId();[m
      }[m
 [32m+[m[32m    @Transactional[m
-[32m+[m[32m    public void encodedPw(Admin admin){[m
+[32m+[m[32m    public void encodedPw(Admin login){[m
 [32m+[m[32m        //암호화하고 update[m
-[32m+[m[32m        String encodedPw = passwordEncoder.encode(admin.getLoginPw());[m
-[32m+[m[32m        admin.changePw(encodedPw);[m
+[32m+[m[32m        String encodedPw = passwordEncoder.encode(login.getLoginPw());[m
+[32m+[m[32m        login.changePw(encodedPw);[m
 [32m+[m[32m    }[m
  [m
      public Optional<Admin> findById(Long id){[m
@@ -79,8 +79,8 @@ Date:   Thu May 19 16:30:56 2022 +0900
 [36m@@ -1,6 +1,7 @@[m
  package byuntil.backend.member.domain.entity.member;[m
  [m
- import byuntil.backend.admin.domain.Admin;[m
-[32m+[m[32mimport byuntil.backend.admin.domain.UserRole;[m
+ import byuntil.backend.admin.domain.Login;[m
+[32m+[m[32mimport byuntil.backend.login.domain.UserRole;[m
  import byuntil.backend.member.domain.entity.Member_Thesis;[m
  import byuntil.backend.member.dto.request.MemberUpdateRequestDto;[m
  import lombok.AllArgsConstructor;[m
@@ -88,8 +88,8 @@ Date:   Thu May 19 16:30:56 2022 +0900
          this.email = dto.getEmail();[m
          this.major = dto.getMajor();[m
          this.image = dto.getImage();[m
-[32m+[m[32m        this.admin.setLoginId(dto.getAdminDto().getLoginId());[m
-[32m+[m[32m        this.admin.setRole(UserRole.valueOf(dto.getAdminDto().getAuthorities().toArray()[0].toString()));[m
+[32m+[m[32m        this.login.setLoginId(dto.getAdminDto().getLoginId());[m
+[32m+[m[32m        this.login.setRole(UserRole.valueOf(dto.getAdminDto().getAuthorities().toArray()[0].toString()));[m
      }[m
      public void addMemberThesis(Member_Thesis memberThesis){[m
          this.theses.add(memberThesis);[m
@@ -100,7 +100,7 @@ Date:   Thu May 19 16:30:56 2022 +0900
 [36m@@ -1,5 +1,6 @@[m
  package byuntil.backend.member.dto.request;[m
  [m
-[32m+[m[32mimport byuntil.backend.admin.domain.dto.AdminDto;[m
+[32m+[m[32mimport byuntil.backend.login.domain.dto.AdminDto;[m
  import lombok.Builder;[m
  import lombok.Getter;[m
  import lombok.NoArgsConstructor;[m
@@ -108,12 +108,12 @@ Date:   Thu May 19 16:30:56 2022 +0900
      private String number;[m
      private String research;[m
  [m
-[32m+[m[32m    private AdminDto adminDto;[m
+[32m+[m[32m    private AdminDto loginDto;[m
 [32m+[m
      @Builder[m
 [31m-    public MemberUpdateRequestDto(String name, String major, String email, String image, String position, String admission, String doctorate, String location, String number, String research) {[m
 [32m+[m[32m    public MemberUpdateRequestDto(String name, String major, String email, String image, String position, String admission,[m
-[32m+[m[32m                                  String doctorate, String location, String number, String research, AdminDto adminDto) {[m
+[32m+[m[32m                                  String doctorate, String location, String number, String research, AdminDto loginDto) {[m
          this.name = name;[m
          this.major = major;[m
          this.email = email;[m
@@ -121,7 +121,7 @@ Date:   Thu May 19 16:30:56 2022 +0900
          this.location = location;[m
          this.number = number;[m
          this.research = research;[m
-[32m+[m[32m        this.adminDto = adminDto;[m
+[32m+[m[32m        this.loginDto = loginDto;[m
      }[m
  }[m
 [1mdiff --git a/src/main/java/byuntil/backend/member/service/MemberService.java b/src/main/java/byuntil/backend/member/service/MemberService.java[m
@@ -130,9 +130,9 @@ Date:   Thu May 19 16:30:56 2022 +0900
 [1m+++ b/src/main/java/byuntil/backend/member/service/MemberService.java[m
 [36m@@ -2,11 +2,14 @@[m [mpackage byuntil.backend.member.service;[m
  [m
- import byuntil.backend.admin.domain.Admin;[m
- import byuntil.backend.admin.repository.AdminRepository;[m
-[32m+[m[32mimport byuntil.backend.admin.service.UserDetailService;[m
+ import byuntil.backend.admin.domain.Login;[m
+ import byuntil.backend.login.repository.AdminRepository;[m
+[32m+[m[32mimport byuntil.backend.login.service.UserDetailService;[m
 [32m+[m[32mimport byuntil.backend.common.exception.LoginIdDuplicationException;[m
  import byuntil.backend.member.domain.entity.member.*;[m
  import byuntil.backend.member.domain.repository.MemberRepository;[m
@@ -153,18 +153,18 @@ Date:   Thu May 19 16:30:56 2022 +0900
      @Transactional[m
      public Long saveMember(MemberSaveRequestDto dto) {[m
 [36m@@ -27,8 +30,11 @@[m [mpublic class MemberService {[m
-         Admin admin = dto.getAdminDto().toEntity();[m
-         admin.addMember(member);*/[m
+         Admin login = dto.getAdminDto().toEntity();[m
+         login.addMember(member);*/[m
          //dto를 entity로 만들고 admin도 entity로만든다음에 return함[m
 [32m+[m[32m        userDetailService.findByLoginId(dto.getAdminDto().getLoginId()).ifPresent((m -> {[m
 [32m+[m[32m            throw new LoginIdDuplicationException("이미 존재하는 회원입니다.");[m
 [32m+[m[32m        }));[m
-         Admin admin = dto.dtosToEntity();[m
-[31m-        adminRepository.save(admin);[m
-[32m+[m[32m        userDetailService.signUp(admin);[m
-         memberRepository.save(admin.getMember());[m
+         Admin login = dto.dtosToEntity();[m
+[31m-        adminRepository.save(login);[m
+[32m+[m[32m        userDetailService.signUp(login);[m
+         memberRepository.save(login.getMember());[m
  [m
-         return admin.getMember().getId();[m
+         return login.getMember().getId();[m
 [36m@@ -64,9 +70,10 @@[m [mpublic class MemberService {[m
      }[m
  [m
@@ -193,17 +193,17 @@ Date:   Thu May 19 16:30:56 2022 +0900
 [32m+[m[32m        userDetailService.deleteById(member.getAdmin().getId());[m
      }[m
  }[m
-[1mdiff --git a/src/test/java/byuntil/backend/admin/service/AdminServiceTest.java b/src/test/java/byuntil/backend/admin/service/AdminServiceTest.java[m
+[1mdiff --git a/src/test/java/byuntil/backend/login/service/AdminServiceTest.java b/src/test/java/byuntil/backend/login/service/AdminServiceTest.java[m
 [1mindex e4ab971..ff4f3f5 100644[m
-[1m--- a/src/test/java/byuntil/backend/admin/service/AdminServiceTest.java[m
-[1m+++ b/src/test/java/byuntil/backend/admin/service/AdminServiceTest.java[m
+[1m--- a/src/test/java/byuntil/backend/login/service/AdminServiceTest.java[m
+[1m+++ b/src/test/java/byuntil/backend/login/service/AdminServiceTest.java[m
 [36m@@ -35,7 +35,7 @@[m [mclass AdminServiceTest {[m
-         AdminDto adminDto = new AdminDto("l1222","비번1", auths);[m
+         AdminDto loginDto = new AdminDto("l1222","비번1", auths);[m
  [m
          //when[m
-[31m-        Long id = userDetailService.signUp(adminDto);[m
-[32m+[m[32m        Long id = userDetailService.signUp(adminDto.toEntity());[m
-         Admin admin = userDetailService.findById(id).get();[m
+[31m-        Long id = userDetailService.signUp(loginDto);[m
+[32m+[m[32m        Long id = userDetailService.signUp(loginDto.toEntity());[m
+         Admin login = userDetailService.findById(id).get();[m
          //then[m
  [m
 [1mdiff --git a/src/test/java/byuntil/backend/common/member/service/MemberServiceTest.java b/src/test/java/byuntil/backend/common/member/service/MemberServiceTest.java[m
@@ -211,10 +211,10 @@ Date:   Thu May 19 16:30:56 2022 +0900
 [1m--- a/src/test/java/byuntil/backend/common/member/service/MemberServiceTest.java[m
 [1m+++ b/src/test/java/byuntil/backend/common/member/service/MemberServiceTest.java[m
 [36m@@ -3,6 +3,7 @@[m [mpackage byuntil.backend.common.member.service;[m
- import byuntil.backend.admin.domain.Admin;[m
- import byuntil.backend.admin.domain.dto.AdminDto;[m
- import byuntil.backend.admin.repository.AdminRepository;[m
-[32m+[m[32mimport byuntil.backend.admin.service.UserDetailService;[m
+ import byuntil.backend.admin.domain.Login;[m
+ import byuntil.backend.login.domain.dto.AdminDto;[m
+ import byuntil.backend.login.repository.AdminRepository;[m
+[32m+[m[32mimport byuntil.backend.login.service.UserDetailService;[m
  import byuntil.backend.member.domain.entity.member.Member;[m
  import byuntil.backend.member.domain.entity.member.Professor;[m
  import byuntil.backend.member.domain.repository.MemberRepository;[m
@@ -263,7 +263,7 @@ Date:   Thu May 19 16:30:56 2022 +0900
                  .major("asdfasdfsa")[m
                  .doctorate("A")[m
                  .location("서울")[m
-[32m+[m[32m                .adminDto(updateAdminDto)[m
+[32m+[m[32m                .loginDto(updateAdminDto)[m
                  .number("01096574723")[m
                  .build();[m
 [32m+[m
@@ -283,8 +283,8 @@ Date:   Thu May 19 16:30:56 2022 +0900
      public ProfessorSaveRequestDto createProfessorDto(){[m
          Collection<GrantedAuthority> auth = new ArrayList<>();[m
          auth.add(new SimpleGrantedAuthority("ROLE_ADMIN"));[m
-[31m-        AdminDto adminDto = new AdminDto("성공?!", "pw1", auth);[m
-[32m+[m[32m        AdminDto adminDto = new AdminDto("1234", "pw1", auth);[m
+[31m-        AdminDto loginDto = new AdminDto("성공?!", "pw1", auth);[m
+[32m+[m[32m        AdminDto loginDto = new AdminDto("1234", "pw1", auth);[m
          return ProfessorSaveRequestDto.builder()[m
                  .email("asdfa")[m
                  .image("asdfasdfa")[m

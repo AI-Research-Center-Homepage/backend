@@ -1,6 +1,6 @@
 package byuntil.backend.member.dto.request;
 
-import byuntil.backend.admin.domain.dto.AdminDto;
+import byuntil.backend.admin.domain.dto.LoginDto;
 import byuntil.backend.member.domain.entity.member.Member;
 import byuntil.backend.member.domain.entity.member.Undergraduate;
 import lombok.Builder;
@@ -17,8 +17,8 @@ public class UndergraduateSaveRequestDto extends MemberSaveRequestDto {
     @Builder
     public UndergraduateSaveRequestDto(String name, String major, String email, String image,
                                        LocalDateTime admission, String research, String office,
-                                       String fields, AdminDto adminDto) {
-        super(name, major, email, image, office, fields, adminDto);
+                                       String fields, LoginDto loginDto) {
+        super(name, major, email, image, office, fields, loginDto);
         this.admission = admission;
         this.research = research;
     }
@@ -31,7 +31,7 @@ public class UndergraduateSaveRequestDto extends MemberSaveRequestDto {
                 .email(getEmail())
                 .image(getImage())
                 .admission(admission)
-                .research(research)
+                .login(getLoginDto().toEntity())
                 .office(getOffice())
                 .build();
     }
