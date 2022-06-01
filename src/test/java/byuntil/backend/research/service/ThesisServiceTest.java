@@ -1,20 +1,12 @@
 package byuntil.backend.research.service;
 
-import byuntil.backend.research.domain.entity.Category;
-import byuntil.backend.research.domain.entity.Field;
 import byuntil.backend.research.domain.entity.Thesis;
-import byuntil.backend.research.domain.repository.ThesisRepository;
-import byuntil.backend.research.dto.FieldDto;
 import byuntil.backend.research.dto.ThesisDto;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.Optional;
 

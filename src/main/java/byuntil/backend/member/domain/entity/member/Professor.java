@@ -24,8 +24,9 @@ public class Professor extends Member {
     }*/
 
     @Builder
-    public Professor(String name, String major, String email, String image, String dtype, String doctorate, String office, String number) {
-        super(name, major, email, image, dtype, office);
+    public Professor(String name, String major, String email, String image, String dtype,
+                     String doctorate, String office, String number, String fields) {
+        super(name, major, email, image, dtype, office, fields);
         this.doctorate = doctorate;
         this.number = number;
     }

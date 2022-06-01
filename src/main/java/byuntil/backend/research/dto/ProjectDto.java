@@ -10,9 +10,11 @@ public class ProjectDto {
     private Long id;
     private String name;
     private String content;
+    private String participants;
+    private FieldDto fieldDto;
 
     public Project toEntity(){
-        Project project = Project.builder().name(name).content(content).build();
+        Project project = Project.builder().name(name).content(content).participants(participants).build();
         return project;
     }
 }

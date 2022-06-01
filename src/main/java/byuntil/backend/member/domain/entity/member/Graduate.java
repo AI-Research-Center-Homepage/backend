@@ -4,22 +4,25 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.tomcat.jni.Local;
 
 import javax.persistence.Entity;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Graduate extends Member {
-    private String admission;
+    private LocalDateTime admission;
 
     @Builder
-    public Graduate(String name, String major, String email, String image, String dtype, String admission, String office) {
-        super(name, major, email, image, dtype, office);
+    public Graduate(String name, String major, String email, String image, String dtype,
+                    LocalDateTime admission, String office, String fields) {
+        super(name, major, email, image, dtype, office, fields);
         this.admission = admission;
     }
 
-    public void update(String admission) {
+    public void update(LocalDateTime admission) {
         this.admission = admission;
     }
 }

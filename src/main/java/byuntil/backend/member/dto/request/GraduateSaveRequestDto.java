@@ -5,14 +5,17 @@ import byuntil.backend.member.domain.entity.member.Member;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 public class GraduateSaveRequestDto extends MemberSaveRequestDto {
 
-    private String admission;
+    private LocalDateTime admission;
 
     @Builder
-    public GraduateSaveRequestDto(String name, String major, String email, String image, String admission, String office) {
-        super(name, major, email, image, office);
+    public GraduateSaveRequestDto(String name, String major, String email, String image,
+                                  LocalDateTime admission, String office, String fields) {
+        super(name, major, email, image, office, fields);
         this.admission = admission;
     }
 

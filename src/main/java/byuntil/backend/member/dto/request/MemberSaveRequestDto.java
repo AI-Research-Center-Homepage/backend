@@ -12,6 +12,7 @@ public abstract class MemberSaveRequestDto {
     private String email;
     private String image;
     private String office;
+    private String fields;
 
     abstract public Member toEntity();
 }

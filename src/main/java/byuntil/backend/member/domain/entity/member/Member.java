@@ -33,6 +33,8 @@ public abstract class Member {
 
     private String office;
 
+    private String fields;
+
     protected Member() {
 
     }
@@ -40,13 +42,14 @@ public abstract class Member {
     @Column(name = "DTYPE", insertable = false, updatable = false)
     private String dtype;
 
-    public Member(String name, String major, String email, String image, String dtype, String office) {
+    public Member(String name, String major, String email, String image, String dtype, String office, String fields) {
         this.name = name;
         this.major = major;
         this.email = email;
         this.image = image;
         this.dtype = dtype;
         this.office = office;
+        this.fields = fields;
     }
 
     public String getDtype() {
@@ -62,6 +65,8 @@ public abstract class Member {
         this.major = dto.getMajor();
         this.image = dto.getImage();
         this.office = dto.getOffice();
+        this.fields = dto.getFields();
+
     }
     public void addMemberThesis(Member_Thesis memberThesis){
         this.theses.add(memberThesis);

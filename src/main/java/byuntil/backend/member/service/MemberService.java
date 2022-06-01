@@ -69,7 +69,6 @@ public class MemberService {
             graduate.update(requestDto.getAdmission());
         } else if (member instanceof Researcher) {
             Researcher researcher = (Researcher) member;
-            researcher.update(requestDto.getResearch());
         } else if (member instanceof Undergraduate) {
             Undergraduate undergraduate = (Undergraduate) member;
             undergraduate.update(requestDto.getAdmission(), requestDto.getResearch());

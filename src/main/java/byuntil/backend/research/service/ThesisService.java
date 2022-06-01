@@ -1,7 +1,9 @@
 package byuntil.backend.research.service;
 
+import byuntil.backend.research.domain.entity.Demo;
 import byuntil.backend.research.domain.entity.Field;
 import byuntil.backend.research.domain.entity.Thesis;
+import byuntil.backend.research.domain.repository.FieldRepository;
 import byuntil.backend.research.domain.repository.ThesisRepository;
 import byuntil.backend.research.dto.FieldDto;
 import byuntil.backend.research.dto.ThesisDto;
@@ -16,11 +18,14 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ThesisService {
-
+    private final FieldRepository fieldRepository;
     private final ThesisRepository thesisRepository;
     @Transactional
     public Long save(ThesisDto thesisDto){
         Thesis thesis = thesisDto.toEntity();
+        Field field = thesisDto.getFieldDto().toEntity();
+        thesis.addField(field);
+        fieldRepository.save(field);
         return thesisRepository.save(thesis).getId();
     }
     @Transactional

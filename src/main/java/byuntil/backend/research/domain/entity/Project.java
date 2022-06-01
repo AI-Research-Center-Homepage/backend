@@ -3,10 +3,7 @@ package byuntil.backend.research.domain.entity;
 import byuntil.backend.research.dto.ProjectDto;
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Builder
@@ -28,9 +25,29 @@ public class Project {
     @Column(columnDefinition = "LONGTEXT")
     private String content;
 
+    private String participants;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "FIELD_ID", nullable = false
+    )
+    private Field field;
+
+    //연관관계 설정 메서드
+    public void addField(Field field){
+        this.field = field;
+        field.setProject(this);
+    }
+
     public void update(ProjectDto projectDto){
         this.name = projectDto.getName();
         this.content = projectDto.getContent();
+        this.participants = projectDto.getParticipants();
+    }
+    @Builder
+    public Project(String name, String content, String participants) {
+        this.name = name;
+        this.content = content;
+        this.participants = participants;
     }
 
 

@@ -7,12 +7,10 @@ import lombok.Getter;
 
 @Getter
 public class ResearcherSaveRequestDto extends MemberSaveRequestDto {
-    private String research;
 
     @Builder
-    public ResearcherSaveRequestDto(String name, String major, String email, String image, String research, String office) {
-        super(name, major, email, image, office);
-        this.research = research;
+    public ResearcherSaveRequestDto(String name, String major, String email, String image, String office, String fields) {
+        super(name, major, email, image, office, fields);
     }
 
 
@@ -24,7 +22,6 @@ public class ResearcherSaveRequestDto extends MemberSaveRequestDto {
                 .email(getEmail())
                 .image(getImage())
                 .office(getOffice())
-                .research(research)
                 .build();
     }
 }

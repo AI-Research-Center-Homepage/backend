@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Getter
 @NoArgsConstructor
 public class MemberUpdateRequestDto {
@@ -12,9 +14,10 @@ public class MemberUpdateRequestDto {
     private String email;
     private String image;
     private String office;
+    private String fields;
 
     private String position;
-    private String admission;
+    private LocalDateTime admission;
     private String doctorate;
     private String location;
     private String number;
@@ -22,7 +25,8 @@ public class MemberUpdateRequestDto {
 
     @Builder
     public MemberUpdateRequestDto(String name, String major, String email, String image, String position, String office,
-                                  String admission, String doctorate, String location, String number, String research) {
+                                  LocalDateTime admission, String doctorate, String location, String number, String research,
+                                  String fields) {
         this.name = name;
         this.major = major;
         this.email = email;
@@ -34,5 +38,6 @@ public class MemberUpdateRequestDto {
         this.number = number;
         this.research = research;
         this.office = office;
+        this.fields = fields;
     }
 }

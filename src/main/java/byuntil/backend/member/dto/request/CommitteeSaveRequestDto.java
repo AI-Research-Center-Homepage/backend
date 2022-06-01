@@ -10,8 +10,9 @@ public class CommitteeSaveRequestDto extends MemberSaveRequestDto {
     private String position;
 
     @Builder
-    public CommitteeSaveRequestDto(String name, String major, String email, String image, String position, String office) {
-        super(name, major, email, image, office);
+    public CommitteeSaveRequestDto(String name, String major, String email,
+                                   String image, String position, String office, String fields) {
+        super(name, major, email, image, office, fields);
         this.position = position;
     }
 

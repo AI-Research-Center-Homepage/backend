@@ -3,13 +3,9 @@ package byuntil.backend.research.domain.entity;
 import lombok.Builder;
 import lombok.Getter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
-@Builder
 @Getter
 public class Demo {
     @Id
@@ -24,6 +20,26 @@ public class Demo {
     private String content;
 
     private String url;
+
+    private String participants;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "FIELD_ID", nullable = false)
+    private Field field;
+
+    @Builder
+    public Demo(String name, String content, String url, String participants) {
+        this.name = name;
+        this.content = content;
+        this.url = url;
+        this.participants = participants;
+    }
+
+    //연관관계 설정 메서드
+    public void addField(Field field){
+        this.field = field;
+        field.setDemo(this);
+    }
 
     public Demo() {
 

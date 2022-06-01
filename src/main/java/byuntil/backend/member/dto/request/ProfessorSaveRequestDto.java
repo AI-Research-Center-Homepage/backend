@@ -11,8 +11,9 @@ public class ProfessorSaveRequestDto extends MemberSaveRequestDto {
     private String number;
 
     @Builder
-    public ProfessorSaveRequestDto(String name, String major, String email, String image, String doctorate, String office, String number) {
-        super(name, major, email, image, office);
+    public ProfessorSaveRequestDto(String name, String major, String email, String image,
+                                   String doctorate, String office, String number, String fields) {
+        super(name, major, email, image, office, fields);
         this.doctorate = doctorate;
         this.number = number;
     }

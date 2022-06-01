@@ -30,7 +30,7 @@ public class FieldService {
     @Transactional
     public Long update(Long id, FieldDto fieldDto){
         Field origin = fieldRepository.findById(id).orElseThrow(()->new IllegalArgumentException("찾는 연구분야가 없습니다. id = "+id));
-        origin.update(fieldDto.getCategory(), fieldDto.getDescription());
+        origin.update(fieldDto.getName(), fieldDto.getDescription());
 
         return id;
     }
