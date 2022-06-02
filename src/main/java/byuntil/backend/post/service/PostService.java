@@ -36,24 +36,42 @@ public class PostService {
     //minji
     @Transactional
     public Long save(PostDto postDto, List<MultipartFile> fileList) throws IOException {
+        //임시코드고 삭제해야함
+        boardRepository.save(postDto.getBoardDto().toEntity());
         //
-        Board board = Board.builder().name("게시판1").build();
-        boardRepository.save(board);
 
-        Post post = postDto.toEntity();
-        List<Attach> attachList =s3Service.upload(fileList);
-        post.addAttaches(attachList);
-        //보드 이름으로 보드 찾아오는 명령어 수행해야함 없으면 예외터뜨리기
-        Optional<Board> result=boardRepository.findByName(postDto.getBoardDto().getName());
-        if(!result.isPresent()){
-            throw new BoardNotFoundException("게시판 이름이 존재하지 않습니다.");
+        if(fileList==null) {
+            Post post = postDto.toEntity();
+            //보드 이름으로 보드 찾아오는 명령어 수행해야함 없으면 예외터뜨리기
+            Optional<Board> result=boardRepository.findByName(postDto.getBoardDto().getName());
+            if(!result.isPresent()){
+                throw new BoardNotFoundException("게시판 이름이 존재하지 않습니다.");
+            }
+            //찾아온 board로
+            post.setBoard(result.get());
+            //그럼 cascade설정으로 attach도 같이 저장이 될 것이다
+            postRepository.save(post);
+            return post.getId();
         }
-        //찾아온 board로
-        post.setBoard(result.get());
-        //그럼 cascade설정으로 attach도 같이 저장이 될 것이다
-        postRepository.save(post);
+        else{
 
-        return post.getId();
+            Post post = postDto.toEntity();
+            List<Attach> attachList =s3Service.uploadReturnAttach(fileList);
+            post.addAttaches(attachList);
+            //보드 이름으로 보드 찾아오는 명령어 수행해야함 없으면 예외터뜨리기
+            Optional<Board> result=boardRepository.findByName(postDto.getBoardDto().getName());
+            if(!result.isPresent()){
+                throw new BoardNotFoundException("게시판 이름이 존재하지 않습니다.");
+            }
+            //찾아온 board로
+            post.setBoard(result.get());
+            //그럼 cascade설정으로 attach도 같이 저장이 될 것이다
+            postRepository.save(post);
+            return post.getId();
+        }
+
+
+
 
     }
 

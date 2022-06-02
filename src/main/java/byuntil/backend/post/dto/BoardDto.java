@@ -27,10 +27,6 @@ public class BoardDto {
     }
 
     public Board toEntity(){
-        List<Post> posts = new ArrayList<>();
-        for(int i=0;i<postDtoList.size();i++){
-            posts.add(postDtoList.get(i).toEntity());
-        }
-        return Board.builder().name(name).posts(posts).build();
+        return Board.builder().name(name).build();
     }
 }

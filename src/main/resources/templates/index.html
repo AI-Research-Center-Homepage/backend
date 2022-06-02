@@ -42,7 +42,7 @@
         };
 
         fetch("http://localhost:8080/post/upload", requestOptions)
-            .then(response =>response.content())
+            .then(response =>response.text())
             .then(result => callback(result))
             .catch(error => console.log('error', error));
 

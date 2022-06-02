@@ -1,6 +1,7 @@
 package byuntil.backend.post.controller;
 
 import byuntil.backend.post.dto.AttachDto;
+import byuntil.backend.post.dto.BoardDto;
 import byuntil.backend.post.dto.PostDto;
 import byuntil.backend.post.service.AttachService;
 import byuntil.backend.post.service.PostService;
@@ -24,7 +25,7 @@ import java.util.List;
 @Controller
 @Slf4j
 @RequiredArgsConstructor
-
+@RequestMapping("/post")
 public class PostController {
     private final AttachService attachService;
     private final S3ServiceImpl s3Service;
@@ -32,7 +33,7 @@ public class PostController {
     public static final DefaultRes FAIL_DEFAULT_RES
             = new DefaultRes(StatusCode.INTERNAL_SERVER_ERROR, ResponseMessage.INTERNAL_SERVER_ERROR);
 
-    @PostMapping(path = "/post/save", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(path = "/save", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public void saveProfile(@RequestPart PostDto postDto,
                             @RequestPart(value = "attachedFile", required = false)
                             final List<MultipartFile> multipartFileList) throws IOException {
@@ -41,8 +42,10 @@ public class PostController {
         //TODO : 컴파일타임에 잡을 수 있는 예외를 런타임으로 넘겨버릴 수 있기 때문에 사용을 지양해야한다 제네릭 타입으로 return하기
     }
     @PostMapping("/submit")
-    public String sumbit(@RequestBody PostDto postDto) throws IOException {
+    public String sumbit(@ModelAttribute PostDto postDto) throws IOException {
         System.out.println("==============================");
+        postDto.setTitle("임시제목1");
+        postDto.setBoardDto(new BoardDto("게시판1"));
         System.out.println(postDto.getContent());
         System.out.println("==============================");
         postService.save(postDto, null);
@@ -54,6 +57,8 @@ public class PostController {
         System.out.println("==============================");
         System.out.println(multipartFileList.size());
         System.out.println("==============================");
+
         return s3Service.upload(multipartFileList).toString();
     }
+
 }
