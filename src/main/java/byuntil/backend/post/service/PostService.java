@@ -59,9 +59,9 @@ public class PostService {
 
     /*
     성재
-    문제 1. file 하나가 아니라 여러개가 들어가야한다는점
-    2. dto안에 entity가 들어가면 안됨
-    3. board도 처리해야함
+    1. file 하나가 아니라 여러개가 들어가야해
+    2. dto안에 entity가 들어가면 안될것같아
+    3. board도 처리해야해!
     @Transactional
     public Long save(PostDto postDto, MultipartFile file) {
         Post post = postDto.toEntity();

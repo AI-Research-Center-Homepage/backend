@@ -26,7 +26,6 @@ public class PostDto {
     }
 
 
-    //TODO : Toentity를할때 값이 안넘어오면 에러가뜬다. 그래서 여기에 있는 값들은 모두 notnull처리를 해주어야할듯?
     //toEntity를 할때는 nullable인것을 제외하고는 모두 넣어야한다
     public Post toEntity() {
         Post build = Post.builder()
