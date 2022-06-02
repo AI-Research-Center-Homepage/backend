@@ -24,9 +24,6 @@ public class Thesis {
     @Column(name = "THESIS_ID")
     private Long id;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "FIELD_ID")
-    private Field field;
 
     @Column(nullable = false)
     private String title;
@@ -38,13 +35,17 @@ public class Thesis {
     @Column(nullable = false)
     private String url;
 
-    /*아래 다대다 테이블있음
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "MEMBER_ID")
-    private Member member;*/
+    @OneToOne(fetch = LAZY)
+    @JoinColumn(name = "FIELD_ID", nullable = false)
+    private Field field;
 
     @OneToMany(mappedBy = "thesis")
     private List<Member_Thesis> members = new ArrayList<>();
+
+    //연관관계 설정 메서드
+    public void setField(Field field){
+        this.field = field;
+    }
 
     public void addMemberThesis(Member_Thesis memberThesis){
         members.add(memberThesis);
@@ -57,9 +58,6 @@ public class Thesis {
         this.publishDate = dto.getPublishDate();
         this.url = dto.getUrl();
 
-    }
-    public void setField(Field field){
-        this.field = field;
     }
     public void toDto(){
         ThesisDto dto = ThesisDto.builder().title(this.title).koName(this.koName).enName(this.enName).journal(this.journal)

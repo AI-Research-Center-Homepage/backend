@@ -22,9 +22,8 @@ public class ThesisDto {
     private String journal;
     private LocalDateTime publishDate;
     private String url;
+    private FieldDto fieldDto;
 
-    //연관관게는 entity로 바꾼 뒤에 넣어주는 걸로..
-    //private FieldDto fieldDto;
 
     public Thesis toEntity(){
         Thesis thesis = Thesis.builder().enName(this.enName).koName(this.koName)

@@ -1,6 +1,6 @@
 package byuntil.backend.member.domain.entity.member;
 
-import byuntil.backend.admin.domain.Admin;
+import byuntil.backend.admin.domain.Login;
 import byuntil.backend.admin.domain.UserRole;
 import byuntil.backend.member.domain.entity.Member_Thesis;
 import byuntil.backend.member.dto.request.MemberUpdateRequestDto;
@@ -31,10 +31,19 @@ public abstract class Member {
 
     private String email;
 
-    private String image;
+    private String image;//imageurl
 
-    @OneToOne(mappedBy = "member", fetch = FetchType.LAZY)
-    private Admin admin;
+    private String office;
+
+    private String fields;
+
+    @Embedded
+    private Login login;
+
+    public void changePw(String encodedPw){
+        this.login.setLoginPw(encodedPw);
+    }
+//
 
     protected Member() {
 
@@ -42,14 +51,16 @@ public abstract class Member {
 
     @Column(name = "DTYPE", insertable = false, updatable = false)
     private String dtype;
-
-    public Member(String name, String major, String email, String image, String dtype, Admin admin) {
+    public Member(String name, String major, String email, String image, String dtype, String office, String fields, Login login) {
         this.name = name;
         this.major = major;
         this.email = email;
         this.image = image;
         this.dtype = dtype;
-        this.admin = admin;
+        this.office = office;
+        this.fields = fields;
+        this.login = login;
+        //this.role = UserRole.valueOf(admin.getAuthorities().toArray()[0].toString());
     }
 
     public String getDtype() {
@@ -58,17 +69,18 @@ public abstract class Member {
     @OneToMany(mappedBy = "member")
     private List<Member_Thesis> theses = new ArrayList<>();
 
-    public void setAdmin(Admin admin){
-        this.admin = admin;
-    }
 
     public void update(MemberUpdateRequestDto dto) {
         this.name = dto.getName();
         this.email = dto.getEmail();
         this.major = dto.getMajor();
         this.image = dto.getImage();
-        this.admin.setLoginId(dto.getAdminDto().getLoginId());
-        this.admin.setRole(UserRole.valueOf(dto.getAdminDto().getAuthorities().toArray()[0].toString()));
+        this.office = dto.getOffice();
+        this.fields = dto.getFields();
+        this.login.setLoginId(dto.getLoginDto().getLoginId());
+        this.login.setLoginPw(dto.getLoginDto().getLoginPw());
+        this.login.setRole(UserRole.valueOf(dto.getLoginDto().getAuthorities().toArray()[0].toString()));
+        this.login.setDeleted(dto.getLoginDto().isDeleted());
     }
     public void addMemberThesis(Member_Thesis memberThesis){
         this.theses.add(memberThesis);

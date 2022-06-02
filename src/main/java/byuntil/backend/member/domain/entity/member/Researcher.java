@@ -1,6 +1,7 @@
 package byuntil.backend.member.domain.entity.member;
 
-import byuntil.backend.admin.domain.Admin;
+import byuntil.backend.admin.domain.Login;
+import byuntil.backend.admin.domain.dto.LoginDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,15 +13,12 @@ import javax.persistence.Entity;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Researcher extends Member {
-    private String research;
 
     @Builder
-    public Researcher(String name, String major, String email, String image, String dtype, String research, Admin admin) {
-        super(name, major, email, image, dtype, admin);
-        this.research = research;
+    public Researcher(String name, String major, String email, String image,
+                      String dtype, String office, String fields, Login login) {
+        super(name, major, email, image, dtype, office, fields, login);
     }
 
-    public void update(String research) {
-        this.research = research;
-    }
+    //
 }

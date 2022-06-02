@@ -1,6 +1,9 @@
 package byuntil.backend.research.service;
 
+import byuntil.backend.common.exception.ExistException;
+import byuntil.backend.research.domain.entity.Demo;
 import byuntil.backend.research.domain.entity.Field;
+import byuntil.backend.research.domain.entity.Project;
 import byuntil.backend.research.domain.entity.Thesis;
 import byuntil.backend.research.domain.repository.FieldRepository;
 import byuntil.backend.research.dto.FieldDto;
@@ -21,22 +24,29 @@ public class FieldService {
 
     @Transactional
     public Long save(FieldDto fieldDto){
-        //dto -> entity
-        //repository에 저장
         Field field = fieldDto.toEntity();
         return fieldRepository.save(field).getId();
     }
-    //member_thesis는 어떻게?
-    @Transactional
-    public Long update(Long id, FieldDto fieldDto){
-        Field origin = fieldRepository.findById(id).orElseThrow(()->new IllegalArgumentException("찾는 연구분야가 없습니다. id = "+id));
-        origin.update(fieldDto.getCategory(), fieldDto.getDescription());
 
-        return id;
-    }
     @Transactional
-    public void delete(Long id){
-        fieldRepository.deleteById(id);
+    public Long update(FieldDto fieldDto){
+        Field origin = fieldRepository.findById(fieldDto.getId()).orElseThrow(()
+                ->new IllegalArgumentException("찾는 연구분야가 없습니다. id = "+fieldDto.getId()));
+        origin.update(fieldDto);
+
+        return fieldDto.getId();
+    }
+    //아무랑도 연관관계가 없을때만 지운다.. 만약에 list를 가지고 있으면 그거 모두 옮겨주거나?해서 list를 비워준다음에 delete시켜야함
+    @Transactional
+    public void deleteById(Long id){
+        Field field = fieldRepository.findById(id).get();
+        if(field.getProject()==null && field.getDemo()==null && field.getThesis()==null){
+            fieldRepository.deleteById(id);
+        }
+        else{
+            throw new ExistException("project, demo, thesis가 모두 비워져야 합니다.");
+        }
+
     }
     public Optional<Field> findById(Long id){
         return fieldRepository.findById(id);
