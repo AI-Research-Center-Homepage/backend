@@ -1,6 +1,6 @@
 package byuntil.backend.member.domain.entity.member;
 
-import byuntil.backend.admin.domain.Admin;
+import byuntil.backend.admin.controlller.domain.Login;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +15,6 @@ import javax.persistence.Entity;
 public class Professor extends Member {
     @Column(nullable = false)
     private String doctorate;
-    private String location;
     private String number;
 
     /*@Builder
@@ -26,16 +25,15 @@ public class Professor extends Member {
     }*/
 
     @Builder
-    public Professor(String name, String major, String email, String image, String dtype, String doctorate, String location, String number, Admin admin) {
-        super(name, major, email, image, dtype, admin);
+    public Professor(String name, String major, String email, String image, String dtype,
+                     String doctorate, String office, String number, String fields, Login login) {
+        super(name, major, email, image, dtype, office, fields, login);
         this.doctorate = doctorate;
-        this.location = location;
         this.number = number;
     }
 
-    public void update(String doctorate, String location, String number) {
+    public void update(String doctorate, String number) {
         this.doctorate = doctorate;
-        this.location = location;
         this.number = number;
     }
 }

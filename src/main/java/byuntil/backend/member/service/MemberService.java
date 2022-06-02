@@ -1,61 +1,66 @@
 package byuntil.backend.member.service;
 
-import byuntil.backend.admin.domain.Admin;
-import byuntil.backend.admin.repository.AdminRepository;
-import byuntil.backend.admin.service.UserDetailService;
+import byuntil.backend.admin.controlller.domain.dto.LoginDto;
+import byuntil.backend.common.exception.IdNotExistException;
 import byuntil.backend.common.exception.LoginIdDuplicationException;
 import byuntil.backend.member.domain.entity.member.*;
 import byuntil.backend.member.domain.repository.MemberRepository;
 import byuntil.backend.member.dto.request.MemberSaveRequestDto;
 import byuntil.backend.member.dto.request.MemberUpdateRequestDto;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.nio.charset.Charset;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class MemberService {
+public class MemberService implements UserDetailsService {
     private final MemberRepository memberRepository;
-    private final UserDetailService userDetailService;
+    private final PasswordEncoder passwordEncoder;
 
     //탈퇴
     @Transactional
     public void secession(Long id) throws Throwable {
-        Member member = (Member)memberRepository.findById(id).get();
-        member.getAdmin().setDeleted(true);
+        //존재하지 않는 회원을 탈퇴시키려고 하는 경우 error 발생해야함
+        if(!memberRepository.findById(id).isPresent()){
+            throw new IdNotExistException("존재하지 않는 id입니다");
+        }
+        else{
+            Member member = (Member)memberRepository.findById(id).get();
+            member.getLogin().setDeleted(true);
 
-        byte[] array = new byte[7]; // length is bounded by 7
-        new Random().nextBytes(array);
-        String generatedString = new String(array, Charset.forName("UTF-8"));
 
-        member.getAdmin().setLoginId(generatedString);
-        MemberUpdateRequestDto dto = MemberUpdateRequestDto.builder().admission("del").email("del").major("del").doctorate("del")
-                .research("del").position("del").number("del").name("del").image("del").location("del").adminDto(member.getAdmin().toDto()).build();
-        updateMember(member.getId(), dto);
+            byte[] array = new byte[7]; // length is bounded by 7
+            new Random().nextBytes(array);
+            String generatedString = new String(array, Charset.forName("UTF-8"));
+
+            member.getLogin().setLoginPw(generatedString);
+            MemberUpdateRequestDto dto = MemberUpdateRequestDto.builder().admission(LocalDateTime.now()).email("del").major("del").doctorate("del")
+                    .position("del").number("del").name("del").image("del").office("del").build();
+            updateMember(member.getId(), dto);
+        }
     }
     @Transactional
     public Long saveMember(MemberSaveRequestDto dto) {
         //dto를 entity로 만들고 admin도 entity로만든다음에 return함
-        userDetailService.findByLoginId(dto.getAdminDto().getLoginId()).ifPresent((m -> {
+        memberRepository.findByLoginId(dto.getLoginDto().getLoginId()).ifPresent((m -> {
             throw new LoginIdDuplicationException("이미 존재하는 회원입니다.");
         }));
-        //dto를 모두 entity로 만드는 메서드
-        Admin admin = dto.dtosToEntity();
-        userDetailService.signUp(admin);
-        memberRepository.save(admin.getMember());
+        String originPW = dto.getLoginDto().getLoginPw();
+        String encodedPW = passwordEncoder.encode(originPW);
+        dto.getLoginDto().setLoginPw(encodedPW);
 
-        return admin.getMember().getId();
+        return ((Member)memberRepository.save(dto.toEntity())).getId();
     }
 
     public Optional findOneMember(Long id) {
@@ -92,11 +97,12 @@ public class MemberService {
         Member member = (Member) memberRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         member.update(requestDto);
         //그리고 암호화를 해주어야한다
-        userDetailService.encodedPw(member.getAdmin());
+        String encodedPw=passwordEncoder.encode(member.getLogin().getLoginPw());
+        member.getLogin().setLoginId(encodedPw);
 
         if (member instanceof Professor) {
             Professor professor = (Professor) member;
-            professor.update(requestDto.getDoctorate(), requestDto.getLocation(), requestDto.getNumber());
+            professor.update(requestDto.getDoctorate(), requestDto.getNumber());
         } else if (member instanceof Committee) {
             Committee committee = (Committee) member;
             committee.update(requestDto.getPosition());
@@ -105,10 +111,9 @@ public class MemberService {
             graduate.update(requestDto.getAdmission());
         } else if (member instanceof Researcher) {
             Researcher researcher = (Researcher) member;
-            researcher.update(requestDto.getResearch());
         } else if (member instanceof Undergraduate) {
             Undergraduate undergraduate = (Undergraduate) member;
-            undergraduate.update(requestDto.getAdmission(), requestDto.getResearch());
+            undergraduate.update(requestDto.getAdmission());
         }
     }
 
@@ -116,7 +121,21 @@ public class MemberService {
     public void delete(Long id) throws Throwable {
         Member member = (Member) memberRepository.findById(id).get();
         memberRepository.delete(member);
-        //연관되어있는 admin도 삭제
-        userDetailService.deleteById(member.getAdmin().getId());
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<Member> result = memberRepository.findByLoginId(username);
+        if(!result.isPresent()){
+            throw new UsernameNotFoundException("Check Id");
+        }
+        Member member = result.get();
+
+        Collection<SimpleGrantedAuthority> auths = new ArrayList<>();
+        auths.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+
+        LoginDto dto = new LoginDto(member.getLogin().getLoginId(), member.getLogin().getLoginPw(), auths,
+                 member.getLogin().getDeleted());
+        return dto;
     }
 }
