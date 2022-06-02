@@ -28,14 +28,12 @@ public class Project {
     private String participants;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "FIELD_ID", nullable = false
-    )
+    @JoinColumn(name = "FIELD_ID", nullable = false)
     private Field field;
 
     //연관관계 설정 메서드
-    public void addField(Field field){
+    public void setField(Field field){
         this.field = field;
-        field.setProject(this);
     }
 
     public void update(ProjectDto projectDto){

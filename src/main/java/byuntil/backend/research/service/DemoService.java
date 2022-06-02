@@ -21,7 +21,7 @@ public class DemoService {
     public Long save(DemoDto demoDto){
         Demo demo = demoDto.toEntity();
         Field field = demoDto.getFieldDto().toEntity();
-        demo.addField(field);
+        field.addDemo(demo);
         fieldRepository.save(field);
         return demoRepository.save(demo).getId();
     }
@@ -32,7 +32,16 @@ public class DemoService {
         demoRepository.deleteById(id);
     }
     public void update(DemoDto demoDto){
+        Demo demo = demoRepository.findById(demoDto.getId()).orElseThrow(()->
+                new IllegalArgumentException("찾는 연구분야가 없습니다. id = "+ demoDto.getId()));
 
+        demo.update(demoDto);
+        //근데 demo가 가지고 있는 field도 새로 넣어주어야함
+        if(!demo.getField().getId().equals(demoDto.getFieldDto().getId())){
+            //내용만 변경되는건 안됨 field는 field혼자만 변경되어야함
+            Field field = fieldRepository.findById(demoDto.getFieldDto().getId()).get();
+            field.addDemo(demo);
+        }
     }
 }
 

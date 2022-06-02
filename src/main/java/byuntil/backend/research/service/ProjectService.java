@@ -26,15 +26,20 @@ public class ProjectService {
     public Long save(ProjectDto projectDto){
         Project project =projectDto.toEntity();
         Field field = projectDto.getFieldDto().toEntity();
-        project.addField(field);
+        field.addProject(project);
         fieldRepository.save(field);
         return projectRepository.save(project).getId();
     }
     @Transactional
-    public Long update(Long id, ProjectDto projectDto){
-        Project project = projectRepository.findById(id).orElseThrow(()->new IllegalArgumentException("해당 프로젝트가 없습니다. id = "+id));
+    public void update(ProjectDto projectDto){
+        Project project = projectRepository.findById(projectDto.getId()).orElseThrow(()
+                ->new IllegalArgumentException("해당 프로젝트가 없습니다. id = "+projectDto.getId()));
         project.update(projectDto);
-        return id;
+        if(!project.getField().getId().equals(projectDto.getFieldDto().getId())){
+            //내용만 변경되는건 안됨 field는 field혼자만 변경되어야함
+            Field field = fieldRepository.findById(projectDto.getFieldDto().getId()).get();
+            field.addProject(project);
+        }
     }
     @Transactional
     public void delete(Long id){

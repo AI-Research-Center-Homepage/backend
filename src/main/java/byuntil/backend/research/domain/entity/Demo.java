@@ -1,5 +1,6 @@
 package byuntil.backend.research.domain.entity;
 
+import byuntil.backend.research.dto.DemoDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -35,10 +36,14 @@ public class Demo {
         this.participants = participants;
     }
 
-    //연관관계 설정 메서드
-    public void addField(Field field){
+    public void setField(Field field){
         this.field = field;
-        field.setDemo(this);
+    }
+    public void update(DemoDto demoDto){
+        this.name = demoDto.getName();
+        this.content = demoDto.getContent();
+        this.url = demoDto.getUrl();
+        this.participants = demoDto.getParticipants();
     }
 
     public Demo() {

@@ -43,9 +43,8 @@ public class Thesis {
     private List<Member_Thesis> members = new ArrayList<>();
 
     //연관관계 설정 메서드
-    public void addField(Field field){
+    public void setField(Field field){
         this.field = field;
-        field.setThesis(this);
     }
 
     public void addMemberThesis(Member_Thesis memberThesis){
@@ -59,9 +58,6 @@ public class Thesis {
         this.publishDate = dto.getPublishDate();
         this.url = dto.getUrl();
 
-    }
-    public void setField(Field field){
-        this.field = field;
     }
     public void toDto(){
         ThesisDto dto = ThesisDto.builder().title(this.title).koName(this.koName).enName(this.enName).journal(this.journal)

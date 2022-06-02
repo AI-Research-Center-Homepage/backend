@@ -24,15 +24,20 @@ public class ThesisService {
     public Long save(ThesisDto thesisDto){
         Thesis thesis = thesisDto.toEntity();
         Field field = thesisDto.getFieldDto().toEntity();
-        thesis.addField(field);
+        field.addThesis(thesis);
         fieldRepository.save(field);
         return thesisRepository.save(thesis).getId();
     }
     @Transactional
-    public Long update(Long id, ThesisDto thesisDto){
-        Thesis origin = thesisRepository.findById(id).orElseThrow(()->new IllegalArgumentException("해당 논문이 없습니다. id = "+id));
-        origin.update(thesisDto);
-        return id;
+    public void update(ThesisDto thesisDto){
+        Thesis thesis = thesisRepository.findById(thesisDto.getId()).orElseThrow(()
+                ->new IllegalArgumentException("해당 논문이 없습니다. id = "+thesisDto.getId()));
+        thesis.update(thesisDto);
+        if(!thesis.getField().getId().equals(thesisDto.getFieldDto().getId())){
+            //내용만 변경되는건 안됨 field는 field혼자만 변경되어야함
+            Field field = fieldRepository.findById(thesisDto.getFieldDto().getId()).get();
+            field.addThesis(thesis);
+        }
     }
     @Transactional
     public void delete(Long id){
