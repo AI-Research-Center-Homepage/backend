@@ -10,12 +10,12 @@ import byuntil.backend.post.domain.entity.Board;
 import byuntil.backend.post.domain.entity.Post;
 import byuntil.backend.post.domain.repository.BoardRepository;
 import byuntil.backend.post.dto.PostDto;
-import byuntil.backend.research.domain.entity.Category;
 import byuntil.backend.research.domain.entity.Thesis;
 import byuntil.backend.research.dto.FieldDto;
 import byuntil.backend.research.dto.ProjectDto;
 import byuntil.backend.research.dto.ThesisDto;
 import byuntil.backend.research.service.ThesisService;
+import byuntil.backend.s3.service.S3ServiceImpl;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +35,16 @@ public class IntegrationTest {
     ThesisService thesisService;
     @Autowired
     BoardRepository boardRepository;
+
+    @Autowired
+    S3ServiceImpl s3Service;
+
+    @Test
+    public void url반환(){
+        String url = "s3://aihomepage/028bd8da84d54db6b84449ad8ad44487.jpg";
+        String key = s3Service.urlToKey(url);
+        Assertions.assertThat(key).isEqualTo("028bd8da84d54db6b84449ad8ad44487");
+    }
 
     @Test
     @Transactional
@@ -93,7 +103,7 @@ public class IntegrationTest {
     }
 
     public FieldDto makeFieldDto(){
-        return FieldDto.builder().category(Category.AR_AI).description(""+Math.random()).build();
+        return FieldDto.builder().description(""+Math.random()).build();
     }
     public ThesisDto makeThesisDto(){
         return ThesisDto.builder().enName(""+Math.random()).koName("한글이름").journal("sss")
@@ -107,7 +117,6 @@ public class IntegrationTest {
                 .name("홍길동" + Math.random())
                 .major("asdfasdfsa")
                 .doctorate("A")
-                .location("전주")
                 .number("0109222723")
                 .build();
         return professor;

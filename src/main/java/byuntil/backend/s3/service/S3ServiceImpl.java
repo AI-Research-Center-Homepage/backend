@@ -7,12 +7,15 @@ import byuntil.backend.post.domain.entity.Attach;
 import byuntil.backend.post.dto.AttachDto;
 import byuntil.backend.s3.domain.*;
 import com.amazonaws.AmazonClientException;
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.SdkClientException;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.transfer.TransferManager;
 import com.amazonaws.services.s3.transfer.Upload;
@@ -239,6 +242,35 @@ public class S3ServiceImpl implements S3Service {
             log.error(amazonClientException.getMessage());
         } catch (InterruptedException e) {
             log.error(e.getMessage());
+        }
+    }
+    public String urlToKey(String url){
+        // 일단 /을 기준으로 자른다
+        String[] div  = url.split("/");
+        String [] div2 = div[div.length-1].split("\\.");
+        return div2[0];
+    }
+    public void deleteList(List<String> urls){
+        for (String url: urls){
+            delete(url);
+        }
+    }
+    //key가 머여
+    //일단 url을 받은다음에 key로 가공한다음에.. 그걸 지운다..
+    public void delete(String url) {
+        String key = urlToKey(url);
+
+        try {
+            //Delete 객체 생성
+            DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(this.bucket, key);
+            //Delete
+            this.s3Client.deleteObject(deleteObjectRequest);
+            System.out.println(String.format("[%s] deletion complete", key));
+
+        } catch (AmazonServiceException e) {
+            e.printStackTrace();
+        } catch (SdkClientException e) {
+            e.printStackTrace();
         }
     }
 }
