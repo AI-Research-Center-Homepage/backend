@@ -53,12 +53,12 @@ public class PostController {
     }
     @PostMapping("/upload")
     @ResponseBody
-    public String upload(@RequestParam("data") List<MultipartFile> multipartFileList) throws IOException {
+    public List<String> upload(@RequestParam("data") List<MultipartFile> multipartFileList) throws IOException {
         System.out.println("==============================");
         System.out.println(multipartFileList.size());
         System.out.println("==============================");
 
-        return s3Service.upload(multipartFileList).toString();
+        return s3Service.upload(multipartFileList);
     }
 
 }

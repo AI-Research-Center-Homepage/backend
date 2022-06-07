@@ -24,6 +24,14 @@ public class Post extends BaseTimeEntity {
     @Column(columnDefinition = "LONGTEXT")
     private String content;
 
+    @ElementCollection
+    @CollectionTable(
+            name = "URL",
+            joinColumns = @JoinColumn(name = "POST_ID")
+    )
+    @OrderColumn
+    @Column(name = "URL_NAME")
+    private List<String> urlList = new ArrayList<>();
 
     @Column(columnDefinition = "integer default 0", nullable = false)
     private int viewNum;
