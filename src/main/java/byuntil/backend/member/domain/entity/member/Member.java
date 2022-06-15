@@ -1,8 +1,7 @@
 package byuntil.backend.member.domain.entity.member;
 
-import byuntil.backend.admin.domain.Login;
-import byuntil.backend.admin.domain.UserRole;
-import byuntil.backend.member.domain.entity.Member_Thesis;
+import byuntil.backend.member_thesis.entity.Member_Thesis;
+import byuntil.backend.admin.controlller.domain.Login;
 import byuntil.backend.member.dto.request.MemberUpdateRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -67,7 +66,7 @@ public abstract class Member {
         return dtype;
     }
     @OneToMany(mappedBy = "member")
-    private List<Member_Thesis> theses = new ArrayList<>();
+    private List<Member_Thesis> member_theses = new ArrayList<>();
 
 
     public void update(MemberUpdateRequestDto dto) {
@@ -79,10 +78,10 @@ public abstract class Member {
         this.fields = dto.getFields();
         this.login.setLoginId(dto.getLoginDto().getLoginId());
         this.login.setLoginPw(dto.getLoginDto().getLoginPw());
-        this.login.setRole(UserRole.valueOf(dto.getLoginDto().getAuthorities().toArray()[0].toString()));
+        //this.login.setRole(UserRole.valueOf(dto.getLoginDto().getAuthorities().toArray()[0].toString()));
         this.login.setDeleted(dto.getLoginDto().isDeleted());
     }
     public void addMemberThesis(Member_Thesis memberThesis){
-        this.theses.add(memberThesis);
+        this.member_theses.add(memberThesis);
     }
 }

@@ -32,7 +32,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
     // https://mvnrepository.com/artifact/io.findify/s3mock
-    testImplementation group: 'io.findify', name: 's3mock_2.13', version: '0.2.6'
+    //testImplementation group: 'io.findify', name: 's3mock_2.13', version: '0.2.6'
+    // https://mvnrepository.com/artifact/io.findify/s3mock
+    testImplementation group: 'io.findify', name: 's3mock_2.12', version: '0.2.4'
+
 
 
 }

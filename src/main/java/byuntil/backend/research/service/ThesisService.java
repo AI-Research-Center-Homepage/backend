@@ -22,11 +22,18 @@ public class ThesisService {
     private final ThesisRepository thesisRepository;
     @Transactional
     public Long save(ThesisDto thesisDto){
-        Thesis thesis = thesisDto.toEntity();
-        Field field = thesisDto.getFieldDto().toEntity();
-        field.addThesis(thesis);
-        fieldRepository.save(field);
-        return thesisRepository.save(thesis).getId();
+        if(thesisDto.getFieldDto()==null){
+            //그냥 thesisDto만 저장한다
+            Thesis thesis = thesisDto.toEntity();
+            return thesisRepository.save(thesis).getId();
+        }
+        else{
+            Field field = thesisDto.getFieldDto().toEntity();
+            fieldRepository.save(field);
+            Thesis thesis = thesisDto.toEntity();
+            field.addThesis(thesis);
+            return thesisRepository.save(thesis).getId();
+        }
     }
     @Transactional
     public void update(ThesisDto thesisDto){

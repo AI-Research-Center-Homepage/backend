@@ -1,7 +1,6 @@
 package byuntil.backend.member.dto.request;
 
-import byuntil.backend.admin.domain.Login;
-import byuntil.backend.admin.domain.dto.LoginDto;
+import byuntil.backend.admin.controlller.domain.dto.LoginDto;
 import byuntil.backend.member.domain.entity.member.Professor;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,7 +32,6 @@ public class ProfessorSaveRequestDto extends MemberSaveRequestDto {
                 .fields(getFields())
                 .number(number)
                 .office(getOffice())
-
                 .login(getLoginDto().toEntity())
                 .build();
     }

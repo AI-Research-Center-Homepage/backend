@@ -1,7 +1,6 @@
 package byuntil.backend.member.service;
 
-import byuntil.backend.admin.domain.Login;
-import byuntil.backend.admin.domain.dto.LoginDto;
+import byuntil.backend.admin.controlller.domain.dto.LoginDto;
 import byuntil.backend.common.exception.IdNotExistException;
 import byuntil.backend.common.exception.LoginIdDuplicationException;
 import byuntil.backend.member.domain.entity.member.*;
@@ -9,7 +8,6 @@ import byuntil.backend.member.domain.repository.MemberRepository;
 import byuntil.backend.member.dto.request.MemberSaveRequestDto;
 import byuntil.backend.member.dto.request.MemberUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -133,10 +131,11 @@ public class MemberService implements UserDetailsService {
         }
         Member member = result.get();
 
-        Collection<GrantedAuthority> auth = new ArrayList<>();
-        auth.add(new SimpleGrantedAuthority(member.getLogin().getRole().toString()));
-        LoginDto dto = new LoginDto(member.getLogin().getLoginId(), member.getLogin().getLoginPw(),
-                auth, member.getLogin().getDeleted());
+        Collection<SimpleGrantedAuthority> auths = new ArrayList<>();
+        auths.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+
+        LoginDto dto = new LoginDto(member.getLogin().getLoginId(), member.getLogin().getLoginPw(), auths,
+                 member.getLogin().getDeleted());
         return dto;
     }
 }

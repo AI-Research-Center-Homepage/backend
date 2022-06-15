@@ -24,12 +24,13 @@ public class ThesisDto {
     private String url;
     private FieldDto fieldDto;
 
-
     public Thesis toEntity(){
         Thesis thesis = Thesis.builder().enName(this.enName).koName(this.koName)
-                .id(id)
                 .title(this.title).journal(this.journal).publishDate(this.publishDate)
                 .url(this.url).build();
         return thesis;
+    }
+    public void addFieldDto(FieldDto dto){
+        this.fieldDto = dto;
     }
 }

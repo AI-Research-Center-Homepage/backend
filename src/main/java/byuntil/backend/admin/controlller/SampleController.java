@@ -1,6 +1,6 @@
 package byuntil.backend.admin.controlller;
 
-import byuntil.backend.admin.domain.dto.LoginDto;
+import byuntil.backend.admin.controlller.domain.dto.LoginDto;
 import byuntil.backend.member.dto.request.ProfessorSaveRequestDto;
 import byuntil.backend.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ public class SampleController {
     @GetMapping("/all")
     public String exAll(){
         //이 page로 들어와서 member를 생성한다음에 sample/member로 들어가서 로그인하면 로그인 성공
-        Collection<GrantedAuthority> auth = new ArrayList<>();
+        Collection<SimpleGrantedAuthority> auth = new ArrayList<>();
         auth.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         LoginDto loginDto = new LoginDto("user1", "111", auth, false);
         ProfessorSaveRequestDto dto = ProfessorSaveRequestDto.builder()

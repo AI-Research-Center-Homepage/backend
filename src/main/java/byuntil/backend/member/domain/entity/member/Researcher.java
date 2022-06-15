@@ -1,7 +1,6 @@
 package byuntil.backend.member.domain.entity.member;
 
-import byuntil.backend.admin.domain.Login;
-import byuntil.backend.admin.domain.dto.LoginDto;
+import byuntil.backend.admin.controlller.domain.Login;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
