@@ -37,8 +37,10 @@ public class PostService {
     @Transactional
     public Long save(PostDto postDto, List<MultipartFile> fileList) throws IOException {
         //
+        /*
         Board board = Board.builder().name("게시판1").build();
         boardRepository.save(board);
+        */
 
         Post post = postDto.toEntity();
         List<Attach> attachList =s3Service.upload(fileList);
