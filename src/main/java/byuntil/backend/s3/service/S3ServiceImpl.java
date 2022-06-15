@@ -155,11 +155,9 @@ public class S3ServiceImpl implements S3Service {
 
     //minji
 
-    public List<String> upload(List<MultipartFile> uploadFileList) throws IOException {
+    public String upload(MultipartFile uploadFile) throws IOException {
         List<Attach> attachList = new ArrayList<>();
-        List<String> resultUrl = new ArrayList<>();
-        if(uploadFileList.isEmpty()) return null;
-        for (MultipartFile uploadFile : uploadFileList) {
+        String resultUrl;
             String origName = uploadFile.getOriginalFilename();
             String url;
             try {
@@ -182,14 +180,11 @@ public class S3ServiceImpl implements S3Service {
                 //dto정보 입력
                 Attach attach = Attach.builder().filePath(url).originFileName(origName).serverFileName(saveFileName).build();
                 attachList.add(attach);
-                resultUrl.add(url);
 
             } catch (StringIndexOutOfBoundsException e) {
                 url = null;
             }
-
-        }
-        return resultUrl;
+        return url;
     }
     public List<Attach> uploadReturnAttach(List<MultipartFile> uploadFileList) throws IOException {
         List<Attach> attachList = new ArrayList<>();

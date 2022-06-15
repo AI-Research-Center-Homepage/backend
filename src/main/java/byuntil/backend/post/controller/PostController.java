@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -42,23 +43,28 @@ public class PostController {
         //TODO : 컴파일타임에 잡을 수 있는 예외를 런타임으로 넘겨버릴 수 있기 때문에 사용을 지양해야한다 제네릭 타입으로 return하기
     }
     @PostMapping("/submit")
-    public String sumbit(@ModelAttribute PostDto postDto) throws IOException {
+    public String submit(@ModelAttribute PostDto postDto) throws IOException {
         System.out.println("==============================");
         postDto.setTitle("임시제목1");
         postDto.setBoardDto(new BoardDto("게시판1"));
         System.out.println(postDto.getContent());
         System.out.println("==============================");
+        //출력해보기
+        for (String url : postDto.getUrlList()) {
+            System.out.println(url);
+        }
         postService.save(postDto, null);
         return "redirect:/";
     }
     @PostMapping("/upload")
     @ResponseBody
-    public List<String> upload(@RequestParam("data") List<MultipartFile> multipartFileList) throws IOException {
+    public String upload(@RequestParam("data") MultipartFile multipartFile) throws IOException {
+        //근데 이거 무조건 하나씩들어오던데
         System.out.println("==============================");
-        System.out.println(multipartFileList.size());
         System.out.println("==============================");
+        String urlList = s3Service.upload(multipartFile);
 
-        return s3Service.upload(multipartFileList);
+        return urlList;
     }
 
 }

@@ -16,13 +16,15 @@ public class PostDto {
     private String title;
     private String content;
     private BoardDto boardDto;
+    private List<String> urlList;
     //board에 대한 dto도 필요
 
     @Builder
-    public PostDto(String title, String content, BoardDto boardDto) {
+    public PostDto(String title, String content, BoardDto boardDto, List<String> urlList) {
         this.title = title;
         this.content = content;
         this.boardDto = boardDto;
+        this.urlList = urlList;
     }
 
 
@@ -31,6 +33,7 @@ public class PostDto {
         Post build = Post.builder()
                 .title(title)
                 .content(content)
+                .urlList(urlList)
                 .build();
         return build;
     }

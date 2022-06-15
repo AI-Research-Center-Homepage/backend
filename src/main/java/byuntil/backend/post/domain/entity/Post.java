@@ -44,11 +44,12 @@ public class Post extends BaseTimeEntity {
     private Board board;
 
     @Builder
-    public Post(Long id, String title, String content, int viewNum) {
+    public Post(Long id, String title, String content, int viewNum, List<String> urlList) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.viewNum = viewNum;
+        this.urlList = urlList;
     }
 
     public void addAttach(final Attach attach) {
@@ -71,6 +72,7 @@ public class Post extends BaseTimeEntity {
     public void updatePost(final PostDto dto) {
         this.title = dto.getTitle();
         this.content = dto.getContent();
-        this.attaches = dto.toEntity().getAttaches();
+        this.urlList = dto.getUrlList();
+        //attach와 같은 연관관계 설정되어있는것은
     }
 }

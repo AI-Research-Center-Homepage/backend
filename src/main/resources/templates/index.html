@@ -31,10 +31,10 @@
         // !!!!! 여기서 이미지를 받아와서 이미지 주소를 받아오고 (ajax 등으로)
         // callback의 인수로 넣으시면 됩니다.
 
+        let frm = document.testform
         //blob이 파일같은거랬으니까 넣음
         let formdata = new FormData();
         formdata.append("data", blob);
-
         let requestOptions = {
             method: 'POST',
             body: formdata,
@@ -42,8 +42,8 @@
         };
 
         fetch("http://localhost:8080/post/upload", requestOptions)
-            .then(response =>response.text())
-            .then(result => callback(result))
+            .then(response =>response.text()) //응답을 읽고 응답을 text로 반환한다
+            .then(result => callback(result)) // 화살표 함수 () => x는 () => {return x;}와 같습니다.
             .catch(error => console.log('error', error));
 
     })
