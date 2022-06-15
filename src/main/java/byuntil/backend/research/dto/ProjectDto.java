@@ -11,7 +11,7 @@ public class ProjectDto {
     private String name;
     private String content;
     private String participants;
-    private FieldDto fieldDto;
+    private String fieldName;
 
     public Project toEntity(){
         Project project = Project.builder().name(name).content(content).participants(participants).build();

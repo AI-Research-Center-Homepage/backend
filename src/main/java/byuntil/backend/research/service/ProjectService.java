@@ -1,5 +1,6 @@
 package byuntil.backend.research.service;
 
+import byuntil.backend.common.exception.research.NullFieldException;
 import byuntil.backend.research.domain.entity.Demo;
 import byuntil.backend.research.domain.entity.Field;
 import byuntil.backend.research.domain.entity.Project;
@@ -25,9 +26,8 @@ public class ProjectService {
     @Transactional
     public Long save(ProjectDto projectDto){
         Project project =projectDto.toEntity();
-        Field field = projectDto.getFieldDto().toEntity();
+        Field field = fieldRepository.findByName(projectDto.getFieldName()).orElseThrow(()-> new NullFieldException());
         field.addProject(project);
-        fieldRepository.save(field);
         return projectRepository.save(project).getId();
     }
     @Transactional
@@ -35,9 +35,9 @@ public class ProjectService {
         Project project = projectRepository.findById(projectDto.getId()).orElseThrow(()
                 ->new IllegalArgumentException("해당 프로젝트가 없습니다. id = "+projectDto.getId()));
         project.update(projectDto);
-        if(!project.getField().getId().equals(projectDto.getFieldDto().getId())){
+        if(!project.getField().getName().equals(projectDto.getFieldName())){
             //내용만 변경되는건 안됨 field는 field혼자만 변경되어야함
-            Field field = fieldRepository.findById(projectDto.getFieldDto().getId()).get();
+            Field field = fieldRepository.findByName(projectDto.getFieldName()).get();
             field.addProject(project);
         }
     }

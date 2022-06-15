@@ -1,6 +1,5 @@
 package byuntil.backend.research.domain.entity;
 
-import byuntil.backend.research.dto.DemoDto;
 import byuntil.backend.research.dto.FieldDto;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -26,26 +25,26 @@ public class Field {
     @Column(columnDefinition = "LONGTEXT")
     private String description;
 
-    @OneToOne(fetch = FetchType.LAZY,mappedBy = "field")
-    private Demo demo;
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "field")
+    private List<Demo> demoList = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY,mappedBy = "field")
-    private Project project;
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "field")
+    private List<Project> projectList = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY,mappedBy = "field")
-    private Thesis thesis;
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "field")
+    private List<Thesis> thesisList = new ArrayList<>();
 
     public void addDemo(Demo demo){
         demo.setField(this);
-        this.demo = demo;
+        this.demoList.add(demo);
     }
     public void addProject(Project project){
         project.setField(this);
-        this.project = project;
+        this.projectList.add(project);
     }
     public void addThesis(Thesis thesis){
         thesis.setField(this);
-        this.thesis = thesis;
+        this.thesisList.add(thesis);
     }
 
     @Builder
@@ -56,6 +55,7 @@ public class Field {
     public void update(FieldDto fieldDto){
         this.name = fieldDto.getName();
         this.description = fieldDto.getDescription();
+
     }
     public FieldDto toDto(){
         FieldDto dto = FieldDto.builder().name(name).description(description).build();

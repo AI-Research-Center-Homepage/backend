@@ -1,5 +1,6 @@
 package byuntil.backend.research.service;
 
+import byuntil.backend.common.exception.research.NullFieldException;
 import byuntil.backend.research.domain.entity.Demo;
 import byuntil.backend.research.domain.entity.Field;
 import byuntil.backend.research.domain.repository.DemoRepository;
@@ -20,9 +21,9 @@ public class DemoService {
 
     public Long save(DemoDto demoDto){
         Demo demo = demoDto.toEntity();
-        Field field = demoDto.getFieldDto().toEntity();
+        //fieldname으로 찾아온다음에 설정해면된다
+        Field field = fieldRepository.findByName(demoDto.getFieldName()).orElseThrow(()->new NullFieldException()) ;
         field.addDemo(demo);
-        fieldRepository.save(field);
         return demoRepository.save(demo).getId();
     }
     public Optional<Demo> findById(Long id){
@@ -37,9 +38,9 @@ public class DemoService {
 
         demo.update(demoDto);
         //근데 demo가 가지고 있는 field도 새로 넣어주어야함
-        if(!demo.getField().getId().equals(demoDto.getFieldDto().getId())){
+        if(!demo.getField().getName().equals(demoDto.getFieldName())){
             //내용만 변경되는건 안됨 field는 field혼자만 변경되어야함
-            Field field = fieldRepository.findById(demoDto.getFieldDto().getId()).get();
+            Field field = fieldRepository.findByName(demoDto.getFieldName()).get();
             field.addDemo(demo);
         }
     }

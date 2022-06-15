@@ -13,7 +13,7 @@ public class DemoDto {
     private String content;
     private String url;
     private String participants;
-    private FieldDto fieldDto;
+    private String fieldName;
     public Demo toEntity(){
         return Demo.builder().name(name).content(content).url(url).participants(participants).build();
     }
