@@ -46,12 +46,9 @@ public class PostService {
         List<Attach> attachList =s3Service.upload(fileList);
         post.addAttaches(attachList);
         //보드 이름으로 보드 찾아오는 명령어 수행해야함 없으면 예외터뜨리기
-        Optional<Board> result=boardRepository.findByName(postDto.getBoardDto().getName());
-        if(!result.isPresent()){
-            throw new BoardNotFoundException("게시판 이름이 존재하지 않습니다.");
-        }
+        Board board=boardRepository.findByName(postDto.getBoardName()).orElseThrow(()-> new BoardNotFoundException());
         //찾아온 board로
-        post.setBoard(result.get());
+        post.setBoard(board);
         //그럼 cascade설정으로 attach도 같이 저장이 될 것이다
         postRepository.save(post);
 
@@ -60,7 +57,6 @@ public class PostService {
     }
 
     /*
-    성재
     문제 1. file 하나가 아니라 여러개가 들어가야한다는점
     2. dto안에 entity가 들어가면 안됨
     3. board도 처리해야함

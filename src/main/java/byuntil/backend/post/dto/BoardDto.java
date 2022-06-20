@@ -14,23 +14,15 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class BoardDto {
+    private Long id;
     private String name;
-    private ArrayList<PostDto> postDtoList;
 
     @Builder
     public BoardDto(String name){
         this.name = name;
     }
 
-    public void addPostDtoList(ArrayList<PostDto> list){
-        this.postDtoList = list;
-    }
-
     public Board toEntity(){
-        List<Post> posts = new ArrayList<>();
-        for(int i=0;i<postDtoList.size();i++){
-            posts.add(postDtoList.get(i).toEntity());
-        }
-        return Board.builder().name(name).posts(posts).build();
+        return Board.builder().name(name).build();
     }
 }

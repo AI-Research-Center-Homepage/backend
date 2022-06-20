@@ -13,16 +13,17 @@ import java.util.List;
 @Getter
 @Setter
 public class PostDto {
+    private Long id;
     private String title;
     private String content;
-    private BoardDto boardDto;
+    private String boardName;
     //board에 대한 dto도 필요
 
     @Builder
-    public PostDto(String title, String content, BoardDto boardDto) {
+    public PostDto(String title, String content, String boardName) {
         this.title = title;
         this.content = content;
-        this.boardDto = boardDto;
+        this.boardName = boardName;
     }
 
 

@@ -33,7 +33,7 @@ public class Thesis {
     @Column(nullable = false)
     private String url;
 
-    @OneToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "FIELD_ID", nullable = false)
     private Field field;
 

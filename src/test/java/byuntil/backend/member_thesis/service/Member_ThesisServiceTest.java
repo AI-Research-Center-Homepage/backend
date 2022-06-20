@@ -64,7 +64,6 @@ class Member_ThesisServiceTest {
                 .name("나승훈")
                 .major("asdfasdfsa")
                 .doctorate("A")
-                .location("전주")
                 .number("01096574723")
                 .build();
         return professor;

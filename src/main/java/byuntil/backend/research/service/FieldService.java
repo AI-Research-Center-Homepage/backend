@@ -1,13 +1,9 @@
 package byuntil.backend.research.service;
 
 import byuntil.backend.common.exception.ExistException;
-import byuntil.backend.research.domain.entity.Demo;
 import byuntil.backend.research.domain.entity.Field;
-import byuntil.backend.research.domain.entity.Project;
-import byuntil.backend.research.domain.entity.Thesis;
 import byuntil.backend.research.domain.repository.FieldRepository;
 import byuntil.backend.research.dto.FieldDto;
-import byuntil.backend.research.dto.ThesisDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,7 +36,7 @@ public class FieldService {
     @Transactional
     public void deleteById(Long id){
         Field field = fieldRepository.findById(id).get();
-        if(field.getProject()==null && field.getDemo()==null && field.getThesis()==null){
+        if(field.getProjectList()==null && field.getDemoList()==null && field.getThesisList()==null){
             fieldRepository.deleteById(id);
         }
         else{

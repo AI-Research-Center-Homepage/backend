@@ -27,7 +27,7 @@ public class Project {
 
     private String participants;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FIELD_ID", nullable = false)
     private Field field;
 
