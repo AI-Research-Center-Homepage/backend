@@ -36,50 +36,34 @@ public class PostService {
     //minji
     @Transactional
     public Long save(PostDto postDto, List<MultipartFile> fileList) throws IOException {
-        //임시코드고 삭제해야함
-        boardRepository.save(postDto.getBoardDto().toEntity());
-        //
+        /*
+        Board board = Board.builder().name("게시판1").build();
+        boardRepository.save(board);
+        */
 
-        if(fileList==null) {
-            Post post = postDto.toEntity();
-            //보드 이름으로 보드 찾아오는 명령어 수행해야함 없으면 예외터뜨리기
-            Optional<Board> result=boardRepository.findByName(postDto.getBoardDto().getName());
-            if(!result.isPresent()){
-                throw new BoardNotFoundException("게시판 이름이 존재하지 않습니다.");
-            }
-            //찾아온 board로
-            post.setBoard(result.get());
-            //그럼 cascade설정으로 attach도 같이 저장이 될 것이다
-            postRepository.save(post);
-            return post.getId();
-        }
-        else{
-
-            Post post = postDto.toEntity();
-            List<Attach> attachList =s3Service.uploadReturnAttach(fileList);
-            post.addAttaches(attachList);
-            //보드 이름으로 보드 찾아오는 명령어 수행해야함 없으면 예외터뜨리기
-            Optional<Board> result=boardRepository.findByName(postDto.getBoardDto().getName());
-            if(!result.isPresent()){
-                throw new BoardNotFoundException("게시판 이름이 존재하지 않습니다.");
-            }
-            //찾아온 board로
-            post.setBoard(result.get());
-            //그럼 cascade설정으로 attach도 같이 저장이 될 것이다
-            postRepository.save(post);
-            return post.getId();
-        }
-
-
-
+        Post post = postDto.toEntity();
+        List<Attach> attachList =s3Service.uploadReturnAttach(fileList);
+        post.addAttaches(attachList);
+        //보드 이름으로 보드 찾아오는 명령어 수행해야함 없으면 예외터뜨리기
+        Board board=boardRepository.findByName(postDto.getBoardName()).orElseThrow(()-> new BoardNotFoundException());
+        //찾아온 board로
+        post.setBoard(board);
+        //그럼 cascade설정으로 attach도 같이 저장이 될 것이다
+        return postRepository.save(post).getId();
 
     }
 
     /*
+<<<<<<< HEAD
     성재
     1. file 하나가 아니라 여러개가 들어가야해
     2. dto안에 entity가 들어가면 안될것같아
     3. board도 처리해야해!
+=======
+    문제 1. file 하나가 아니라 여러개가 들어가야한다는점
+    2. dto안에 entity가 들어가면 안됨
+    3. board도 처리해야함
+>>>>>>> 6f63700fdae2fa7eaba629c57d15c19aa6791d56
     @Transactional
     public Long save(PostDto postDto, MultipartFile file) {
         Post post = postDto.toEntity();

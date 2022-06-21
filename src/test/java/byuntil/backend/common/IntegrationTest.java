@@ -65,7 +65,6 @@ public class IntegrationTest {
         Member member2 = (Member)memberService.findOneMember(memberId2).get();
 
         //field를 thesis에 넣기
-        thesisDto1.addFieldDto(fieldDto1);
         Long thesisId1 = thesisService.save(thesisDto1);
         Thesis thesis1 = thesisService.findById(thesisId1).get();
 
@@ -99,15 +98,15 @@ public class IntegrationTest {
         //then
     }
     public PostDto makePostDto(){
-        return PostDto.builder().title("제목1").content("내용11").build();
+        return PostDto.builder().title("제목1").boardName("board1").content("내용11").build();
     }
 
     public FieldDto makeFieldDto(){
-        return FieldDto.builder().description(""+Math.random()).build();
+        return FieldDto.builder().name("field").description(""+Math.random()).build();
     }
     public ThesisDto makeThesisDto(){
         return ThesisDto.builder().enName(""+Math.random()).koName("한글이름").journal("sss")
-                .title("ss").publishDate(LocalDateTime.now()).url("sda/ss").build();
+                .title("ss").fieldName("field1").publishDate(LocalDateTime.now()).url("sda/ss").build();
     }
     public ProfessorSaveRequestDto makeProfessorDto(){
 

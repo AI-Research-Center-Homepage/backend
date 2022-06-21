@@ -14,16 +14,12 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class BoardDto {
+    private Long id;
     private String name;
-    private ArrayList<PostDto> postDtoList;
 
     @Builder
     public BoardDto(String name){
         this.name = name;
-    }
-
-    public void addPostDtoList(ArrayList<PostDto> list){
-        this.postDtoList = list;
     }
 
     public Board toEntity(){
