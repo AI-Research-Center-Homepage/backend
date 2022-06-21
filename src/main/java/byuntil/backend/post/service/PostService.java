@@ -42,7 +42,7 @@ public class PostService {
         */
 
         Post post = postDto.toEntity();
-        List<Attach> attachList =s3Service.uploadReturnAttach(fileList);
+        List<Attach> attachList =s3Service.uploadReturnAttachList(fileList);
         post.addAttaches(attachList);
         //보드 이름으로 보드 찾아오는 명령어 수행해야함 없으면 예외터뜨리기
         Board board=boardRepository.findByName(postDto.getBoardName()).orElseThrow(()-> new BoardNotFoundException());

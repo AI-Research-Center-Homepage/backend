@@ -12,6 +12,10 @@
     <input  type="hidden" name="content">
     <input type="submit" value="버튼">
 </form>
+<form action="/post/attach/submit" method="post" enctype="multipart/form-data">
+    <input type="file" name="file1"/>
+    <button type="submit">전송</button>
+</form>
 <script th:src="@{https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js}"></script>
 <script>
     const Editor = toastui.Editor;

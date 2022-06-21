@@ -4,7 +4,6 @@ import byuntil.backend.common.exception.s3.InvalidExtensionException;
 import byuntil.backend.common.exception.s3.InvalidFileNameException;
 import byuntil.backend.common.exception.s3.UploadFailException;
 import byuntil.backend.post.domain.entity.Attach;
-import byuntil.backend.post.dto.AttachDto;
 import byuntil.backend.s3.domain.*;
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
@@ -17,6 +16,7 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.transfer.TransferManager;
 import com.amazonaws.services.s3.transfer.Upload;
 import lombok.extern.slf4j.Slf4j;
@@ -80,6 +80,10 @@ public class S3ServiceImpl implements S3Service {
         return image.isEmpty()
                 ? Optional.empty()
                 : Optional.ofNullable(uploadImg(image));
+    }
+
+    public S3Object getObject(String bucketName, String fileKey){
+        return s3Client.getObject(bucketName, fileKey);
     }
 
     private String uploadImg(final MultipartFile file) throws IOException {
@@ -186,7 +190,39 @@ public class S3ServiceImpl implements S3Service {
             }
         return url;
     }
-    public List<Attach> uploadReturnAttach(List<MultipartFile> uploadFileList) throws IOException {
+    public Optional<Attach> uploadReturnAttach(MultipartFile uploadFile) throws IOException {
+        Attach attach;
+            String origName = uploadFile.getOriginalFilename();
+            String url;
+            try {
+                // 확장자를 찾기 위한 코드
+                final String ext = origName.substring(origName.lastIndexOf('.'));
+                // 파일이름 암호화
+                final String saveFileName = getUuid() + ext;
+                // 파일 객체 생성
+                // System.getProperty => 시스템 환경에 관한 정보를 얻을 수 있다. (user.dir = 현재 작업 디렉토리를 의미함)
+                File file = new File(System.getProperty("user.dir") + saveFileName);
+                // 파일 변환
+                uploadFile.transferTo(file);
+                // S3 파일 업로드
+                uploadOnS3(saveFileName, file);
+                // 주소 할당
+                url = defaultUrl + saveFileName;
+                // 파일 삭제
+                file.delete();
+
+                //dto정보 입력
+                attach = Attach.builder().filePath(url).originFileName(origName).serverFileName(saveFileName).build();
+
+            } catch (StringIndexOutOfBoundsException e) {
+                url = null;
+                attach = null;
+            }
+
+
+        return Optional.of(attach);
+    }
+    public List<Attach> uploadReturnAttachList(List<MultipartFile> uploadFileList) throws IOException {
         List<Attach> attachList = new ArrayList<>();
         if(uploadFileList.isEmpty()) return null;
         for (MultipartFile uploadFile : uploadFileList) {
@@ -260,6 +296,7 @@ public class S3ServiceImpl implements S3Service {
             DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(this.bucket, key);
             //Delete
             this.s3Client.deleteObject(deleteObjectRequest);
+
             System.out.println(String.format("[%s] deletion complete", key));
 
         } catch (AmazonServiceException e) {

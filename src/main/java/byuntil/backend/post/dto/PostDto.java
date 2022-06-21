@@ -17,6 +17,7 @@ public class PostDto {
     private String title;
     private String content;
     private String boardName;
+    private List<String> urlList;
     //board에 대한 dto도 필요
 
     @Builder
