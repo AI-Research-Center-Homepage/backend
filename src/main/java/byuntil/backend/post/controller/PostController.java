@@ -46,13 +46,10 @@ public class PostController {
     public String submit(@ModelAttribute PostDto postDto) throws IOException {
         System.out.println("==============================");
         postDto.setTitle("임시제목1");
-        postDto.setBoardDto(new BoardDto("게시판1"));
+        postDto.setBoardName("게시판1");
         System.out.println(postDto.getContent());
         System.out.println("==============================");
         //출력해보기
-        for (String url : postDto.getUrlList()) {
-            System.out.println(url);
-        }
         postService.save(postDto, null);
         return "redirect:/";
     }
