@@ -21,7 +21,6 @@ import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import java.util.Optional;
 
 @SpringBootTest
@@ -44,24 +43,32 @@ public class ResearchTest {
     @Autowired
     EntityManager em;
 
-    public DemoDto makeDemoDto(){
+    public DemoDto makeDemoDto() {
         return DemoDto.builder().content("내s용d").name("데모1").url("url").fieldName("field1").build();
     }
-    public ProjectDto makeProjectDto(){ return ProjectDto.builder().name("fie").fieldName("field1").content("내용123").participants("참여자들").build();}
-    public FieldDto makeFieldDto(){
+
+    public ProjectDto makeProjectDto() {
+        return ProjectDto.builder().name("fie").fieldName("field1").description("요약").content("내용123").participants("참여자들").build();
+    }
+
+    public FieldDto makeFieldDto() {
         return FieldDto.builder().name("field1").description("설명").build();
     }
-    public FieldDto makeETCFieldDto(){ return FieldDto.builder().name("기타").description("설명1").build();}
+
+    public FieldDto makeETCFieldDto() {
+        return FieldDto.builder().name("기타").description("설명1").build();
+    }
+
     @Test
     @Commit
     @Transactional
-    public void 연관관계테스트(){
+    public void 연관관계테스트() {
         //given
         DemoDto demoDto = makeDemoDto();
         FieldDto fieldDto = makeFieldDto();
         //when
         fieldRepository.save(fieldDto.toEntity());
-        Long demoId =demoService.save(demoDto);
+        Long demoId = demoService.save(demoDto);
         Demo demo = demoService.findById(demoId).get();
         //then
         org.assertj.core.api.Assertions.assertThat(demo.getContent()).isEqualTo(demoDto.getContent());
@@ -71,27 +78,28 @@ public class ResearchTest {
     @Test
     @Transactional
     @Commit
-    public void demo의field모두불러오기(){
+    public void demo의field모두불러오기() {
         //given
         DemoDto demoDto = makeDemoDto();
         FieldDto fieldDto = makeFieldDto();
 
         //when
         fieldRepository.save(fieldDto.toEntity());
-        Long demoId =demoService.save(demoDto);
+        Long demoId = demoService.save(demoDto);
         Demo demo = demoService.findById(demoId).get();
         //then
         System.out.println("===============================");
         for (Optional<Field> f : fieldRepository.allDemoFields()) {
-            System.out.println(f.get().getName() + " " + f.get().getDescription() + " "  + f.get().getDemoList());
+            System.out.println(f.get().getName() + " " + f.get().getDescription() + " " + f.get().getDemoList());
         }
         System.out.println("===============================");
 
     }
+
     @Test
     @Transactional
     @Commit
-    public void 삭제테스트(){
+    public void 삭제테스트() {
         //given
         FieldDto fieldDto = makeFieldDto();
         DemoDto demoDto = makeDemoDto();
@@ -115,9 +123,10 @@ public class ResearchTest {
         //then
         org.assertj.core.api.Assertions.assertThat(fieldService.findById(field.getId())).isNotPresent();
     }
+
     @Test
     @Transactional
-    public void 삭제시예외(){
+    public void 삭제시예외() {
         //given
         FieldDto fieldDto = makeFieldDto();
         DemoDto demoDto = makeDemoDto();

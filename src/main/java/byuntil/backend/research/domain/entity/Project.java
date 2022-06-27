@@ -22,6 +22,8 @@ public class Project {
     @Column(nullable = false)
     private String name;
 
+    private String description;
+
     @Column(columnDefinition = "LONGTEXT")
     private String content;
 
@@ -32,18 +34,21 @@ public class Project {
     private Field field;
 
     //연관관계 설정 메서드
-    public void setField(Field field){
+    public void setField(Field field) {
         this.field = field;
     }
 
-    public void update(ProjectDto projectDto){
+    public void update(ProjectDto projectDto) {
         this.name = projectDto.getName();
+        this.description = projectDto.getDescription();
         this.content = projectDto.getContent();
         this.participants = projectDto.getParticipants();
     }
+
     @Builder
-    public Project(String name, String content, String participants) {
+    public Project(String name, String description, String content, String participants) {
         this.name = name;
+        this.description = description;
         this.content = content;
         this.participants = participants;
     }
