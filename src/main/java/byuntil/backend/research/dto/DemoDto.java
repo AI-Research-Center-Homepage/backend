@@ -10,22 +10,22 @@ import lombok.RequiredArgsConstructor;
 @Builder
 public class DemoDto {
     private final Long id;
-    private final String name;
+    private final String title;
+    private final String description;
     private final String content;
     private final String url;
     private final String participants;
-    private final String fieldName;
 
     public DemoDto(final Demo demo) {
         this.id = demo.getId();
-        this.name = demo.getName();
+        this.title = demo.getTitle();
+        this.description = demo.getDescription();
         this.content = demo.getContent();
         this.url = demo.getUrl();
         this.participants = demo.getParticipants();
-        this.fieldName = demo.getField().getName();
     }
 
     public Demo toEntity() {
-        return Demo.builder().name(name).content(content).url(url).participants(participants).build();
+        return Demo.builder().title(title).content(content).url(url).participants(participants).build();
     }
 }

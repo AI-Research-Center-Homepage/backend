@@ -1,8 +1,10 @@
 package byuntil.backend.common.factory;
 
+import byuntil.backend.research.domain.entity.Demo;
 import byuntil.backend.research.domain.entity.Field;
 import byuntil.backend.research.domain.entity.Project;
 import byuntil.backend.research.domain.entity.Thesis;
+import byuntil.backend.research.dto.DemoDto;
 import byuntil.backend.research.dto.ProjectDto;
 import byuntil.backend.research.dto.ThesisDto;
 import lombok.Builder;
@@ -84,6 +86,29 @@ public class MockResearchFactory {
 
     public static List<ThesisDto> createMockThesisDtos(List<Thesis> theses) {
         return theses.stream().map(ThesisDto::new).toList();
+    }
+
+    public static Demo createMockDemo(int count) {
+        return Demo.builder()
+                .title("제목" + count)
+                .description("요약" + count)
+                .content("내용" + count)
+                .url("url" + count)
+                .participants("참여자")
+                .build();
+    }
+
+    public static List<Demo> createMockDemos(int demoNum) {
+        List<Demo> list = new ArrayList<>();
+        for (int i = 0; i < demoNum; i++) {
+            Demo mockDemo = createMockDemo(i);
+            list.add(mockDemo);
+        }
+        return list;
+    }
+
+    public static List<DemoDto> createMockDemoDtos(List<Demo> demos) {
+        return demos.stream().map(DemoDto::new).toList();
     }
 
     @Getter

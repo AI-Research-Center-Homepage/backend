@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,10 +21,10 @@ public class FieldController {
     @GetMapping("/fields")
     public ResponseEntity<?> readFields() {
         List<Field> fields = fieldService.findAll();
-        List<FieldDto> dtos = fields.stream().
-                map(o -> new FieldDto(o))
-                .collect(Collectors.toList());
-        FieldResponseDto<FieldDto> response = FieldResponseDto.<FieldDto>builder().fields(dtos).build();
+        List<FieldDto> fieldDtos = fields.stream().
+                map(FieldDto::new)
+                .toList();
+        FieldResponseDto<FieldDto> response = FieldResponseDto.<FieldDto>builder().fields(fieldDtos).build();
         return ResponseEntity.ok().body(response);
     }
 

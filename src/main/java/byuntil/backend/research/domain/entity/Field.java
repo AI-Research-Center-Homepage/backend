@@ -25,39 +25,35 @@ public class Field {
     @Column(columnDefinition = "LONGTEXT")
     private String description;
 
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "field")
-    private List<Demo> demoList = new ArrayList<>();
-
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "field")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "field")
     private List<Project> projectList = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "field")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "field")
     private List<Thesis> thesisList = new ArrayList<>();
 
-    public void addDemo(Demo demo){
-        demo.setField(this);
-        this.demoList.add(demo);
-    }
-    public void addProject(Project project){
+    public void addProject(Project project) {
         project.setField(this);
         this.projectList.add(project);
     }
-    public void addThesis(Thesis thesis){
+
+    public void addThesis(Thesis thesis) {
         thesis.setField(this);
         this.thesisList.add(thesis);
     }
 
     @Builder
-    public Field(String name,  String description) {
+    public Field(String name, String description) {
         this.name = name;
         this.description = description;
     }
-    public void update(FieldDto fieldDto){
+
+    public void update(FieldDto fieldDto) {
         this.name = fieldDto.getName();
         this.description = fieldDto.getDescription();
 
     }
-    public FieldDto toDto(){
+
+    public FieldDto toDto() {
         FieldDto dto = FieldDto.builder().name(name).description(description).build();
         return dto;
 

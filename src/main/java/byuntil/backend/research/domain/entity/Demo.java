@@ -4,7 +4,10 @@ import byuntil.backend.research.dto.DemoDto;
 import lombok.Builder;
 import lombok.Getter;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @Entity
 @Getter
@@ -15,8 +18,9 @@ public class Demo {
     private Long id;
 
     @Column(nullable = false)
-    private String name;
+    private String title;
 
+    private String description;
     @Column(columnDefinition = "LONGTEXT")
     private String content;
 
@@ -24,23 +28,18 @@ public class Demo {
 
     private String participants;
 
-    @ManyToOne
-    @JoinColumn(name = "FIELD_ID", nullable = false)
-    private Field field;
-
     @Builder
-    public Demo(String name, String content, String url, String participants) {
-        this.name = name;
+    public Demo(String title, String description, String content, String url, String participants) {
+        this.title = title;
+        this.description = description;
         this.content = content;
         this.url = url;
         this.participants = participants;
     }
 
-    public void setField(Field field){
-        this.field = field;
-    }
-    public void update(DemoDto demoDto){
-        this.name = demoDto.getName();
+    public void update(DemoDto demoDto) {
+        this.title = demoDto.getTitle();
+        this.description = demoDto.getDescription();
         this.content = demoDto.getContent();
         this.url = demoDto.getUrl();
         this.participants = demoDto.getParticipants();

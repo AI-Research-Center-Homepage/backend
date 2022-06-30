@@ -1,7 +1,6 @@
 package byuntil.backend.research;
 
 import byuntil.backend.common.exception.ExistException;
-import byuntil.backend.research.domain.entity.Demo;
 import byuntil.backend.research.domain.entity.Field;
 import byuntil.backend.research.domain.entity.Project;
 import byuntil.backend.research.domain.repository.DemoRepository;
@@ -24,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -49,7 +47,7 @@ public class ResearchTest {
     EntityManager em;
 
     public DemoDto makeDemoDto() {
-        return DemoDto.builder().content("내s용d").name("데모1").url("url").fieldName("field1").build();
+        return DemoDto.builder().content("내s용d").title("데모1").url("url").build();
     }
 
     public ProjectDto makeProjectDto() {
@@ -68,42 +66,6 @@ public class ResearchTest {
         return FieldDto.builder().name("field2").description("설명2").build();
     }
 
-    @Test
-    @Commit
-    @Transactional
-    public void 연관관계테스트() {
-        //given
-        DemoDto demoDto = makeDemoDto();
-        FieldDto fieldDto = makeFieldDto();
-        //when
-        fieldRepository.save(fieldDto.toEntity());
-        Long demoId = demoService.save(demoDto);
-        Demo demo = demoService.findById(demoId).get();
-        //then
-        assertThat(demo.getContent()).isEqualTo(demoDto.getContent());
-        Assertions.assertTrue(demo.getField().getName().equals(fieldDto.getName()));
-    }
-
-    @Test
-    @Transactional
-    @Commit
-    public void demo의field모두불러오기() {
-        //given
-        DemoDto demoDto = makeDemoDto();
-        FieldDto fieldDto = makeFieldDto();
-
-        //when
-        fieldRepository.save(fieldDto.toEntity());
-        Long demoId = demoService.save(demoDto);
-        Demo demo = demoService.findById(demoId).get();
-        //then
-        System.out.println("===============================");
-        for (Optional<Field> f : fieldRepository.allDemoFields()) {
-            System.out.println(f.get().getName() + " " + f.get().getDescription() + " " + f.get().getDemoList());
-        }
-        System.out.println("===============================");
-
-    }
 
     @Test
     @Transactional
@@ -123,7 +85,6 @@ public class ResearchTest {
 
         thesisRepository.deleteByFieldName(field.getName());
         projectRepository.deleteByFieldName(field.getName());
-        demoRepository.deleteByFieldName(field.getName());//이거 없으면 실행할 수 없다는 에러가 뜨게 됨
         fieldRepository.deleteByName(field.getName());
 
         em.flush();
@@ -138,16 +99,16 @@ public class ResearchTest {
     public void 삭제시예외() {
         //given
         FieldDto fieldDto = makeFieldDto();
-        DemoDto demoDto = makeDemoDto();
+        ProjectDto projectDto = makeProjectDto();
         //when
         fieldRepository.save(fieldDto.toEntity());
-        Long demoId = demoService.save(demoDto);
-        Demo demo = demoService.findById(demoId).get();
-        Field field = fieldRepository.findByName(demoDto.getFieldName()).get();
+        Long projectId = projectService.save(projectDto);
+        Project project = projectService.findById(projectId).get();
+        Field field = fieldRepository.findByName(projectDto.getFieldName()).get();
 
         //then
         Assertions.assertThrows(ExistException.class, () -> {
-            fieldService.deleteById(demo.getField().getId());
+            fieldService.deleteById(project.getField().getId());
         });
     }
 
