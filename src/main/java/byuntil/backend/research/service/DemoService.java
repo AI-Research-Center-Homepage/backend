@@ -2,7 +2,7 @@ package byuntil.backend.research.service;
 
 import byuntil.backend.research.domain.entity.Demo;
 import byuntil.backend.research.domain.repository.DemoRepository;
-import byuntil.backend.research.dto.DemoDto;
+import byuntil.backend.research.dto.request.DemoDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

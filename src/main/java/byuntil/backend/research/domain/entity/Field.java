@@ -1,6 +1,6 @@
 package byuntil.backend.research.domain.entity;
 
-import byuntil.backend.research.dto.FieldDto;
+import byuntil.backend.research.dto.request.FieldDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

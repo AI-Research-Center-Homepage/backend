@@ -2,8 +2,8 @@ package byuntil.backend.research.controller.common;
 
 import byuntil.backend.research.domain.entity.Field;
 import byuntil.backend.research.domain.entity.Thesis;
-import byuntil.backend.research.dto.FieldDto;
-import byuntil.backend.research.dto.ThesisDto;
+import byuntil.backend.research.dto.request.FieldDto;
+import byuntil.backend.research.dto.request.ThesisDto;
 import byuntil.backend.research.service.FieldService;
 import byuntil.backend.research.service.ThesisService;
 import org.junit.jupiter.api.DisplayName;

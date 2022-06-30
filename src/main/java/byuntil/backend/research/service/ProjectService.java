@@ -5,7 +5,7 @@ import byuntil.backend.research.domain.entity.Field;
 import byuntil.backend.research.domain.entity.Project;
 import byuntil.backend.research.domain.repository.FieldRepository;
 import byuntil.backend.research.domain.repository.ProjectRepository;
-import byuntil.backend.research.dto.ProjectDto;
+import byuntil.backend.research.dto.request.ProjectDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

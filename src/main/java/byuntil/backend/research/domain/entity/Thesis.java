@@ -1,7 +1,7 @@
 package byuntil.backend.research.domain.entity;
 
 import byuntil.backend.member_thesis.entity.Member_Thesis;
-import byuntil.backend.research.dto.ThesisDto;
+import byuntil.backend.research.dto.request.ThesisDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -42,7 +42,7 @@ public class Thesis {
 
     //builder어노테이션을 class단위로 하지 않은 이유 : 그러면 위의 member_thesis가 new할당을 안받아서 null이 됨
     @Builder
-    public Thesis(String title, String koName, String enName, String journal, LocalDateTime publishDate, String url){
+    public Thesis(String title, String koName, String enName, String journal, LocalDateTime publishDate, String url) {
         this.title = title;
         this.koName = koName;
         this.enName = enName;
@@ -52,14 +52,15 @@ public class Thesis {
     }
 
     //연관관계 설정 메서드
-    public void setField(Field field){
+    public void setField(Field field) {
         this.field = field;
     }
 
-    public void addMemberThesis(Member_Thesis memberThesis){
+    public void addMemberThesis(Member_Thesis memberThesis) {
         member_theses.add(memberThesis);
     }
-    public void update(ThesisDto dto){
+
+    public void update(ThesisDto dto) {
         this.title = dto.getTitle();
         this.koName = dto.getKoName();
         this.enName = dto.getEnName();
@@ -68,7 +69,8 @@ public class Thesis {
         this.url = dto.getUrl();
 
     }
-    public void toDto(){
+
+    public void toDto() {
         ThesisDto dto = ThesisDto.builder().title(this.title).koName(this.koName).enName(this.enName).journal(this.journal)
                 .publishDate(this.publishDate).url(this.url).build();
 

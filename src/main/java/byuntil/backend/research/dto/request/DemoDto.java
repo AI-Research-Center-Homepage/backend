@@ -1,4 +1,4 @@
-package byuntil.backend.research.dto;
+package byuntil.backend.research.dto.request;
 
 import byuntil.backend.research.domain.entity.Demo;
 import lombok.Builder;

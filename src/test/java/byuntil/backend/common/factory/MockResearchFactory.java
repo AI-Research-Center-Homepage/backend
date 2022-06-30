@@ -4,9 +4,9 @@ import byuntil.backend.research.domain.entity.Demo;
 import byuntil.backend.research.domain.entity.Field;
 import byuntil.backend.research.domain.entity.Project;
 import byuntil.backend.research.domain.entity.Thesis;
-import byuntil.backend.research.dto.DemoDto;
-import byuntil.backend.research.dto.ProjectDto;
-import byuntil.backend.research.dto.ThesisDto;
+import byuntil.backend.research.dto.request.DemoDto;
+import byuntil.backend.research.dto.request.ProjectDto;
+import byuntil.backend.research.dto.request.ThesisDto;
 import lombok.Builder;
 import lombok.Getter;
 

@@ -1,7 +1,7 @@
 package byuntil.backend.common.factory;
 
 import byuntil.backend.research.domain.entity.Field;
-import byuntil.backend.research.dto.FieldDto;
+import byuntil.backend.research.dto.request.FieldDto;
 
 import java.util.ArrayList;
 import java.util.List;

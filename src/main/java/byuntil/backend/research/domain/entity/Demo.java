@@ -1,6 +1,6 @@
 package byuntil.backend.research.domain.entity;
 
-import byuntil.backend.research.dto.DemoDto;
+import byuntil.backend.research.dto.request.DemoDto;
 import lombok.Builder;
 import lombok.Getter;
 

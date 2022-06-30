@@ -3,7 +3,7 @@ package byuntil.backend.research.service;
 import byuntil.backend.common.exception.ExistException;
 import byuntil.backend.research.domain.entity.Field;
 import byuntil.backend.research.domain.repository.FieldRepository;
-import byuntil.backend.research.dto.FieldDto;
+import byuntil.backend.research.dto.request.FieldDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
