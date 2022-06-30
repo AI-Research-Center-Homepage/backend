@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -32,7 +32,7 @@ public class MemberService implements UserDetailsService {
     @Transactional
     public void secession(Long id) throws Throwable {
         //존재하지 않는 회원을 탈퇴시키려고 하는 경우 error 발생해야함
-        if (!memberRepository.findById(id).isPresent()) {
+        if (memberRepository.findById(id).isEmpty()) {
             throw new IdNotExistException("존재하지 않는 id입니다");
         } else {
             Member member = (Member) memberRepository.findById(id).get();
@@ -41,7 +41,7 @@ public class MemberService implements UserDetailsService {
 
             byte[] array = new byte[7]; // length is bounded by 7
             new Random().nextBytes(array);
-            String generatedString = new String(array, Charset.forName("UTF-8"));
+            String generatedString = new String(array, StandardCharsets.UTF_8);
 
             member.getLogin().setLoginPw(generatedString);
             MemberUpdateRequestDto dto = MemberUpdateRequestDto.builder().admission(LocalDateTime.now()).email("del").major("del").doctorate("del")
@@ -108,8 +108,7 @@ public class MemberService implements UserDetailsService {
             graduate.update(requestDto.getAdmission());
         } else if (member instanceof Researcher) {
             Researcher researcher = (Researcher) member;
-        } else if (member instanceof Undergraduate) {
-            Undergraduate undergraduate = (Undergraduate) member;
+        } else if (member instanceof Undergraduate undergraduate) {
             undergraduate.update(requestDto.getAdmission());
         }
     }
@@ -123,7 +122,7 @@ public class MemberService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<Member> result = memberRepository.findByLoginId(username);
-        if (!result.isPresent()) {
+        if (result.isEmpty()) {
             throw new UsernameNotFoundException("Check Id");
         }
         Member member = result.get();
