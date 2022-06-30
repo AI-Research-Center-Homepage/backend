@@ -17,8 +17,8 @@ public class Undergraduate extends Member {
 
     @Builder
     public Undergraduate(String name, String major, String email, String image, String dtype,
-                         LocalDateTime admission, String office, String fields, Login login) {
-        super(name, major, email, image, dtype, office, fields, login);
+                         LocalDateTime admission, String location, Login login) {
+        super(name, major, email, image, dtype, location, login);
         this.admission = admission;
     }
 

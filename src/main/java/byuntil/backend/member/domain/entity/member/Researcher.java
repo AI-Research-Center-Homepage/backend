@@ -15,8 +15,8 @@ public class Researcher extends Member {
 
     @Builder
     public Researcher(String name, String major, String email, String image,
-                      String dtype, String office, String fields, Login login) {
-        super(name, major, email, image, dtype, office, fields, login);
+                      String dtype, String location, Login login) {
+        super(name, major, email, image, dtype, location, login);
     }
 
     //

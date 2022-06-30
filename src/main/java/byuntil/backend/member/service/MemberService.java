@@ -45,7 +45,7 @@ public class MemberService implements UserDetailsService {
 
             member.getLogin().setLoginPw(generatedString);
             MemberUpdateRequestDto dto = MemberUpdateRequestDto.builder().admission(LocalDateTime.now()).email("del").major("del").doctorate("del")
-                    .position("del").number("del").name("del").image("del").office("del").build();
+                    .position("del").number("del").name("del").image("del").location("del").build();
             updateMember(member.getId(), dto);
         }
     }

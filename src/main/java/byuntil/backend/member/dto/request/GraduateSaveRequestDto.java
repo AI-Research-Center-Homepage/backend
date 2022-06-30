@@ -15,8 +15,8 @@ public class GraduateSaveRequestDto extends MemberSaveRequestDto {
 
     @Builder
     public GraduateSaveRequestDto(String name, String major, String email, String image,
-                                  LocalDateTime admission, String office, String fields, LoginDto loginDto) {
-        super(name, major, email, image, office, fields, loginDto);
+                                  LocalDateTime admission, String location, LoginDto loginDto) {
+        super(name, major, email, image, location, loginDto);
         this.admission = admission;
     }
 
@@ -29,7 +29,7 @@ public class GraduateSaveRequestDto extends MemberSaveRequestDto {
                 .email(getEmail())
                 .image(getImage())
                 .admission(admission)
-                .office(getOffice())
+                .location(getLocation())
                 .login(getLoginDto().toEntity())
                 .build();
     }

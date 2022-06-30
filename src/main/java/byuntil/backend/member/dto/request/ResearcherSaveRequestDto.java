@@ -10,8 +10,8 @@ import lombok.Getter;
 public class ResearcherSaveRequestDto extends MemberSaveRequestDto {
 
     @Builder
-    public ResearcherSaveRequestDto(String name, String major, String email, String image, String office, String fields, LoginDto loginDto) {
-        super(name, major, email, image, office, fields, loginDto);
+    public ResearcherSaveRequestDto(String name, String major, String email, String image, String location, LoginDto loginDto) {
+        super(name, major, email, image, location, loginDto);
     }
 
 
@@ -22,7 +22,7 @@ public class ResearcherSaveRequestDto extends MemberSaveRequestDto {
                 .major(getMajor())
                 .email(getEmail())
                 .image(getImage())
-                .office(getOffice())
+                .location(getLocation())
                 .login(getLoginDto().toEntity())
                 .build();
     }

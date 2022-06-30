@@ -46,9 +46,8 @@ class MemberServiceTest {
                 .major("asdfasdfsa")
                 .doctorate("A")
                 .number("01096574723")
-                .fields("여러가지 연구분야 에이아이 등등등")
                 .loginDto(loginDto)
-                .office("주소주소")
+                .location("주소주소")
                 .build();
 
         return professor;

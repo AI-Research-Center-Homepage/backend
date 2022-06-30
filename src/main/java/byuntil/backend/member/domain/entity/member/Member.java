@@ -1,8 +1,8 @@
 package byuntil.backend.member.domain.entity.member;
 
-import byuntil.backend.member_thesis.entity.Member_Thesis;
 import byuntil.backend.admin.controlller.domain.Login;
 import byuntil.backend.member.dto.request.MemberUpdateRequestDto;
+import byuntil.backend.member_thesis.entity.Member_Thesis;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.hibernate.annotations.DynamicUpdate;
@@ -32,14 +32,12 @@ public abstract class Member {
 
     private String image;//imageurl
 
-    private String office;
-
-    private String fields;
+    private String location;
 
     @Embedded
     private Login login;
 
-    public void changePw(String encodedPw){
+    public void changePw(String encodedPw) {
         this.login.setLoginPw(encodedPw);
     }
 //
@@ -50,14 +48,14 @@ public abstract class Member {
 
     @Column(name = "DTYPE", insertable = false, updatable = false)
     private String dtype;
-    public Member(String name, String major, String email, String image, String dtype, String office, String fields, Login login) {
+
+    public Member(String name, String major, String email, String image, String dtype, String location, Login login) {
         this.name = name;
         this.major = major;
         this.email = email;
         this.image = image;
         this.dtype = dtype;
-        this.office = office;
-        this.fields = fields;
+        this.location = location;
         this.login = login;
         //this.role = UserRole.valueOf(admin.getAuthorities().toArray()[0].toString());
     }
@@ -65,6 +63,7 @@ public abstract class Member {
     public String getDtype() {
         return dtype;
     }
+
     @OneToMany(mappedBy = "member")
     private List<Member_Thesis> member_theses = new ArrayList<>();
 
@@ -74,14 +73,14 @@ public abstract class Member {
         this.email = dto.getEmail();
         this.major = dto.getMajor();
         this.image = dto.getImage();
-        this.office = dto.getOffice();
-        this.fields = dto.getFields();
+        this.location = dto.getLocation();
         this.login.setLoginId(dto.getLoginDto().getLoginId());
         this.login.setLoginPw(dto.getLoginDto().getLoginPw());
         //this.login.setRole(UserRole.valueOf(dto.getLoginDto().getAuthorities().toArray()[0].toString()));
         this.login.setDeleted(dto.getLoginDto().isDeleted());
     }
-    public void addMemberThesis(Member_Thesis memberThesis){
+
+    public void addMemberThesis(Member_Thesis memberThesis) {
         this.member_theses.add(memberThesis);
     }
 }

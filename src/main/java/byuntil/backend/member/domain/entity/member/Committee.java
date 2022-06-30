@@ -16,8 +16,8 @@ public class Committee extends Member {
 
     @Builder
     public Committee(String name, String major, String email, String image, Login login,
-                     String dtype, String position, String office, String fields) {
-        super(name, major, email, image, dtype, office, fields, login);
+                     String dtype, String position, String location) {
+        super(name, major, email, image, dtype, location, login);
         this.position = position;
     }
 

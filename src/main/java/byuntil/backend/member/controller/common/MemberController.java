@@ -77,7 +77,7 @@ public class MemberController {
             this.id = professor.getId();
             this.name = professor.getName();
             this.image = professor.getImage();
-            this.location = professor.getOffice();
+            this.location = professor.getLocation();
             this.doctorate = professor.getDoctorate();
             this.number = professor.getNumber();
         }
@@ -95,7 +95,7 @@ public class MemberController {
             this.id = gradate.getId();
             this.name = gradate.getName();
             this.image = gradate.getImage();
-            this.location = gradate.getOffice();
+            this.location = gradate.getLocation();
             this.admission = gradate.getAdmission();
         }
     }
@@ -112,7 +112,7 @@ public class MemberController {
             this.id = underGradate.getId();
             this.name = underGradate.getName();
             this.image = underGradate.getImage();
-            this.location = underGradate.getOffice();
+            this.location = underGradate.getLocation();
             this.admission = underGradate.getAdmission();
         }
     }
@@ -129,7 +129,7 @@ public class MemberController {
             this.id = committee.getId();
             this.name = committee.getName();
             this.image = committee.getImage();
-            this.location = committee.getOffice();
+            this.location = committee.getLocation();
             this.position = committee.getPosition();
         }
     }
@@ -145,7 +145,7 @@ public class MemberController {
             this.id = researcher.getId();
             this.name = researcher.getName();
             this.image = researcher.getImage();
-            this.location = researcher.getOffice();
+            this.location = researcher.getLocation();
         }
     }
 }

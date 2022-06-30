@@ -16,7 +16,7 @@ public class MockMemberFactory {
                 .major(professorVO.major)
                 .email(professorVO.email)
                 .image(professorVO.image)
-                .office(professorVO.location)
+                .location(professorVO.location)
                 .doctorate(professorVO.doctorate)
                 .number(professorVO.number)
                 .build();
