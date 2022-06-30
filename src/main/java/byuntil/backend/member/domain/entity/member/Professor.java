@@ -17,13 +17,6 @@ public class Professor extends Member {
     private String doctorate;
     private String number;
 
-    /*@Builder
-    public Professor(String doctorate, String location, String number) {
-        this.doctorate = doctorate;
-        this.location = location;
-        this.number = number;
-    }*/
-
     @Builder
     public Professor(String name, String major, String email, String image, String dtype,
                      String doctorate, String office, String number, String fields, Login login) {

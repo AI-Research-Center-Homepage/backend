@@ -12,14 +12,17 @@ public class ProfessorSaveRequestDto extends MemberSaveRequestDto {
     private String number;
 
     @Builder
-    public ProfessorSaveRequestDto(String name, String major, String email, String image,
-                                   String doctorate, String office, String number, String fields, LoginDto loginDto) {
+    public ProfessorSaveRequestDto(String name, String major, String email, String image, String office, String fields, LoginDto loginDto, String doctorate, String number) {
         super(name, major, email, image, office, fields, loginDto);
-
         this.doctorate = doctorate;
         this.number = number;
     }
 
+    public ProfessorSaveRequestDto(final Professor professor, final LoginDto loginDto) {
+        super(professor.getName(), professor.getMajor(), professor.getEmail(), professor.getImage(), professor.getOffice(), professor.getFields(), loginDto);
+        this.doctorate = professor.getDoctorate();
+        this.number = professor.getNumber();
+    }
 
     @Override
     public Professor toEntity() {

@@ -32,11 +32,10 @@ public class MemberService implements UserDetailsService {
     @Transactional
     public void secession(Long id) throws Throwable {
         //존재하지 않는 회원을 탈퇴시키려고 하는 경우 error 발생해야함
-        if(!memberRepository.findById(id).isPresent()){
+        if (!memberRepository.findById(id).isPresent()) {
             throw new IdNotExistException("존재하지 않는 id입니다");
-        }
-        else{
-            Member member = (Member)memberRepository.findById(id).get();
+        } else {
+            Member member = (Member) memberRepository.findById(id).get();
             member.getLogin().setDeleted(true);
 
 
@@ -50,6 +49,7 @@ public class MemberService implements UserDetailsService {
             updateMember(member.getId(), dto);
         }
     }
+
     @Transactional
     public Long saveMember(MemberSaveRequestDto dto) {
         //dto를 entity로 만들고 admin도 entity로만든다음에 return함
@@ -60,7 +60,7 @@ public class MemberService implements UserDetailsService {
         String encodedPW = passwordEncoder.encode(originPW);
         dto.getLoginDto().setLoginPw(encodedPW);
 
-        return ((Member)memberRepository.save(dto.toEntity())).getId();
+        return ((Member) memberRepository.save(dto.toEntity())).getId();
     }
 
     public Optional findOneMember(Long id) {
@@ -97,17 +97,14 @@ public class MemberService implements UserDetailsService {
         Member member = (Member) memberRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         member.update(requestDto);
         //그리고 암호화를 해주어야한다
-        String encodedPw=passwordEncoder.encode(member.getLogin().getLoginPw());
+        String encodedPw = passwordEncoder.encode(member.getLogin().getLoginPw());
         member.getLogin().setLoginId(encodedPw);
 
-        if (member instanceof Professor) {
-            Professor professor = (Professor) member;
+        if (member instanceof Professor professor) {
             professor.update(requestDto.getDoctorate(), requestDto.getNumber());
-        } else if (member instanceof Committee) {
-            Committee committee = (Committee) member;
+        } else if (member instanceof Committee committee) {
             committee.update(requestDto.getPosition());
-        } else if (member instanceof Graduate) {
-            Graduate graduate = (Graduate) member;
+        } else if (member instanceof Graduate graduate) {
             graduate.update(requestDto.getAdmission());
         } else if (member instanceof Researcher) {
             Researcher researcher = (Researcher) member;
@@ -126,7 +123,7 @@ public class MemberService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<Member> result = memberRepository.findByLoginId(username);
-        if(!result.isPresent()){
+        if (!result.isPresent()) {
             throw new UsernameNotFoundException("Check Id");
         }
         Member member = result.get();
@@ -135,7 +132,11 @@ public class MemberService implements UserDetailsService {
         auths.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 
         LoginDto dto = new LoginDto(member.getLogin().getLoginId(), member.getLogin().getLoginPw(), auths,
-                 member.getLogin().getDeleted());
+                member.getLogin().getDeleted());
         return dto;
+    }
+
+    public List<Member> findAllByPosition(String position) {
+        return memberRepository.findAllByPosition(position);
     }
 }

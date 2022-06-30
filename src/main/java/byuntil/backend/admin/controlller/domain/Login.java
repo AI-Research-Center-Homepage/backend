@@ -2,7 +2,8 @@ package byuntil.backend.admin.controlller.domain;
 
 import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
 
 @Builder
@@ -23,10 +24,8 @@ public class Login {
     @Column(nullable = false)
     private Boolean deleted;
 
-    public void changePw(String encodedPw){
-        this.loginPw=encodedPw;
+    public void changePw(String encodedPw) {
+        this.loginPw = encodedPw;
     }
-
-
 
 }
