@@ -6,7 +6,6 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Builder
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -20,7 +19,7 @@ public class Project {
     //아이거 mappedyby 아래 image에 project에 대한 멤버변수가 있어야 인식가능함 !
 
     @Column(nullable = false)
-    private String name;
+    private String title;
 
     private String description;
 
@@ -39,15 +38,15 @@ public class Project {
     }
 
     public void update(ProjectDto projectDto) {
-        this.name = projectDto.getName();
+        this.title = projectDto.getName();
         this.description = projectDto.getDescription();
         this.content = projectDto.getContent();
         this.participants = projectDto.getParticipants();
     }
 
     @Builder
-    public Project(String name, String description, String content, String participants) {
-        this.name = name;
+    public Project(String title, String description, String content, String participants) {
+        this.title = title;
         this.description = description;
         this.content = content;
         this.participants = participants;
