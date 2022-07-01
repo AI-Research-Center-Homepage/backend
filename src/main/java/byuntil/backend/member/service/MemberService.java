@@ -30,7 +30,7 @@ public class MemberService implements UserDetailsService {
 
     //탈퇴
     @Transactional
-    public void secession(Long id) throws Throwable {
+    public void secession(final Long id) throws Throwable {
         //존재하지 않는 회원을 탈퇴시키려고 하는 경우 error 발생해야함
         if (memberRepository.findById(id).isEmpty()) {
             throw new IdNotExistException("존재하지 않는 id입니다");
@@ -51,7 +51,7 @@ public class MemberService implements UserDetailsService {
     }
 
     @Transactional
-    public Long saveMember(MemberSaveRequestDto dto) {
+    public Long saveMember(final MemberSaveRequestDto dto) {
         //dto를 entity로 만들고 admin도 entity로만든다음에 return함
         memberRepository.findByLoginId(dto.getLoginDto().getLoginId()).ifPresent((m -> {
             throw new LoginIdDuplicationException("이미 존재하는 회원입니다.");
@@ -63,27 +63,27 @@ public class MemberService implements UserDetailsService {
         return ((Member) memberRepository.save(dto.toEntity())).getId();
     }
 
-    public Optional findOneMember(Long id) {
+    public Optional findOneMember(final Long id) {
         return memberRepository.findById(id);
     }
 
-    public Professor findOneProfessor(Long id) {
+    public Professor findOneProfessor(final Long id) {
         return (Professor) memberRepository.findById(id).get();
     }
 
-    public Graduate findOneGraduate(Long id) {
+    public Graduate findOneGraduate(final Long id) {
         return (Graduate) memberRepository.findById(id).get();
     }
 
-    public Researcher findOneResearcher(Long id) {
+    public Researcher findOneResearcher(final Long id) {
         return (Researcher) memberRepository.findById(id).get();
     }
 
-    public Undergraduate findOneUndergraduate(Long id) {
+    public Undergraduate findOneUndergraduate(final Long id) {
         return (Undergraduate) memberRepository.findById(id).get();
     }
 
-    public Committee findOneCommittee(Long id) {
+    public Committee findOneCommittee(final Long id) {
         return (Committee) memberRepository.findById(id).get();
     }
 
@@ -93,7 +93,7 @@ public class MemberService implements UserDetailsService {
     }
 
     @Transactional
-    public void updateMember(Long id, MemberUpdateRequestDto requestDto) throws Throwable {
+    public void updateMember(final Long id, final MemberUpdateRequestDto requestDto) throws Throwable {
         Member member = (Member) memberRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         member.update(requestDto);
         //그리고 암호화를 해주어야한다
@@ -114,13 +114,13 @@ public class MemberService implements UserDetailsService {
     }
 
     @Transactional
-    public void delete(Long id) throws Throwable {
+    public void delete(final Long id) throws Throwable {
         Member member = (Member) memberRepository.findById(id).get();
         memberRepository.delete(member);
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         Optional<Member> result = memberRepository.findByLoginId(username);
         if (result.isEmpty()) {
             throw new UsernameNotFoundException("Check Id");
@@ -135,7 +135,7 @@ public class MemberService implements UserDetailsService {
         return dto;
     }
 
-    public List<Member> findAllByPosition(String position) {
+    public List<Member> findAllByPosition(final String position) {
         return memberRepository.findAllByPosition(position);
     }
 }

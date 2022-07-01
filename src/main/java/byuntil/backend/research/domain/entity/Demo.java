@@ -29,7 +29,7 @@ public class Demo {
     private String participants;
 
     @Builder
-    public Demo(String title, String description, String content, String url, String participants) {
+    public Demo(final String title, final String description, final String content, final String url, final String participants) {
         this.title = title;
         this.description = description;
         this.content = content;
@@ -37,7 +37,7 @@ public class Demo {
         this.participants = participants;
     }
 
-    public void update(DemoDto demoDto) {
+    public void update(final DemoDto demoDto) {
         this.title = demoDto.getTitle();
         this.description = demoDto.getDescription();
         this.content = demoDto.getContent();

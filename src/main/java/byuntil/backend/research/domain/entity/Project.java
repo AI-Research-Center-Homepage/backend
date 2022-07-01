@@ -33,11 +33,11 @@ public class Project {
     private Field field;
 
     //연관관계 설정 메서드
-    public void setField(Field field) {
+    public void setField(final Field field) {
         this.field = field;
     }
 
-    public void update(ProjectDto projectDto) {
+    public void update(final ProjectDto projectDto) {
         this.title = projectDto.getName();
         this.description = projectDto.getDescription();
         this.content = projectDto.getContent();
@@ -45,7 +45,7 @@ public class Project {
     }
 
     @Builder
-    public Project(String title, String description, String content, String participants) {
+    public Project(final String title, final String description, final String content, final String participants) {
         this.title = title;
         this.description = description;
         this.content = content;

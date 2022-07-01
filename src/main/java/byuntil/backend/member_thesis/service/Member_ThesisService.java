@@ -20,8 +20,9 @@ public class Member_ThesisService {
     private final Member_ThesisRepository member_thesisRepository;
     private final MemberRepository memberRepository;
     private final ThesisRepository thesisRepository;
+
     @Transactional
-    public Long createThesis(Long memberId, Long thesisId){
+    public Long createThesis(final Long memberId, final Long thesisId) {
         Member member = (Member) memberRepository.findById(memberId).get();
         Thesis thesis = thesisRepository.findById(thesisId).get();
 
@@ -29,14 +30,17 @@ public class Member_ThesisService {
         member_thesisRepository.save(memberThesis);
         return memberThesis.getId();
     }
+
     @Transactional
-    public void delete(Long id){
+    public void delete(final Long id) {
         member_thesisRepository.deleteById(id);
     }
-    public Optional<Member_Thesis> findById(Long id){
+
+    public Optional<Member_Thesis> findById(final Long id) {
         return member_thesisRepository.findById(id);
     }
-    public List<Member_Thesis> findAll(){
+
+    public List<Member_Thesis> findAll() {
         return member_thesisRepository.findAll();
     }
 }

@@ -16,12 +16,12 @@ import java.util.Optional;
 public class DemoService {
     private final DemoRepository demoRepository;
 
-    public Long save(DemoDto demoDto) {
+    public Long save(final DemoDto demoDto) {
         Demo demo = demoDto.toEntity();
         return demoRepository.save(demo).getId();
     }
 
-    public Optional<Demo> findById(Long id) {
+    public Optional<Demo> findById(final Long id) {
         return demoRepository.findById(id);
     }
 
@@ -29,11 +29,11 @@ public class DemoService {
         return demoRepository.findAll();
     }
 
-    public void deleteById(Long id) {
+    public void deleteById(final Long id) {
         demoRepository.deleteById(id);
     }
 
-    public void update(DemoDto demoDto) {
+    public void update(final DemoDto demoDto) {
         Demo demo = demoRepository.findById(demoDto.getId()).orElseThrow(() ->
                 new IllegalArgumentException("찾는 연구분야가 없습니다. id = " + demoDto.getId()));
 

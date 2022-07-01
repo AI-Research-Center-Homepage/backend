@@ -24,7 +24,7 @@ public class Login {
     @Column(nullable = false)
     private Boolean deleted;
 
-    public void changePw(String encodedPw) {
+    public void changePw(final String encodedPw) {
         this.loginPw = encodedPw;
     }
 

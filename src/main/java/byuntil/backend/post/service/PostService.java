@@ -32,7 +32,7 @@ public class PostService {
 
     //minji
     @Transactional
-    public Long save(PostDto postDto, List<MultipartFile> fileList) throws IOException {
+    public Long save(final PostDto postDto, final List<MultipartFile> fileList) throws IOException {
         //
         /*
         Board board = Board.builder().name("게시판1").build();
@@ -73,7 +73,7 @@ public class PostService {
         return postRepository.save(post).getId();
     }*/
 
-    private Optional<FileStatus> fileUpload(MultipartFile file) {
+    private Optional<FileStatus> fileUpload(final MultipartFile file) {
         if (Objects.isNull(file)) {
             return Optional.empty();
         } else if (file.isEmpty()) {
@@ -91,7 +91,7 @@ public class PostService {
         }
     }
 
-    private String createStoreFilename(String originalFilename) {
+    private String createStoreFilename(final String originalFilename) {
         String uuid = UUID.randomUUID().toString();
         /*String ext = extractExt(originalFilename);
         String storeFilename = uuid + ext;*/
@@ -100,7 +100,7 @@ public class PostService {
         return storeFilename;
     }
 
-    private String extractExt(String originalFilename) {
+    private String extractExt(final String originalFilename) {
         int idx = originalFilename.lastIndexOf(".");
         String ext = originalFilename.substring(idx);
         return ext;
@@ -145,7 +145,7 @@ public class PostService {
         return postRepository.updateView(id);
     }
 
-    public Post findById(Long postId) {
+    public Post findById(final Long postId) {
         return postRepository.findById(postId).orElseThrow(NoSuchElementException::new);
     }
 }

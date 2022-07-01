@@ -17,21 +17,21 @@ public class BoardService {
     private final BoardRepository boardRepository;
 
     @Transactional
-    public Long save(BoardDto boardDto) {
+    public Long save(final BoardDto boardDto) {
         return boardRepository.save(boardDto.toEntity()).getId();
     }
 
-    public Optional<Board> findById(Long id) {
+    public Optional<Board> findById(final Long id) {
         return boardRepository.findById(id);
     }
 
 
-    public Board findByName(String name) {
+    public Board findByName(final String name) {
         return boardRepository.findByName(name).get();
     }
 
     @Transactional
-    public void delete(Board board) {
+    public void delete(final Board board) {
         boardRepository.delete(board);
     }
 }

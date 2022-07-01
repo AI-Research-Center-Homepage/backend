@@ -31,23 +31,23 @@ public class Field {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "field")
     private List<Thesis> thesisList = new ArrayList<>();
 
-    public void addProject(Project project) {
+    public void addProject(final Project project) {
         project.setField(this);
         this.projectList.add(project);
     }
 
-    public void addThesis(Thesis thesis) {
+    public void addThesis(final Thesis thesis) {
         thesis.setField(this);
         this.thesisList.add(thesis);
     }
 
     @Builder
-    public Field(String name, String description) {
+    public Field(final String name, final String description) {
         this.name = name;
         this.description = description;
     }
 
-    public void update(FieldDto fieldDto) {
+    public void update(final FieldDto fieldDto) {
         this.name = fieldDto.getName();
         this.description = fieldDto.getDescription();
 

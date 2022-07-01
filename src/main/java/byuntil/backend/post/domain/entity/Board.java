@@ -23,7 +23,7 @@ public class Board {
     private List<Post> posts = new ArrayList<>();
 
     @Builder
-    public Board(String name, List<Post> posts) {
+    public Board(final String name, final List<Post> posts) {
         this.name = name;
         this.posts = posts;
     }

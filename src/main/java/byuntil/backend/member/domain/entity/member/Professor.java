@@ -18,14 +18,14 @@ public class Professor extends Member {
     private String number;
 
     @Builder
-    public Professor(String name, String major, String email, String image, String dtype,
-                     String doctorate, String location, String number, Login login) {
+    public Professor(final String name, final String major, final String email, final String image, final String dtype,
+                     final String doctorate, final String location, final String number, final Login login) {
         super(name, major, email, image, dtype, location, login);
         this.doctorate = doctorate;
         this.number = number;
     }
 
-    public void update(String doctorate, String number) {
+    public void update(final String doctorate, final String number) {
         this.doctorate = doctorate;
         this.number = number;
     }

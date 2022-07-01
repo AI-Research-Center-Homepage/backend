@@ -25,17 +25,19 @@ public class Member_Thesis {
     private Thesis thesis;
 
     //정적팩터리메서드
-    public static Member_Thesis createThesis(Member member, Thesis thesis){
+    public static Member_Thesis createThesis(final Member member, final Thesis thesis) {
         Member_Thesis memberThesis = new Member_Thesis();
         memberThesis.setMember(member);
         memberThesis.setThesis(thesis);
         return memberThesis;
     }
-    private void setThesis(Thesis thesis){
+
+    private void setThesis(final Thesis thesis) {
         this.thesis = thesis;
         thesis.addMemberThesis(this);
     }
-    private void setMember(Member member){
+
+    private void setMember(final Member member) {
         this.member = member;
         member.addMemberThesis(this);
     }

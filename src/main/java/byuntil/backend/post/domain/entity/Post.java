@@ -37,7 +37,7 @@ public class Post extends BaseTimeEntity {
     private Board board;
 
     @Builder
-    public Post(Long id, String title, String image, String content, int viewNum) {
+    public Post(final Long id, final String title, final String image, final String content, final int viewNum) {
         this.id = id;
         this.title = title;
         this.image = image;
@@ -50,13 +50,13 @@ public class Post extends BaseTimeEntity {
     }
 
     //연관관계 설정
-    public void addAttaches(List<Attach> attachList) {
+    public void addAttaches(final List<Attach> attachList) {
         for (Attach attach : attachList) {
             attach.addPost(this);
         }
     }
 
-    public void setBoard(Board board) {
+    public void setBoard(final Board board) {
         this.board = board;
     }
 

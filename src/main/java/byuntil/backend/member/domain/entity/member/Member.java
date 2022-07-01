@@ -37,7 +37,7 @@ public abstract class Member {
     @Embedded
     private Login login;
 
-    public void changePw(String encodedPw) {
+    public void changePw(final String encodedPw) {
         this.login.setLoginPw(encodedPw);
     }
 //
@@ -49,7 +49,7 @@ public abstract class Member {
     @Column(name = "DTYPE", insertable = false, updatable = false)
     private String dtype;
 
-    public Member(String name, String major, String email, String image, String dtype, String location, Login login) {
+    public Member(final String name, final String major, final String email, final String image, final String dtype, final String location, final Login login) {
         this.name = name;
         this.major = major;
         this.email = email;
@@ -68,7 +68,7 @@ public abstract class Member {
     private List<Member_Thesis> member_theses = new ArrayList<>();
 
 
-    public void update(MemberUpdateRequestDto dto) {
+    public void update(final MemberUpdateRequestDto dto) {
         this.name = dto.getName();
         this.email = dto.getEmail();
         this.major = dto.getMajor();
@@ -80,7 +80,7 @@ public abstract class Member {
         this.login.setDeleted(dto.getLoginDto().isDeleted());
     }
 
-    public void addMemberThesis(Member_Thesis memberThesis) {
+    public void addMemberThesis(final Member_Thesis memberThesis) {
         this.member_theses.add(memberThesis);
     }
 }

@@ -15,13 +15,13 @@ public class Committee extends Member {
     private String position;
 
     @Builder
-    public Committee(String name, String major, String email, String image, Login login,
-                     String dtype, String position, String location) {
+    public Committee(final String name, final String major, final String email, final String image, final Login login,
+                     final String dtype, final String position, final String location) {
         super(name, major, email, image, dtype, location, login);
         this.position = position;
     }
 
-    public void update(String position) {
+    public void update(final String position) {
         this.position = position;
     }
 }

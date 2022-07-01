@@ -21,7 +21,7 @@ public class ThesisService {
     private final ThesisRepository thesisRepository;
 
     @Transactional
-    public Long save(ThesisDto thesisDto) {
+    public Long save(final ThesisDto thesisDto) {
         //thesisDto.name이 null이면 예외가 터져야함
         Field field = fieldRepository.findByName(thesisDto.getFieldName()).orElseThrow(() -> new NullFieldException());
         Thesis thesis = thesisDto.toEntity();
@@ -30,7 +30,7 @@ public class ThesisService {
     }
 
     @Transactional
-    public void update(ThesisDto thesisDto) {
+    public void update(final ThesisDto thesisDto) {
         Thesis thesis = thesisRepository.findById(thesisDto.getId()).orElseThrow(()
                 -> new IllegalArgumentException("해당 논문이 없습니다. id = " + thesisDto.getId()));
         thesis.update(thesisDto);
@@ -42,11 +42,11 @@ public class ThesisService {
     }
 
     @Transactional
-    public void delete(Long id) {
+    public void delete(final Long id) {
         thesisRepository.deleteById(id);
     }
 
-    public Optional<Thesis> findById(Long id) {
+    public Optional<Thesis> findById(final Long id) {
         return thesisRepository.findById(id);
     }
 
@@ -54,7 +54,7 @@ public class ThesisService {
         return thesisRepository.findAll();
     }
 
-    public List<Thesis> findAllByFieldName(String name) {
+    public List<Thesis> findAllByFieldName(final String name) {
         return thesisRepository.findAllByFieldName(name);
     }
 }
