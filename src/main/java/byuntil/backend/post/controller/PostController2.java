@@ -22,7 +22,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/post")
-public class PostController {
+public class PostController2 {
     private final AttachService attachService;
     private final PostService postService;
     public static final DefaultRes FAIL_DEFAULT_RES

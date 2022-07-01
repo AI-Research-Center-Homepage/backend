@@ -18,10 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -43,10 +40,10 @@ public class PostService {
         */
 
         Post post = postDto.toEntity();
-        List<Attach> attachList =s3Service.upload(fileList);
+        List<Attach> attachList = s3Service.upload(fileList);
         post.addAttaches(attachList);
         //보드 이름으로 보드 찾아오는 명령어 수행해야함 없으면 예외터뜨리기
-        Board board=boardRepository.findByName(postDto.getBoardName()).orElseThrow(()-> new BoardNotFoundException());
+        Board board = boardRepository.findByName(postDto.getBoardName()).orElseThrow(BoardNotFoundException::new);
         //찾아온 board로
         post.setBoard(board);
         //그럼 cascade설정으로 attach도 같이 저장이 될 것이다
@@ -148,4 +145,7 @@ public class PostService {
         return postRepository.updateView(id);
     }
 
+    public Post findById(Long postId) {
+        return postRepository.findById(postId).orElseThrow(NoSuchElementException::new);
+    }
 }

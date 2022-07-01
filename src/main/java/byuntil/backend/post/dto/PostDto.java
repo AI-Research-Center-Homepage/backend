@@ -1,27 +1,24 @@
 package byuntil.backend.post.dto;
 
-import byuntil.backend.post.domain.entity.Attach;
 import byuntil.backend.post.domain.entity.Post;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
 public class PostDto {
     private Long id;
     private String title;
+    private String image;
     private String content;
     private String boardName;
     //board에 대한 dto도 필요
 
     @Builder
-    public PostDto(String title, String content, String boardName) {
+    public PostDto(String title, String image, String content, String boardName) {
         this.title = title;
+        this.image = image;
         this.content = content;
         this.boardName = boardName;
     }
@@ -32,6 +29,7 @@ public class PostDto {
     public Post toEntity() {
         Post build = Post.builder()
                 .title(title)
+                .image(image)
                 .content(content)
                 .build();
         return build;
