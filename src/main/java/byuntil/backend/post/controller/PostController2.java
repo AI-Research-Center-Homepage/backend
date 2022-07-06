@@ -1,6 +1,5 @@
 package byuntil.backend.post.controller;
 
-import byuntil.backend.post.dto.AttachDto;
 import byuntil.backend.post.dto.PostDto;
 import byuntil.backend.post.service.AttachService;
 import byuntil.backend.post.service.PostService;
@@ -9,9 +8,7 @@ import byuntil.backend.response.ResponseMessage;
 import byuntil.backend.response.StatusCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -25,7 +22,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/post")
-public class PostController {
+public class PostController2 {
     private final AttachService attachService;
     private final PostService postService;
     public static final DefaultRes FAIL_DEFAULT_RES

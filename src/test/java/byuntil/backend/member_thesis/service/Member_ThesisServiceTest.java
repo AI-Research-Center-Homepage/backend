@@ -5,7 +5,7 @@ import byuntil.backend.member.dto.request.ProfessorSaveRequestDto;
 import byuntil.backend.member.service.MemberService;
 import byuntil.backend.member_thesis.entity.Member_Thesis;
 import byuntil.backend.research.domain.entity.Thesis;
-import byuntil.backend.research.dto.ThesisDto;
+import byuntil.backend.research.dto.request.ThesisDto;
 import byuntil.backend.research.service.ThesisService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -14,8 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -31,7 +29,7 @@ class Member_ThesisServiceTest {
     //1. 멤버저장
     //2. 논문저장
     //3. member_thesisService에 멤버-논문 매핑
-    public void 멤버가논문쓸때(){
+    public void 멤버가논문쓸때() {
         //given
         ProfessorSaveRequestDto professor = makeMemberDto();
         ThesisDto thesisDto = makeThesisDto();
@@ -39,7 +37,7 @@ class Member_ThesisServiceTest {
         //when
         Long memberId = memberService.saveMember(professor);
         Long thesisId = thesisService.save(thesisDto);
-        Member member = (Member)memberService.findOneMember(memberId).get();
+        Member member = (Member) memberService.findOneMember(memberId).get();
         Thesis thesis = thesisService.findById(thesisId).get();
         Long id = member_thesisService.createThesis(memberId, thesisId);
         Member_Thesis memberThesis = member_thesisService.findById(id).get();
@@ -53,11 +51,13 @@ class Member_ThesisServiceTest {
                 .isEqualTo(thesis.getMember_theses().get(0).getId());
 
     }
-    public ThesisDto makeThesisDto(){
+
+    public ThesisDto makeThesisDto() {
         return ThesisDto.builder().enName("minji").koName("민지").url("https://localhost:8080").journal("journal1")
                 .title("제목1").publishDate(LocalDateTime.now()).build();
     }
-    public ProfessorSaveRequestDto makeMemberDto(){
+
+    public ProfessorSaveRequestDto makeMemberDto() {
         ProfessorSaveRequestDto professor = ProfessorSaveRequestDto.builder()
                 .email("asdfa")
                 .image("asdfasdfa")

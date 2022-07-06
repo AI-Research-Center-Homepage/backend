@@ -14,9 +14,9 @@ import javax.persistence.Entity;
 public class Researcher extends Member {
 
     @Builder
-    public Researcher(String name, String major, String email, String image,
-                      String dtype, String office, String fields, Login login) {
-        super(name, major, email, image, dtype, office, fields, login);
+    public Researcher(final String name, final String major, final String email, final String image,
+                      String dtype, String location, Login login) {
+        super(name, major, email, image, dtype, location, login);
     }
 
     //

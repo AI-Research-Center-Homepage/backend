@@ -31,7 +31,7 @@ public class Attach {
 
 
     @Builder
-    public Attach(Long id, String originFileName, String serverFileName, String filePath) {
+    public Attach(final Long id, final String originFileName, final String serverFileName, final String filePath) {
         this.id = id;
         this.originFileName = originFileName;
         this.serverFileName = serverFileName;

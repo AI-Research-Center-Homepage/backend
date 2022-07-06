@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -30,28 +30,28 @@ public class MemberService implements UserDetailsService {
 
     //탈퇴
     @Transactional
-    public void secession(Long id) throws Throwable {
+    public void secession(final Long id) throws Throwable {
         //존재하지 않는 회원을 탈퇴시키려고 하는 경우 error 발생해야함
-        if(!memberRepository.findById(id).isPresent()){
+        if (memberRepository.findById(id).isEmpty()) {
             throw new IdNotExistException("존재하지 않는 id입니다");
-        }
-        else{
-            Member member = (Member)memberRepository.findById(id).get();
+        } else {
+            Member member = (Member) memberRepository.findById(id).get();
             member.getLogin().setDeleted(true);
 
 
             byte[] array = new byte[7]; // length is bounded by 7
             new Random().nextBytes(array);
-            String generatedString = new String(array, Charset.forName("UTF-8"));
+            String generatedString = new String(array, StandardCharsets.UTF_8);
 
             member.getLogin().setLoginPw(generatedString);
             MemberUpdateRequestDto dto = MemberUpdateRequestDto.builder().admission(LocalDateTime.now()).email("del").major("del").doctorate("del")
-                    .position("del").number("del").name("del").image("del").office("del").build();
+                    .position("del").number("del").name("del").image("del").location("del").build();
             updateMember(member.getId(), dto);
         }
     }
+
     @Transactional
-    public Long saveMember(MemberSaveRequestDto dto) {
+    public Long saveMember(final MemberSaveRequestDto dto) {
         //dto를 entity로 만들고 admin도 entity로만든다음에 return함
         memberRepository.findByLoginId(dto.getLoginDto().getLoginId()).ifPresent((m -> {
             throw new LoginIdDuplicationException("이미 존재하는 회원입니다.");
@@ -60,30 +60,30 @@ public class MemberService implements UserDetailsService {
         String encodedPW = passwordEncoder.encode(originPW);
         dto.getLoginDto().setLoginPw(encodedPW);
 
-        return ((Member)memberRepository.save(dto.toEntity())).getId();
+        return ((Member) memberRepository.save(dto.toEntity())).getId();
     }
 
-    public Optional findOneMember(Long id) {
+    public Optional findOneMember(final Long id) {
         return memberRepository.findById(id);
     }
 
-    public Professor findOneProfessor(Long id) {
+    public Professor findOneProfessor(final Long id) {
         return (Professor) memberRepository.findById(id).get();
     }
 
-    public Graduate findOneGraduate(Long id) {
+    public Graduate findOneGraduate(final Long id) {
         return (Graduate) memberRepository.findById(id).get();
     }
 
-    public Researcher findOneResearcher(Long id) {
+    public Researcher findOneResearcher(final Long id) {
         return (Researcher) memberRepository.findById(id).get();
     }
 
-    public Undergraduate findOneUndergraduate(Long id) {
+    public Undergraduate findOneUndergraduate(final Long id) {
         return (Undergraduate) memberRepository.findById(id).get();
     }
 
-    public Committee findOneCommittee(Long id) {
+    public Committee findOneCommittee(final Long id) {
         return (Committee) memberRepository.findById(id).get();
     }
 
@@ -93,40 +93,36 @@ public class MemberService implements UserDetailsService {
     }
 
     @Transactional
-    public void updateMember(Long id, MemberUpdateRequestDto requestDto) throws Throwable {
+    public void updateMember(final Long id, final MemberUpdateRequestDto requestDto) throws Throwable {
         Member member = (Member) memberRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         member.update(requestDto);
         //그리고 암호화를 해주어야한다
-        String encodedPw=passwordEncoder.encode(member.getLogin().getLoginPw());
+        String encodedPw = passwordEncoder.encode(member.getLogin().getLoginPw());
         member.getLogin().setLoginId(encodedPw);
 
-        if (member instanceof Professor) {
-            Professor professor = (Professor) member;
+        if (member instanceof Professor professor) {
             professor.update(requestDto.getDoctorate(), requestDto.getNumber());
-        } else if (member instanceof Committee) {
-            Committee committee = (Committee) member;
+        } else if (member instanceof Committee committee) {
             committee.update(requestDto.getPosition());
-        } else if (member instanceof Graduate) {
-            Graduate graduate = (Graduate) member;
+        } else if (member instanceof Graduate graduate) {
             graduate.update(requestDto.getAdmission());
         } else if (member instanceof Researcher) {
             Researcher researcher = (Researcher) member;
-        } else if (member instanceof Undergraduate) {
-            Undergraduate undergraduate = (Undergraduate) member;
+        } else if (member instanceof Undergraduate undergraduate) {
             undergraduate.update(requestDto.getAdmission());
         }
     }
 
     @Transactional
-    public void delete(Long id) throws Throwable {
+    public void delete(final Long id) throws Throwable {
         Member member = (Member) memberRepository.findById(id).get();
         memberRepository.delete(member);
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         Optional<Member> result = memberRepository.findByLoginId(username);
-        if(!result.isPresent()){
+        if (result.isEmpty()) {
             throw new UsernameNotFoundException("Check Id");
         }
         Member member = result.get();
@@ -135,7 +131,11 @@ public class MemberService implements UserDetailsService {
         auths.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 
         LoginDto dto = new LoginDto(member.getLogin().getLoginId(), member.getLogin().getLoginPw(), auths,
-                 member.getLogin().getDeleted());
+                member.getLogin().getDeleted());
         return dto;
+    }
+
+    public List<Member> findAllByPosition(final String position) {
+        return memberRepository.findAllByPosition(position);
     }
 }

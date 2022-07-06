@@ -12,8 +12,8 @@ public class CommitteeSaveRequestDto extends MemberSaveRequestDto {
 
     @Builder
     public CommitteeSaveRequestDto(String name, String major, String email,
-                                   String image, String position, String office, String fields,LoginDto loginDto) {
-        super(name, major, email, image, office, fields, loginDto);
+                                   String image, String position, String location, LoginDto loginDto) {
+        super(name, major, email, image, location, loginDto);
         this.position = position;
     }
 
@@ -26,7 +26,7 @@ public class CommitteeSaveRequestDto extends MemberSaveRequestDto {
                 .image(getImage())
                 .major(getMajor())
                 .position(getPosition())
-                .office(getOffice())
+                .location(getLocation())
                 .login(getLoginDto().toEntity())
                 .build();
     }
