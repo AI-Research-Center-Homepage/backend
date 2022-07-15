@@ -23,19 +23,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //아래의 antMatchers에는 resources/templates하위가 와야하는건가 -> 아님
 
         http
-                .authorizeRequests()
-                .antMatchers("/sample/member").hasRole("ADMIN")
-                .antMatchers("/sample/admin").hasRole("ADMIN")
-                .antMatchers("/sample/all").permitAll();
+                .authorizeRequests().anyRequest()
+                //.antMatchers("/sample/member").hasRole("ADMIN")
+                //.antMatchers("/sample/admin").hasRole("ADMIN")
+                //.antMatchers("/sample/all")
+                .permitAll();
         http.formLogin();
         http.csrf().disable();
         // /logout으로 들어가면 logout됨 어떤 버튼을 누르면 해당 url로 redirect되도록 설계하면 될듯
         http.logout();
         http.httpBasic();
 
-        http.authorizeRequests().antMatchers("/h2-console/**").permitAll()
+        /*http.authorizeRequests().antMatchers("/h2-console/**").permitAll()
                 .and().csrf().ignoringAntMatchers("/h2-console/**")
-                .and().headers().frameOptions().sameOrigin();
+                .and().headers().frameOptions().sameOrigin();*/
 
 
         //쿠키(서버가 사용자의 웹브라우저에 저장하는 데아터) 의 만료시간 설정

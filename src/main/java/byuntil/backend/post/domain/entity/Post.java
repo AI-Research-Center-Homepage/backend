@@ -25,6 +25,8 @@ public class Post extends BaseTimeEntity {
     @Column(columnDefinition = "LONGTEXT")
     private String content;
 
+    private String author;
+
 
     @Column(columnDefinition = "integer default 0", nullable = false)
     private int viewNum;
@@ -37,12 +39,13 @@ public class Post extends BaseTimeEntity {
     private Board board;
 
     @Builder
-    public Post(final Long id, final String title, final String image, final String content, final int viewNum) {
+    public Post(final Long id, final String title, final String image, final String content, final int viewNum, String author) {
         this.id = id;
         this.title = title;
         this.image = image;
         this.content = content;
         this.viewNum = viewNum;
+        this.author = author;
     }
 
     public void addAttach(final Attach attach) {
@@ -69,5 +72,10 @@ public class Post extends BaseTimeEntity {
         this.image = dto.getImage();
         this.content = dto.getContent();
         this.attaches = dto.toEntity().getAttaches();
+        this.author = dto.getAuthor();
+    }
+    public PostDto toDto(){
+        return PostDto.builder().boardName(board.getName()).content(content).title(title).author(author)
+                .image(image).build();
     }
 }

@@ -1,6 +1,8 @@
 package byuntil.backend.member.domain.entity.member;
 
 import byuntil.backend.admin.controlller.domain.Login;
+import byuntil.backend.admin.controlller.domain.dto.LoginDto;
+import byuntil.backend.member.dto.request.ResearcherSaveRequestDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,5 +21,9 @@ public class Researcher extends Member {
         super(name, major, email, image, dtype, location, login);
     }
 
-    //
+    public ResearcherSaveRequestDto toDto(){
+        LoginDto loginDto = new LoginDto(getLogin().getLoginId(), getLogin().getLoginPw());
+        return ResearcherSaveRequestDto.builder().loginDto(loginDto).email(getEmail()).location(getLocation()).image(getImage()).major(getMajor())
+                .name(getName()).build();
+    }
 }

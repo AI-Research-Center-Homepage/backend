@@ -1,6 +1,8 @@
 package byuntil.backend.member.domain.entity.member;
 
 import byuntil.backend.admin.controlller.domain.Login;
+import byuntil.backend.admin.controlller.domain.dto.LoginDto;
+import byuntil.backend.member.dto.request.CommitteeSaveRequestDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,5 +25,11 @@ public class Committee extends Member {
 
     public void update(final String position) {
         this.position = position;
+    }
+
+    public CommitteeSaveRequestDto toDto(){
+        LoginDto loginDto = new LoginDto(getLogin().getLoginId(), getLogin().getLoginPw());
+        return CommitteeSaveRequestDto.builder().loginDto(loginDto).email(getEmail()).location(getLocation()).image(getImage())
+                .name(getName()).major(getMajor()).position(getPosition()).image(getImage()).build();
     }
 }

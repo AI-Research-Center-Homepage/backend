@@ -1,6 +1,9 @@
 package byuntil.backend.member.domain.entity.member;
 
 import byuntil.backend.admin.controlller.domain.Login;
+import byuntil.backend.admin.controlller.domain.dto.LoginDto;
+import byuntil.backend.member.dto.request.CommitteeSaveRequestDto;
+import byuntil.backend.member.dto.request.GraduateSaveRequestDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,5 +27,12 @@ public class Graduate extends Member {
 
     public void update(final LocalDateTime admission) {
         this.admission = admission;
+    }
+
+    public GraduateSaveRequestDto toDto(){
+        LoginDto loginDto = new LoginDto(getLogin().getLoginId(), getLogin().getLoginPw());
+        return GraduateSaveRequestDto.builder().loginDto(loginDto).email(getEmail()).location(getLocation()).image(getImage())
+                .admission(getAdmission()).name(getName()).build();
+
     }
 }

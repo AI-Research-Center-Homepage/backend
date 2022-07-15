@@ -3,6 +3,7 @@ package byuntil.backend.common.factory;
 import byuntil.backend.post.domain.entity.Attach;
 import byuntil.backend.post.domain.entity.Board;
 import byuntil.backend.post.domain.entity.Post;
+import byuntil.backend.post.dto.PostDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,8 @@ public class MockBoardFactory {
     }
 
     public static Post createMockPost(Long postId, String postName) {
-        return Post.builder().id(postId).title(postName).content("내용").viewNum(1).image("이미지").build();
+        return Post.builder().id(postId).title(postName).content("내용").viewNum(1).
+                image("이미지").build();
     }
 
     public static Board createMockBoard(String boardName, int postNum, boolean isExistAttach) {

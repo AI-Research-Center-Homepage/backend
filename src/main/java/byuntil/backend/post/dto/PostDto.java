@@ -13,14 +13,17 @@ public class PostDto {
     private String image;
     private String content;
     private String boardName;
+    private String author;
     //board에 대한 dto도 필요
 
     @Builder
-    public PostDto(String title, String image, String content, String boardName) {
+    public PostDto(Long id, String title, String image, String content, String boardName, String author) {
+        this.id = id;
         this.title = title;
         this.image = image;
         this.content = content;
         this.boardName = boardName;
+        this.author = author;
     }
 
 

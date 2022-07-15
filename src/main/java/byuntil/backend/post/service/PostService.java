@@ -32,16 +32,18 @@ public class PostService {
 
     //minji
     @Transactional
-    public Long save(final PostDto postDto, final List<MultipartFile> fileList) throws IOException {
-        //
-        /*
-        Board board = Board.builder().name("게시판1").build();
-        boardRepository.save(board);
-        */
+    public Long save(final PostDto postDto, final Optional<List<MultipartFile>> fileList) throws IOException {
+        //지워야하는코드
+        Board board1 = Board.builder().name("News").build();
+        boardRepository.save(board1);
 
         Post post = postDto.toEntity();
-        List<Attach> attachList = s3Service.upload(fileList);
-        post.addAttaches(attachList);
+
+        //post.setBoard(board1);
+        if(fileList!=null){
+            List<Attach> attachList = s3Service.upload(fileList.get());
+            post.addAttaches(attachList);
+        }
         //보드 이름으로 보드 찾아오는 명령어 수행해야함 없으면 예외터뜨리기
         Board board = boardRepository.findByName(postDto.getBoardName()).orElseThrow(BoardNotFoundException::new);
         //찾아온 board로

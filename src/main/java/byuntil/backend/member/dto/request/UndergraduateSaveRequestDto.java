@@ -12,14 +12,12 @@ import java.time.LocalDateTime;
 public class UndergraduateSaveRequestDto extends MemberSaveRequestDto {
 
     private LocalDateTime admission;
-    private String research;
 
     @Builder
     public UndergraduateSaveRequestDto(String name, String major, String email, String image,
-                                       LocalDateTime admission, String research, String location, LoginDto loginDto) {
+                                       LocalDateTime admission,String location, LoginDto loginDto) {
         super(name, major, email, image, location, loginDto);
         this.admission = admission;
-        this.research = research;
     }
 
     @Override
