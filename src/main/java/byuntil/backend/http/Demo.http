@@ -1,0 +1,46 @@
+###demo create
+POST /api/v1/admin/demo/new HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+Content-Length: 144
+
+{
+  "title" : "제목",
+  "description" : "글",
+  "content" : "내용",
+  "url" : "www.wwwwsssw...",
+  "participants" : "홍길동, 홍길서, 홍길남"
+}
+###demo update
+PUT /api/v1/admin/demo/?id=1 HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+Content-Length: 156
+
+{
+"title" : "수정된제목",
+"description" : "수종된글",
+"content" : "수종된내용",
+"url" : "수정된www.wwwww...",
+"participants" : "수정된홍길동, 홍길서, 홍길남"
+}
+###demo readall
+GET /api/v1/admin/demo/ HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+Content-Length: 156
+
+{
+  "title" : "수정된제목",
+  "description" : "수종된글",
+  "content" : "수종된내용",
+  "url" : "수정된www.wwwww...",
+  "participants" : "수정된홍길동, 홍길서, 홍길남"
+}
+###delete
+DELETE /api/v1/admin/demo/?id=1 HTTP/1.1
+Host: localhost:8080
+
+###read by id
+GET /api/v1/admin/demo/?id=1 HTTP/1.1
+Host: localhost:8080
