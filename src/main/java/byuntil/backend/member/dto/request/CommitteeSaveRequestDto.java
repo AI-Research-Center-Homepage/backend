@@ -1,5 +1,6 @@
 package byuntil.backend.member.dto.request;
 
+import byuntil.backend.admin.controlller.domain.Login;
 import byuntil.backend.admin.controlller.domain.dto.LoginDto;
 import byuntil.backend.member.domain.entity.member.Committee;
 import byuntil.backend.member.domain.entity.member.Member;
@@ -20,6 +21,11 @@ public class CommitteeSaveRequestDto extends MemberSaveRequestDto {
 
     @Override
     public Member toEntity() {
+        Login login = null;
+
+        if (getLoginDto()!=null){
+            login = getLoginDto().toEntity();
+        }
         return Committee.builder()
                 .name(getName())
                 .email(getEmail())
@@ -27,7 +33,7 @@ public class CommitteeSaveRequestDto extends MemberSaveRequestDto {
                 .major(getMajor())
                 .position(getPosition())
                 .location(getLocation())
-                .login(getLoginDto().toEntity())
+                .login(login)
                 .build();
     }
 }

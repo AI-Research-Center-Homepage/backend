@@ -21,6 +21,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http)throws Exception{
         //아래의 antMatchers에는 resources/templates하위가 와야하는건가 -> 아님
+        http.authorizeRequests().antMatchers("/h2-console/**").permitAll()
+                .and().csrf().ignoringAntMatchers("/h2-console/**")
+                .and().headers().frameOptions().sameOrigin();
 
         http
                 .authorizeRequests().anyRequest()
@@ -34,9 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.logout();
         http.httpBasic();
 
-        /*http.authorizeRequests().antMatchers("/h2-console/**").permitAll()
-                .and().csrf().ignoringAntMatchers("/h2-console/**")
-                .and().headers().frameOptions().sameOrigin();*/
+
 
 
         //쿠키(서버가 사용자의 웹브라우저에 저장하는 데아터) 의 만료시간 설정

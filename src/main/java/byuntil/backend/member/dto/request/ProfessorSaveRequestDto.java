@@ -1,5 +1,6 @@
 package byuntil.backend.member.dto.request;
 
+import byuntil.backend.admin.controlller.domain.Login;
 import byuntil.backend.admin.controlller.domain.dto.LoginDto;
 import byuntil.backend.member.domain.entity.member.Professor;
 import lombok.Builder;
@@ -26,6 +27,11 @@ public class ProfessorSaveRequestDto extends MemberSaveRequestDto {
 
     @Override
     public Professor toEntity() {
+        Login login = null;
+
+        if (getLoginDto()!=null){
+            login = getLoginDto().toEntity();
+        }
         return Professor.builder()
                 .name(getName())
                 .major(getMajor())
@@ -34,7 +40,7 @@ public class ProfessorSaveRequestDto extends MemberSaveRequestDto {
                 .doctorate(doctorate)
                 .number(number)
                 .location(getLocation())
-                .login(getLoginDto().toEntity())
+                .login(login)
                 .build();
     }
 }

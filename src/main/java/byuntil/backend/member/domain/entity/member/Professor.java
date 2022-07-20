@@ -32,8 +32,15 @@ public class Professor extends Member {
         this.number = number;
     }
     public ProfessorSaveRequestDto toDto(){
-        LoginDto loginDto = new LoginDto(getLogin().getLoginId(), getLogin().getLoginPw());
-        return ProfessorSaveRequestDto.builder().loginDto(loginDto).email(getEmail()).location(getLocation()).image(getImage())
-                .doctorate(getDoctorate()).name(getName()).number(getNumber()).major(getMajor()).build();
+        if(getLogin()!=null){
+            LoginDto loginDto = new LoginDto(getLogin().getLoginId(), getLogin().getLoginPw());
+            return ProfessorSaveRequestDto.builder().loginDto(loginDto).email(getEmail()).location(getLocation()).image(getImage())
+                    .doctorate(getDoctorate()).name(getName()).number(getNumber()).major(getMajor()).build();
+        }
+        else{
+            return ProfessorSaveRequestDto.builder().email(getEmail()).location(getLocation()).image(getImage())
+                    .doctorate(getDoctorate()).name(getName()).number(getNumber()).major(getMajor()).build();
+        }
+
     }
 }

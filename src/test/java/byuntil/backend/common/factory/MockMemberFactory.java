@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MockMemberFactory {
-    public static Professor createMockProfessor(ProfessorSaveRequestVO professorVO) {
+    public static Professor createMockVOProfessor(ProfessorSaveRequestVO professorVO) {
         return Professor.builder()
                 .name(professorVO.name)
                 .major(professorVO.major)
@@ -19,6 +19,17 @@ public class MockMemberFactory {
                 .location(professorVO.location)
                 .doctorate(professorVO.doctorate)
                 .number(professorVO.number)
+                .build();
+    }
+    public static Professor createMockProfessor() {
+        return Professor.builder()
+                .name("NAME")
+                .major("MAJOR")
+                .email("EMAIL")
+                .image("IMAGE")
+                .location("LOCATION")
+                .doctorate("DOCTORATE")
+                .number("NUM")
                 .build();
     }
 
@@ -34,7 +45,7 @@ public class MockMemberFactory {
                     .doctorate("학위" + i)
                     .number("번호" + i)
                     .build();
-            professors.add(createMockProfessor(build));
+            professors.add(createMockVOProfessor(build));
         }
         return professors;
     }

@@ -1,5 +1,6 @@
 package byuntil.backend.member.dto.request;
 
+import byuntil.backend.admin.controlller.domain.Login;
 import byuntil.backend.admin.controlller.domain.dto.LoginDto;
 import byuntil.backend.member.domain.entity.member.Member;
 import byuntil.backend.member.domain.entity.member.Researcher;
@@ -17,13 +18,18 @@ public class ResearcherSaveRequestDto extends MemberSaveRequestDto {
 
     @Override
     public Member toEntity() {
+        Login login = null;
+
+        if (getLoginDto()!=null){
+            login = getLoginDto().toEntity();
+        }
         return Researcher.builder()
                 .name(getName())
                 .major(getMajor())
                 .email(getEmail())
                 .image(getImage())
                 .location(getLocation())
-                .login(getLoginDto().toEntity())
+                .login(login)
                 .build();
     }
 }

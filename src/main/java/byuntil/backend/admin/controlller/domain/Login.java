@@ -14,14 +14,15 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class Login {
 
-    @Column(nullable = false, unique = true)
+    //nullable을 false로 바꾸면 login id가 없는 사용자가 등록이 되지 않아서 그냥 없앴다
+    @Column(unique = true)
     private String loginId;
 
-    @Column(nullable = false)
+    @Column()
     private String loginPw;
 
     //탈퇴한 회원 : true, 탈퇴x : false
-    @Column(nullable = false)
+    @Column()
     private Boolean deleted;
 
     public void changePw(final String encodedPw) {

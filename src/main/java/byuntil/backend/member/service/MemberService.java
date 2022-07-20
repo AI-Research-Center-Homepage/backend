@@ -36,6 +36,10 @@ public class MemberService implements UserDetailsService {
             throw new IdNotExistException("존재하지 않는 id입니다");
         } else {
             Member member = (Member) memberRepository.findById(id).get();
+            //여기서 member가 login을 가지고 있는지도 확인해야함
+            if(!Optional.ofNullable(member.getLogin()).isPresent()){
+                throw new IdNotExistException("존재하지 않는 id입니다");
+            }
             member.getLogin().setDeleted(true);
 
 
@@ -53,12 +57,19 @@ public class MemberService implements UserDetailsService {
     @Transactional
     public Long saveMember(final MemberSaveRequestDto dto) {
         //dto를 entity로 만들고 admin도 entity로만든다음에 return함
-        memberRepository.findByLoginId(dto.getLoginDto().getLoginId()).ifPresent((m -> {
-            throw new LoginIdDuplicationException("이미 존재하는 회원입니다.");
-        }));
-        String originPW = dto.getLoginDto().getLoginPw();
-        String encodedPW = passwordEncoder.encode(originPW);
-        dto.getLoginDto().setLoginPw(encodedPW);
+        //loginDto가 null일 경우 처리를 해주어야함
+        Optional<String> id = Optional.ofNullable(dto)
+                .map(MemberSaveRequestDto::getLoginDto)
+                .map(LoginDto::getLoginId);
+
+        id.ifPresentOrElse(x -> memberRepository.findByLoginId(id.get()).ifPresentOrElse(m -> {
+            throw new LoginIdDuplicationException("이미 존재하는 회원입니다.");} ,
+                ()-> dto.getLoginDto().setLoginPw(passwordEncoder.encode(dto.getLoginDto().getLoginPw())
+                        )
+                )
+                ,()->{}
+        );
+
 
         return ((Member) memberRepository.save(dto.toEntity())).getId();
     }

@@ -24,7 +24,7 @@ public class PostAdminController {
     @PostMapping("/posts/")
     public ResponseEntity<?> createPost(@RequestPart PostDto postDto, @RequestPart(value = "file", required = false) List<MultipartFile> fileList) throws IOException {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(postService.save(postDto, Optional.ofNullable(fileList)));
+        return ResponseEntity.status(HttpStatus.CREATED).body(postService.save(postDto, fileList));
     }
     //게시글삭제
     @DeleteMapping("/posts/")
@@ -42,7 +42,8 @@ public class PostAdminController {
     }
     //게시글 수정
     @PutMapping("/posts/")
-    public ResponseEntity<?> updatePost(@RequestParam Long id, PostDto postDto, MultipartFile file){
+    public ResponseEntity<?> updatePost(@RequestParam Long id, PostDto postDto,
+                                        @RequestPart(value = "file", required = false)MultipartFile file){
         postService.updatePost(id, postDto, file);
         return ResponseEntity.status(HttpStatus.CREATED).body(id);
     }

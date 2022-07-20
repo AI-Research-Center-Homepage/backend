@@ -29,8 +29,15 @@ public class Undergraduate extends Member {
     }
 
     public UndergraduateSaveRequestDto toDto(){
-        LoginDto loginDto = new LoginDto(getLogin().getLoginId(), getLogin().getLoginPw());
-        return UndergraduateSaveRequestDto.builder().email(getEmail()).loginDto(loginDto).location(getLocation()).image(getImage()).admission(getAdmission())
-                .name(getName()).major(getMajor()).build();
+        if(getLogin()!=null){
+            LoginDto loginDto = new LoginDto(getLogin().getLoginId(), getLogin().getLoginPw());
+            return UndergraduateSaveRequestDto.builder().email(getEmail()).loginDto(loginDto).location(getLocation()).image(getImage()).admission(getAdmission())
+                    .name(getName()).major(getMajor()).build();
+        }
+        else{
+            return UndergraduateSaveRequestDto.builder().email(getEmail()).location(getLocation()).image(getImage()).admission(getAdmission())
+                    .name(getName()).major(getMajor()).build();
+        }
+
     }
 }

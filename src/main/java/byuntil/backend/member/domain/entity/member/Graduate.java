@@ -30,9 +30,16 @@ public class Graduate extends Member {
     }
 
     public GraduateSaveRequestDto toDto(){
-        LoginDto loginDto = new LoginDto(getLogin().getLoginId(), getLogin().getLoginPw());
-        return GraduateSaveRequestDto.builder().loginDto(loginDto).email(getEmail()).location(getLocation()).image(getImage())
-                .admission(getAdmission()).name(getName()).build();
+        if (getLogin()!=null){
+            LoginDto loginDto = new LoginDto(getLogin().getLoginId(), getLogin().getLoginPw());
+            return GraduateSaveRequestDto.builder().loginDto(loginDto).email(getEmail()).location(getLocation()).image(getImage())
+                    .admission(getAdmission()).name(getName()).build();
+        }
+        else{
+            return GraduateSaveRequestDto.builder().email(getEmail()).location(getLocation()).image(getImage())
+                    .admission(getAdmission()).name(getName()).build();
+        }
+
 
     }
 }

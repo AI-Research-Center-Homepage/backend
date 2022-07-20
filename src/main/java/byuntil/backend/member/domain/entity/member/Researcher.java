@@ -22,8 +22,15 @@ public class Researcher extends Member {
     }
 
     public ResearcherSaveRequestDto toDto(){
-        LoginDto loginDto = new LoginDto(getLogin().getLoginId(), getLogin().getLoginPw());
-        return ResearcherSaveRequestDto.builder().loginDto(loginDto).email(getEmail()).location(getLocation()).image(getImage()).major(getMajor())
-                .name(getName()).build();
+        if(getLogin()!=null){
+            LoginDto loginDto = new LoginDto(getLogin().getLoginId(), getLogin().getLoginPw());
+            return ResearcherSaveRequestDto.builder().loginDto(loginDto).email(getEmail()).location(getLocation()).image(getImage()).major(getMajor())
+                    .name(getName()).build();
+        }
+        else{
+            return ResearcherSaveRequestDto.builder().email(getEmail()).location(getLocation()).image(getImage()).major(getMajor())
+                    .name(getName()).build();
+        }
+
     }
 }

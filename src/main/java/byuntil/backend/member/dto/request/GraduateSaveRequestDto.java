@@ -1,5 +1,6 @@
 package byuntil.backend.member.dto.request;
 
+import byuntil.backend.admin.controlller.domain.Login;
 import byuntil.backend.admin.controlller.domain.dto.LoginDto;
 import byuntil.backend.member.domain.entity.member.Graduate;
 import byuntil.backend.member.domain.entity.member.Member;
@@ -23,6 +24,12 @@ public class GraduateSaveRequestDto extends MemberSaveRequestDto {
 
     @Override
     public Member toEntity() {
+        Login login = null;
+
+        if (getLoginDto()!=null){
+            login = getLoginDto().toEntity();
+        }
+
         return Graduate.builder()
                 .name(getName())
                 .major(getMajor())
@@ -30,7 +37,7 @@ public class GraduateSaveRequestDto extends MemberSaveRequestDto {
                 .image(getImage())
                 .admission(admission)
                 .location(getLocation())
-                .login(getLoginDto().toEntity())
+                .login(login)
                 .build();
     }
 }

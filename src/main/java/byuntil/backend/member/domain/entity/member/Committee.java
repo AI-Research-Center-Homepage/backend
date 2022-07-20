@@ -28,8 +28,14 @@ public class Committee extends Member {
     }
 
     public CommitteeSaveRequestDto toDto(){
-        LoginDto loginDto = new LoginDto(getLogin().getLoginId(), getLogin().getLoginPw());
-        return CommitteeSaveRequestDto.builder().loginDto(loginDto).email(getEmail()).location(getLocation()).image(getImage())
-                .name(getName()).major(getMajor()).position(getPosition()).image(getImage()).build();
+        if (getLogin()!=null){
+            LoginDto loginDto = new LoginDto(getLogin().getLoginId(), getLogin().getLoginPw());
+            return CommitteeSaveRequestDto.builder().loginDto(loginDto).email(getEmail()).location(getLocation()).image(getImage())
+                    .name(getName()).major(getMajor()).position(getPosition()).image(getImage()).build();
+        }
+        else{
+            return CommitteeSaveRequestDto.builder().email(getEmail()).location(getLocation()).image(getImage())
+                    .name(getName()).major(getMajor()).position(getPosition()).image(getImage()).build();
+        }
     }
 }

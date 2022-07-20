@@ -7,21 +7,26 @@ import byuntil.backend.member.domain.entity.member.Researcher;
 import byuntil.backend.member.dto.request.*;
 import byuntil.backend.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/admin/")
 public class MemberAdminController {
+
     private final MemberService memberService;
     //멤버등록 /members/new?position={position}
     @PostMapping("/members/new")
-    public ResponseEntity<?> join(@RequestParam String position, @ModelAttribute MemberAllInfoDto memberDto) {
+    public ResponseEntity<?> join(@RequestParam String position, @RequestBody MemberAllInfoDto memberDto) {
         //position이 뭐냐에 따라서..
         //일단 모든 정보를 담을 수 있는.. dto을 정의하고.. positon이 뭐냐에 따라서
         //committeesaveReqeustDto로할지.. 이런것들을 if문으로 나눈다음에?
         //멤버를 저장한다..
+
         if(position.equals("Committee")){
             CommitteeSaveRequestDto dto = CommitteeSaveRequestDto.builder().loginDto(memberDto.getLoginDto()).email(memberDto.getEmail())
                     .location(memberDto.getLocation()).image(memberDto.getImage()).position(memberDto.getPosition())
@@ -38,6 +43,7 @@ public class MemberAdminController {
         }
         else if(position.equals("Professor")){
             ProfessorSaveRequestDto dto = ProfessorSaveRequestDto.builder().loginDto(memberDto.getLoginDto()).email(memberDto.getEmail())
+                    .name(memberDto.getName())
                     .image(memberDto.getImage()).location(memberDto.getLocation()).major(memberDto.getMajor()).doctorate(memberDto.getDoctorate())
                     .number(memberDto.getNumber()).name(memberDto.getName()).build();
             memberService.saveMember(dto);
@@ -55,7 +61,7 @@ public class MemberAdminController {
                     .image(memberDto.getImage()).location(memberDto.getLocation()).image(memberDto.getImage()).email(memberDto.getEmail())
                     .major(memberDto.getMajor()).name(memberDto.getName()).build();
             memberService.saveMember(dto);
-            return ResponseEntity.ok().body(dto);
+            return ResponseEntity.status(HttpStatus.CREATED).body("");
         }
         else{
             //에러
