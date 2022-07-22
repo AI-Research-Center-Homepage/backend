@@ -15,13 +15,13 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/admin/")
+@RequestMapping("/api/v1/admin")
 public class MemberAdminController {
 
     private final MemberService memberService;
     //멤버등록 /members/new?position={position}
     @PostMapping("/members/new")
-    public ResponseEntity<?> join(@RequestParam String position, @RequestBody MemberAllInfoDto memberDto) {
+    public ResponseEntity join(@RequestParam String position, @RequestBody MemberAllInfoDto memberDto) {
         //position이 뭐냐에 따라서..
         //일단 모든 정보를 담을 수 있는.. dto을 정의하고.. positon이 뭐냐에 따라서
         //committeesaveReqeustDto로할지.. 이런것들을 if문으로 나눈다음에?
@@ -70,7 +70,7 @@ public class MemberAdminController {
     }
     //멤버조회 /members/{memberId}
     @GetMapping("/members")
-    public ResponseEntity<?> readMember(@RequestParam Long id) {
+    public ResponseEntity readMember(@RequestParam Long id) {
         Member member = (Member) memberService.findOneMember(id).get();
         String dType = member.getDtype();
         if (dType.equals("Committee")){
@@ -102,7 +102,7 @@ public class MemberAdminController {
     }
     //멤버 탈퇴
     @DeleteMapping("/members")
-    public ResponseEntity<Void> resignMember(@RequestParam Long id) throws Throwable {
+    public ResponseEntity resignMember(@RequestParam Long id) throws Throwable {
         memberService.secession(id);
         return ResponseEntity.ok().build();
     }

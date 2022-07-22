@@ -21,28 +21,28 @@ public class PostAdminController {
     private final PostService postService;
 
     //게시글등록
-    @PostMapping("/posts/")
-    public ResponseEntity<?> createPost(@RequestPart PostDto postDto, @RequestPart(value = "file", required = false) List<MultipartFile> fileList) throws IOException {
+    @PostMapping("/posts")
+    public ResponseEntity createPost(@RequestPart PostDto postDto, @RequestPart(value = "file", required = false) List<MultipartFile> fileList) throws IOException {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(postService.save(postDto, fileList));
     }
     //게시글삭제
-    @DeleteMapping("/posts/")
-    public ResponseEntity<?> deletePost(@RequestParam Long id){
+    @DeleteMapping("/posts")
+    public ResponseEntity deletePost(@RequestParam Long id){
         postService.deletePost(id);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("");
     }
     //게시글 조회
-    @GetMapping("/posts/")
-    public ResponseEntity<?> readPost(@RequestParam Long id){
+    @GetMapping("/posts")
+    public ResponseEntity readPost(@RequestParam Long id){
         PostDto dto = postService.findById(id).toDto();
         //만약에 해당하는 id로 조회된 post가 없을 경우 예외 터뜨리기 -> service부분에 예외터뜨리는 부분 있음
         return ResponseEntity.ok().body(dto);
     }
     //게시글 수정
-    @PutMapping("/posts/")
-    public ResponseEntity<?> updatePost(@RequestParam Long id, PostDto postDto,
+    @PutMapping("/posts")
+    public ResponseEntity updatePost(@RequestParam Long id, PostDto postDto,
                                         @RequestPart(value = "file", required = false)MultipartFile file){
         postService.updatePost(id, postDto, file);
         return ResponseEntity.status(HttpStatus.CREATED).body(id);
