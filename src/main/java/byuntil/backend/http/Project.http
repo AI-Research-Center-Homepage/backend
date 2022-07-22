@@ -1,0 +1,35 @@
+###Project Create
+POST /api/v1/admin/project/new HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+Content-Length: 134
+
+{
+  "name" : "프로젝트명1",
+  "description" : "설명",
+  "content" : "내용",
+  "participants" : "참가자",
+  "fieldName" : "연구분야1"
+}
+###Project Update
+PUT /api/v1/admin/project/?id=2 HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+Content-Length: 148
+
+{
+  "name" : "수정된프로젝트명",
+  "description" : "수정된 설명",
+  "content" : "수정된 내용",
+  "participants" : "수정된 참가자",
+  "fieldName" : "연구분야1"
+}
+###Project Delete
+DELETE /api/v1/admin/project/?id=2 HTTP/1.1
+Host: localhost:8080
+###Read Project
+GET /api/v1/admin/project/2 HTTP/1.1
+Host: localhost:8080
+###Read All Project
+GET /api/v1/admin/project/ HTTP/1.1
+Host: localhost:8080

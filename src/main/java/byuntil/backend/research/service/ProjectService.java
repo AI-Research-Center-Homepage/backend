@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,15 +47,24 @@ public class ProjectService {
         projectRepository.deleteById(id);
     }
 
-    public Optional<Project> findById(final Long id) {
-        return projectRepository.findById(id);
+    public ProjectDto findById(final Long id) {
+        return projectRepository.findById(id).get().toDto();
     }
 
-    public List<Project> findAll() {
-        return projectRepository.findAll();
+    public List<ProjectDto> findAll() {
+        List<ProjectDto> projectDtoList = new ArrayList<>();
+        for (Project project : projectRepository.findAll()) {
+            projectDtoList.add(project.toDto());
+        }
+        return projectDtoList;
     }
 
-    public List<Project> findAllByFieldName(final String name) {
-        return projectRepository.findAllByFieldName(name);
+    public List<ProjectDto> findAllByFieldName(final String name) {
+        List<Project> projectList = projectRepository.findAllByFieldName(name);
+        List<ProjectDto> projectDtoList = new ArrayList<>();
+        for (Project project: projectList) {
+            projectDtoList.add(project.toDto());
+        }
+        return projectDtoList;
     }
 }

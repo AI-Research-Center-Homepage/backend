@@ -51,6 +51,10 @@ public class Project {
         this.content = content;
         this.participants = participants;
     }
+    public ProjectDto toDto(){
+        return ProjectDto.builder().content(content).description(description).fieldName(field.getName())
+                .name(title).id(id).participants(participants).build();
+    }
 
 
 }
