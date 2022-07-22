@@ -18,6 +18,10 @@ public class FieldService {
 
     private final FieldRepository fieldRepository;
 
+    public Optional<Field> findByName(String name){
+        return fieldRepository.findByName(name);
+    }
+
     @Transactional
     public Long save(final FieldDto fieldDto) {
         Field field = fieldDto.toEntity();
