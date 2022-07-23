@@ -4,32 +4,27 @@ import byuntil.backend.research.domain.entity.Thesis;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
-@RequiredArgsConstructor
 @Builder
+@Setter
 public class ThesisDto {
-    private final Long id;
+    private Long id;
     private final String title;
     private final String koName;
     private final String enName;
     private final String journal;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private final LocalDateTime publishDate;
     private final String url;
     private final String fieldName;
+    private List<MemberDto> members;
 
-    public ThesisDto(final Thesis thesis) {
-        this.id = thesis.getId();
-        this.title = thesis.getTitle();
-        this.koName = thesis.getKoName();
-        this.enName = thesis.getEnName();
-        this.journal = thesis.getJournal();
-        this.publishDate = thesis.getPublishDate();
-        this.url = thesis.getUrl();
-        this.fieldName = thesis.getField().getName();
-    }
 
     public Thesis toEntity() {
         return Thesis.builder().enName(this.enName).koName(this.koName)

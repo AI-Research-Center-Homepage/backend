@@ -2,6 +2,7 @@ package byuntil.backend.research.controller.common;
 
 import byuntil.backend.research.domain.entity.Field;
 import byuntil.backend.research.domain.entity.Thesis;
+import byuntil.backend.research.dto.request.ThesisDto;
 import byuntil.backend.research.dto.response.ThesisResponseDto;
 import byuntil.backend.research.service.FieldService;
 import byuntil.backend.research.service.ThesisService;
@@ -25,38 +26,18 @@ public class ThesisController {
     private final ThesisService thesisService;
 
     @GetMapping("/thesis")
-    public ResponseEntity<?> readTheses() {
+    public ResponseEntity readTheses() {
         List<Field> fields = fieldService.findAll();
         List<ThesisFieldDto> thesisFieldDtos = new ArrayList<>();
         for (Field field : fields) {
             String fieldName = field.getName();
-            List<Thesis> theses = thesisService.findAllByFieldName(fieldName);
 
-            List<ThesisDto> thesisDtos = theses.stream().map(ThesisDto::new).toList();
+            List<ThesisDto> thesisDtos = thesisService.findAllByFieldName(fieldName);
             thesisFieldDtos.add(ThesisFieldDto.builder().fieldName(fieldName).theses(thesisDtos).build());
         }
         ThesisResponseDto<ThesisFieldDto> response = ThesisResponseDto.<ThesisFieldDto>builder().theses(thesisFieldDtos).build();
 
         return ResponseEntity.ok().body(response);
-    }
-
-    @Getter
-    static class ThesisDto {
-        private final Long id;
-        private final String title;
-        private final String koName;
-        private final String enName;
-        private final String journal;
-        private final LocalDateTime publishDate;
-
-        public ThesisDto(Thesis thesis) {
-            this.id = thesis.getId();
-            this.title = thesis.getTitle();
-            this.koName = thesis.getKoName();
-            this.enName = thesis.getEnName();
-            this.journal = thesis.getJournal();
-            this.publishDate = thesis.getPublishDate();
-        }
     }
 
     @Getter

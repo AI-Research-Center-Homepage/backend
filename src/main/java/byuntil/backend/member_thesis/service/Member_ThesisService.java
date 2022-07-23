@@ -32,6 +32,22 @@ public class Member_ThesisService {
     }
 
     @Transactional
+    public void deleteByMemberId(Long memberId){
+        member_thesisRepository.deleteByMemberId(memberId);
+    }
+    @Transactional
+    public void deleteByThesisId(Long thesisId){
+        member_thesisRepository.deleteByThesisId(thesisId);
+    }
+    @Transactional
+    public Long create(Long memberId, Thesis thesis){
+        Member member = (Member) memberRepository.findById(memberId).get();
+        Member_Thesis memberThesis = Member_Thesis.createThesis(member, thesis);
+        member_thesisRepository.save(memberThesis);
+        return memberThesis.getId();
+    }
+
+    @Transactional
     public void delete(final Long id) {
         member_thesisRepository.deleteById(id);
     }
