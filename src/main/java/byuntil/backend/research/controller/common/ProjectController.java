@@ -2,6 +2,7 @@ package byuntil.backend.research.controller.common;
 
 import byuntil.backend.research.domain.entity.Field;
 import byuntil.backend.research.domain.entity.Project;
+import byuntil.backend.research.dto.request.FieldDto;
 import byuntil.backend.research.dto.request.ProjectDto;
 import byuntil.backend.research.dto.response.ProjectResponseDto;
 import byuntil.backend.research.service.FieldService;
@@ -26,9 +27,9 @@ public class ProjectController {
 
     @GetMapping("/project")
     public ResponseEntity<?> readProjects() {
-        List<Field> fields = fieldService.findAll();
+        List<FieldDto> fields = fieldService.findAll();
         List<ProjectFieldDto> projectFieldDtos = new ArrayList<>();
-        for (Field field : fields) {
+        for (FieldDto field : fields) {
             String fieldName = field.getName();
             List<ProjectDto> projectDtos = projectService.findAllByFieldName(fieldName);
             projectFieldDtos.add(ProjectFieldDto.builder().fieldName(fieldName).projects(projectDtos).build());

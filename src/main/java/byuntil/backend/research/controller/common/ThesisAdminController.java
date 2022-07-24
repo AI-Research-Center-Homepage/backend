@@ -29,7 +29,7 @@ public class ThesisAdminController {
     @GetMapping("/new")
     public ResponseEntity readMemberField(){
         List<MemberResponseDto> members = memberService.findAllMember();
-        List<byuntil.backend.research.dto.response.FieldDto> fieldDtoList = fieldService.findAll();
+        List<byuntil.backend.research.dto.response.FieldDto> fieldDtoList = fieldService.findAllWithName();
         MemberFieldDto memberFieldDto = MemberFieldDto.builder().memberDtoList(members).fieldDtoList(fieldDtoList).build();
 
         return ResponseEntity.status(HttpStatus.OK).body(memberFieldDto);

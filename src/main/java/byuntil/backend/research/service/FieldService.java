@@ -42,7 +42,7 @@ public class FieldService {
     @Transactional
     public void deleteById(final Long id) {
         Field field = fieldRepository.findById(id).get();
-        if (field.getProjectList() == null && field.getThesisList() == null) {
+        if (field.getProjectList().size() == 0 && field.getThesisList().size() == 0) {
             fieldRepository.deleteById(id);
         } else {
             throw new ExistException("project, demo, thesis가 모두 비워져야 합니다.");
@@ -50,15 +50,25 @@ public class FieldService {
 
     }
 
-    public Optional<Field> findById(final Long id) {
-        return fieldRepository.findById(id);
+    public FieldDto findById(final Long id) {
+        Field field = fieldRepository.findById(id).get();
+        return FieldDto.builder().id(field.getId()).description(field.getDescription()).name(field.getName()).build();
     }
 
-    public List<byuntil.backend.research.dto.response.FieldDto> findAll() {
+    public List<byuntil.backend.research.dto.response.FieldDto> findAllWithName() {
         List<Field> fields = fieldRepository.findAll();
         List<byuntil.backend.research.dto.response.FieldDto> fieldDtoList = new ArrayList<>();
         for (Field field: fields) {
             fieldDtoList.add(byuntil.backend.research.dto.response.FieldDto.builder().fieldName(field.getName()).build());
+        }
+        return fieldDtoList;
+    }
+    public List<FieldDto> findAll(){
+        List<Field> fields = fieldRepository.findAll();
+        List<FieldDto> fieldDtoList =  new ArrayList<>();
+        for (Field field: fields) {
+            fieldDtoList.add(FieldDto.builder().name(field.getName()).description(field.getDescription())
+                    .id(field.getId()).build());
         }
         return fieldDtoList;
     }
