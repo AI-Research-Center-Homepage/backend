@@ -1,0 +1,60 @@
+###create Thesis
+POST /api/v1/admin/thesis/new HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+Content-Length: 379
+
+{
+  "title" : "제목",
+  "koName" : "한글이름",
+  "enName" : "engName",
+  "journal" : "저널",
+  "publishDate" : "2019-12-14T06:34:20",
+  "url" : "ww.w..",
+  "fieldName" : "연구분야1",
+  "members" : [
+    {
+      "id" : "1",
+      "name" : "member1"
+    },
+    {
+      "id" : "4",
+      "name" : "member1"
+    }
+  ]
+}
+
+###update Thesis
+PUT /api/v1/admin/thesis?id=8 HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+Content-Length: 250
+
+{
+  "title" : "수정된 제목",
+  "koName" : "수정된 한글이름",
+  "enName" : "수정된 engName",
+  "journal" : "수정된 저널",
+  "publishDate" : "2018-12-14T06:34:20",
+  "url" : "수정된 ww.w..",
+  "fieldName" : "연구분야1",
+  "members" : [
+
+  ]
+}
+
+###read Thesis
+GET /api/v1/admin/thesis/6 HTTP/1.1
+Host: localhost:8080
+
+###read field, Member
+GET /api/v1/admin/thesis/new HTTP/1.1
+Host: localhost:8080
+
+###delete Thesis
+DELETE /api/v1/admin/thesis?id=8 HTTP/1.1
+Host: localhost:8080
+
+###reate all thesis
+DELETE /api/v1/admin/thesis?id=8 HTTP/1.1
+Host: localhost:8080
