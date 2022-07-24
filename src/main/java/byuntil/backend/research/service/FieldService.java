@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,7 +54,12 @@ public class FieldService {
         return fieldRepository.findById(id);
     }
 
-    public List<Field> findAll() {
-        return fieldRepository.findAll();
+    public List<byuntil.backend.research.dto.response.FieldDto> findAll() {
+        List<Field> fields = fieldRepository.findAll();
+        List<byuntil.backend.research.dto.response.FieldDto> fieldDtoList = new ArrayList<>();
+        for (Field field: fields) {
+            fieldDtoList.add(byuntil.backend.research.dto.response.FieldDto.builder().fieldName(field.getName()).build());
+        }
+        return fieldDtoList;
     }
 }

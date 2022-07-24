@@ -7,6 +7,7 @@ import byuntil.backend.member.domain.entity.member.*;
 import byuntil.backend.member.domain.repository.MemberRepository;
 import byuntil.backend.member.dto.request.MemberSaveRequestDto;
 import byuntil.backend.member.dto.request.MemberUpdateRequestDto;
+import byuntil.backend.member.dto.response.MemberResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -99,8 +100,13 @@ public class MemberService implements UserDetailsService {
     }
 
 
-    public List<Member> findAllMember() {
-        return memberRepository.findAll();
+    public List<MemberResponseDto> findAllMember() {
+        List<Member> members = memberRepository.findAll();
+        List<MemberResponseDto> memberResponseDtoList = new ArrayList<>();
+        for (Member member: members) {
+            memberResponseDtoList.add(MemberResponseDto.builder().name(member.getName()).id(member.getId()).build());
+        }
+        return memberResponseDtoList;
     }
 
     @Transactional
