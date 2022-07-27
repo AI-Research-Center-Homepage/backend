@@ -20,7 +20,7 @@ public class FieldController {
     private final FieldService fieldService;
 
     @GetMapping("/fields")
-    public ResponseEntity<?> readFields() {
+    public ResponseEntity readFields() {
         List<FieldDto> fields = fieldService.findAll();
         FieldResponseDto<FieldDto> response = FieldResponseDto.<FieldDto>builder().fields(fields).build();
         return ResponseEntity.ok().body(response);

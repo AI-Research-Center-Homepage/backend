@@ -26,7 +26,7 @@ public class ProjectController {
     private final ProjectService projectService;
 
     @GetMapping("/project")
-    public ResponseEntity<?> readProjects() {
+    public ResponseEntity readProjects() {
         List<FieldDto> fields = fieldService.findAll();
         List<ProjectFieldDto> projectFieldDtos = new ArrayList<>();
         for (FieldDto field : fields) {
