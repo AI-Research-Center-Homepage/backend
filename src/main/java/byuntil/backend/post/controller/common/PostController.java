@@ -11,6 +11,7 @@ import byuntil.backend.post.service.BoardService;
 import byuntil.backend.post.service.PostService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -98,7 +99,9 @@ public class PostController {
         private final Long id;
         private final String title;
         private final String image;
+        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private final LocalDateTime createdDate;
+        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private final LocalDateTime modifiedDate;
 
         public PostPreviewDto(final Post post) {

@@ -5,6 +5,7 @@ import byuntil.backend.member.dto.response.*;
 import byuntil.backend.member.service.MemberService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -89,6 +90,7 @@ public class MemberController {
         private final String name;
         private final String image;
         private final String location;
+        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private final LocalDateTime admission;
 
         public GraduateDto(final Graduate gradate) {
@@ -106,6 +108,7 @@ public class MemberController {
         private final String name;
         private final String image;
         private final String location;
+        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private final LocalDateTime admission;
 
         public UndergraduateDto(final Undergraduate underGradate) {
