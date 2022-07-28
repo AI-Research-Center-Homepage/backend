@@ -31,11 +31,11 @@ public class Undergraduate extends Member {
     public UndergraduateSaveRequestDto toDto(){
         if(getLogin()!=null){
             LoginDto loginDto = new LoginDto(getLogin().getLoginId(), getLogin().getLoginPw());
-            return UndergraduateSaveRequestDto.builder().email(getEmail()).loginDto(loginDto).location(getLocation()).image(getImage()).admission(getAdmission())
+            return UndergraduateSaveRequestDto.builder().email(getEmail()).loginDto(loginDto).location(getLocation()).image(getImage()).admission(getAdmission()).id(getId())
                     .name(getName()).major(getMajor()).build();
         }
         else{
-            return UndergraduateSaveRequestDto.builder().email(getEmail()).location(getLocation()).image(getImage()).admission(getAdmission())
+            return UndergraduateSaveRequestDto.builder().email(getEmail()).location(getLocation()).image(getImage()).admission(getAdmission()).id(getId())
                     .name(getName()).major(getMajor()).build();
         }
 

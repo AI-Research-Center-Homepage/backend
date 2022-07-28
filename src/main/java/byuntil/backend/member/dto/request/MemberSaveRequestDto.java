@@ -8,6 +8,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public abstract class MemberSaveRequestDto {
+    private Long id;
     private String name;
     private String major;
     private String email;

@@ -30,11 +30,11 @@ public class Committee extends Member {
     public CommitteeSaveRequestDto toDto(){
         if (getLogin()!=null){
             LoginDto loginDto = new LoginDto(getLogin().getLoginId(), getLogin().getLoginPw());
-            return CommitteeSaveRequestDto.builder().loginDto(loginDto).email(getEmail()).location(getLocation()).image(getImage())
+            return CommitteeSaveRequestDto.builder().loginDto(loginDto).email(getEmail()).location(getLocation()).image(getImage()).id(getId())
                     .name(getName()).major(getMajor()).position(getPosition()).image(getImage()).build();
         }
         else{
-            return CommitteeSaveRequestDto.builder().email(getEmail()).location(getLocation()).image(getImage())
+            return CommitteeSaveRequestDto.builder().email(getEmail()).location(getLocation()).image(getImage()).id(getId())
                     .name(getName()).major(getMajor()).position(getPosition()).image(getImage()).build();
         }
     }

@@ -3,6 +3,7 @@ package byuntil.backend.common.member.service;
 import byuntil.backend.admin.controlller.domain.dto.LoginDto;
 import byuntil.backend.member.domain.entity.member.Member;
 import byuntil.backend.member.domain.entity.member.Professor;
+import byuntil.backend.member.dto.request.MemberSaveRequestDto;
 import byuntil.backend.member.dto.request.ProfessorSaveRequestDto;
 import byuntil.backend.member.service.MemberService;
 import org.junit.jupiter.api.Assertions;
@@ -61,10 +62,10 @@ class MemberServiceTest {
         ProfessorSaveRequestDto professorSaveRequestDto = makeMemberDto();
         Long id = memberService.saveMember(professorSaveRequestDto);
         Professor oneProfessor = memberService.findOneProfessor(id);
-        //when
 
-        List<Member> members = memberService.findAllByPosition("Professor");
-        List<Professor> professors = members.stream().map(member -> (Professor) member).toList();
+        //when
+        List<ProfessorSaveRequestDto> professors = (List<ProfessorSaveRequestDto>) memberService.findAllByPosition("Professor");
+        //List<Professor> professors = members.stream().map(member -> (Professor) member).toList();
 
         //then
         Assertions.assertEquals(oneProfessor.getNumber(), professors.get(0).getNumber());

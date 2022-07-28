@@ -24,11 +24,11 @@ public class Researcher extends Member {
     public ResearcherSaveRequestDto toDto(){
         if(getLogin()!=null){
             LoginDto loginDto = new LoginDto(getLogin().getLoginId(), getLogin().getLoginPw());
-            return ResearcherSaveRequestDto.builder().loginDto(loginDto).email(getEmail()).location(getLocation()).image(getImage()).major(getMajor())
+            return ResearcherSaveRequestDto.builder().loginDto(loginDto).email(getEmail()).location(getLocation()).image(getImage()).major(getMajor()).id(getId())
                     .name(getName()).build();
         }
         else{
-            return ResearcherSaveRequestDto.builder().email(getEmail()).location(getLocation()).image(getImage()).major(getMajor())
+            return ResearcherSaveRequestDto.builder().email(getEmail()).location(getLocation()).image(getImage()).major(getMajor()).id(getId())
                     .name(getName()).build();
         }
 

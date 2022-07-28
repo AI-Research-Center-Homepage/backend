@@ -77,7 +77,7 @@ public abstract class Member {
         this.login.setLoginId(dto.getLoginDto().getLoginId());
         this.login.setLoginPw(dto.getLoginDto().getLoginPw());
         //this.login.setRole(UserRole.valueOf(dto.getLoginDto().getAuthorities().toArray()[0].toString()));
-        this.login.setDeleted(dto.getLoginDto().isDeleted());
+        this.login.setDeleted(dto.getLoginDto().getDeleted());
     }
 
     public void addMemberThesis(final Member_Thesis memberThesis) {

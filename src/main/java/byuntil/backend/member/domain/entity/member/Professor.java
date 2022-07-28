@@ -34,11 +34,11 @@ public class Professor extends Member {
     public ProfessorSaveRequestDto toDto(){
         if(getLogin()!=null){
             LoginDto loginDto = new LoginDto(getLogin().getLoginId(), getLogin().getLoginPw());
-            return ProfessorSaveRequestDto.builder().loginDto(loginDto).email(getEmail()).location(getLocation()).image(getImage())
+            return ProfessorSaveRequestDto.builder().loginDto(loginDto).email(getEmail()).location(getLocation()).image(getImage()).id(getId())
                     .doctorate(getDoctorate()).name(getName()).number(getNumber()).major(getMajor()).build();
         }
         else{
-            return ProfessorSaveRequestDto.builder().email(getEmail()).location(getLocation()).image(getImage())
+            return ProfessorSaveRequestDto.builder().email(getEmail()).location(getLocation()).image(getImage()).id(getId())
                     .doctorate(getDoctorate()).name(getName()).number(getNumber()).major(getMajor()).build();
         }
 

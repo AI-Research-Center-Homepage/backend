@@ -1,10 +1,7 @@
 package byuntil.backend.member.dto.request;
 
 import byuntil.backend.admin.controlller.domain.dto.LoginDto;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -12,7 +9,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Getter
 @Setter
-@Builder
 public class MemberAllInfoDto {
     private String name;
     private String major;

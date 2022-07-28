@@ -15,9 +15,9 @@ public class GraduateSaveRequestDto extends MemberSaveRequestDto {
     private LocalDateTime admission;
 
     @Builder
-    public GraduateSaveRequestDto(String name, String major, String email, String image,
+    public GraduateSaveRequestDto(Long id, String name, String major, String email, String image,
                                   LocalDateTime admission, String location, LoginDto loginDto) {
-        super(name, major, email, image, location, loginDto);
+        super(id, name, major, email, image, location, loginDto);
         this.admission = admission;
     }
 

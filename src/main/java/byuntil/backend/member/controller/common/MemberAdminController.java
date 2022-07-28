@@ -1,24 +1,44 @@
 package byuntil.backend.member.controller.common;
 
+import byuntil.backend.admin.controlller.domain.dto.LoginDto;
 import byuntil.backend.common.exception.TypeNotExistException;
 import byuntil.backend.member.domain.entity.member.Committee;
 import byuntil.backend.member.domain.entity.member.Member;
 import byuntil.backend.member.domain.entity.member.Researcher;
 import byuntil.backend.member.dto.request.*;
+import byuntil.backend.member.dto.response.MemberLookupDto;
+import byuntil.backend.member.dto.response.MembersLookupDto;
 import byuntil.backend.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/admin")
 public class MemberAdminController {
-
     private final MemberService memberService;
+
+    //
+    @GetMapping("/members/{position}")
+    public ResponseEntity readMembersByPosition(@PathVariable String position){
+        List<MemberSaveRequestDto> members = (List<MemberSaveRequestDto>) memberService.findAllByPosition(position);
+        List<MemberLookupDto> memberLookupDtoList = new ArrayList<>();
+        for (MemberSaveRequestDto dto: members) {
+            memberLookupDtoList.add(MemberLookupDto.builder().name(dto.getName()).id(dto.getId()).email(dto.getEmail()).major(dto.getMajor()).build());
+        }
+        MembersLookupDto membersLookupDto = MembersLookupDto.builder().members(memberLookupDtoList).build();
+        return ResponseEntity.ok().body(membersLookupDto);
+    }
+
+
     //멤버등록 /members/new?position={position}
     @PostMapping("/members/new")
     public ResponseEntity join(@RequestParam String position, @RequestBody MemberAllInfoDto memberDto) {
@@ -27,37 +47,39 @@ public class MemberAdminController {
         //committeesaveReqeustDto로할지.. 이런것들을 if문으로 나눈다음에?
         //멤버를 저장한다..
 
+        LoginDto loginDto = createAuth(memberDto.getLoginDto());
+
         if(position.equals("Committee")){
-            CommitteeSaveRequestDto dto = CommitteeSaveRequestDto.builder().loginDto(memberDto.getLoginDto()).email(memberDto.getEmail())
+            CommitteeSaveRequestDto dto = CommitteeSaveRequestDto.builder().loginDto(loginDto).email(memberDto.getEmail())
                     .location(memberDto.getLocation()).image(memberDto.getImage()).position(memberDto.getPosition())
                     .major(memberDto.getMajor()).build();
             memberService.saveMember(dto);
-            return ResponseEntity.ok().body(dto);
+            return ResponseEntity.status(HttpStatus.CREATED).body("");
         }
         else if(position.equals("Graduate")){
-            GraduateSaveRequestDto dto = GraduateSaveRequestDto.builder().loginDto(memberDto.getLoginDto()).email(memberDto.getEmail())
+            GraduateSaveRequestDto dto = GraduateSaveRequestDto.builder().loginDto(loginDto).email(memberDto.getEmail())
                     .admission(memberDto.getAdmission()).major(memberDto.getMajor()).location(memberDto.getLocation())
                     .name(memberDto.getName()).image(memberDto.getImage()).build();
             memberService.saveMember(dto);
-            return ResponseEntity.ok().body(dto);
+            return ResponseEntity.status(HttpStatus.CREATED).body("");
         }
         else if(position.equals("Professor")){
-            ProfessorSaveRequestDto dto = ProfessorSaveRequestDto.builder().loginDto(memberDto.getLoginDto()).email(memberDto.getEmail())
+            ProfessorSaveRequestDto dto = ProfessorSaveRequestDto.builder().loginDto(loginDto).email(memberDto.getEmail())
                     .name(memberDto.getName())
                     .image(memberDto.getImage()).location(memberDto.getLocation()).major(memberDto.getMajor()).doctorate(memberDto.getDoctorate())
                     .number(memberDto.getNumber()).name(memberDto.getName()).build();
             memberService.saveMember(dto);
-            return ResponseEntity.ok().body(dto);
+            return ResponseEntity.status(HttpStatus.CREATED).body("");
         }
         else if(position.equals("Researcher")){
-            ResearcherSaveRequestDto dto = ResearcherSaveRequestDto.builder().loginDto(memberDto.getLoginDto()).location(memberDto.getLocation())
+            ResearcherSaveRequestDto dto = ResearcherSaveRequestDto.builder().loginDto(loginDto).location(memberDto.getLocation())
                     .email(memberDto.getEmail()).major(memberDto.getMajor()).image(memberDto.getImage()).name(memberDto.getName())
                     .image(memberDto.getImage()).build();
             memberService.saveMember(dto);
-            return ResponseEntity.ok().body(dto);
+            return ResponseEntity.status(HttpStatus.CREATED).body("");
         }
         else if(position.equals("Undergraduate")){
-            UndergraduateSaveRequestDto dto = UndergraduateSaveRequestDto.builder().loginDto(memberDto.getLoginDto()).admission(memberDto.getAdmission())
+            UndergraduateSaveRequestDto dto = UndergraduateSaveRequestDto.builder().loginDto(loginDto).admission(memberDto.getAdmission())
                     .image(memberDto.getImage()).location(memberDto.getLocation()).image(memberDto.getImage()).email(memberDto.getEmail())
                     .major(memberDto.getMajor()).name(memberDto.getName()).build();
             memberService.saveMember(dto);
@@ -68,6 +90,7 @@ public class MemberAdminController {
             throw new TypeNotExistException();
         }
     }
+
     //멤버조회 /members/{memberId}
     @GetMapping("/members")
     public ResponseEntity readMember(@RequestParam Long id) {
@@ -100,11 +123,18 @@ public class MemberAdminController {
         }
 
     }
+
     //멤버 탈퇴
     @DeleteMapping("/members")
     public ResponseEntity resignMember(@RequestParam Long id) throws Throwable {
         memberService.secession(id);
         return ResponseEntity.ok().build();
+    }
+
+    public LoginDto createAuth(LoginDto loginDto){
+        Collection<SimpleGrantedAuthority> auth = new ArrayList<>();
+        auth.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        return new LoginDto(loginDto.getLoginId(), loginDto.getLoginPw(), auth, false);
     }
 
 

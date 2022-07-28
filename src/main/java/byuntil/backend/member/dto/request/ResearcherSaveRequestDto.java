@@ -11,8 +11,8 @@ import lombok.Getter;
 public class ResearcherSaveRequestDto extends MemberSaveRequestDto {
 
     @Builder
-    public ResearcherSaveRequestDto(String name, String major, String email, String image, String location, LoginDto loginDto) {
-        super(name, major, email, image, location, loginDto);
+    public ResearcherSaveRequestDto(Long id, String name, String major, String email, String image, String location, LoginDto loginDto) {
+        super(id, name, major, email, image, location, loginDto);
     }
 
 

@@ -3,12 +3,17 @@ package byuntil.backend.member.service;
 import byuntil.backend.admin.controlller.domain.dto.LoginDto;
 import byuntil.backend.common.exception.IdNotExistException;
 import byuntil.backend.common.exception.LoginIdDuplicationException;
+import byuntil.backend.common.exception.TypeNotExistException;
 import byuntil.backend.member.domain.entity.member.*;
 import byuntil.backend.member.domain.repository.MemberRepository;
-import byuntil.backend.member.dto.request.MemberSaveRequestDto;
-import byuntil.backend.member.dto.request.MemberUpdateRequestDto;
+import byuntil.backend.member.dto.request.*;
+import byuntil.backend.member.dto.response.CommitteeResponseDto;
+import byuntil.backend.member.dto.response.MemberLookupDto;
 import byuntil.backend.member.dto.response.MemberResponseDto;
+import byuntil.backend.member.dto.response.MembersLookupDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -152,7 +157,65 @@ public class MemberService implements UserDetailsService {
         return dto;
     }
 
-    public List<Member> findAllByPosition(final String position) {
-        return memberRepository.findAllByPosition(position);
+    public List<?> findAllByPosition(final String position) {
+        List<Member> members = memberRepository.findAllByPosition(position);
+
+        if(position.equals("Committee")){
+            List<CommitteeSaveRequestDto> dtoList = new ArrayList<>();
+            for (Member member: members) {
+                Committee committee = (Committee) member;
+                dtoList.add(committee.toDto());
+            }
+            return dtoList;
+        }
+        else if(position.equals("Graduate")){
+            List<GraduateSaveRequestDto> dtoList = new ArrayList<>();
+            for (Member member: members) {
+                Graduate graduate = (Graduate) member;
+                dtoList.add(graduate.toDto());
+            }
+            return dtoList;
+        }
+        else if(position.equals("Professor")){
+            List<ProfessorSaveRequestDto> dtoList = new ArrayList<>();
+            for (Member member: members) {
+                Professor professor = (Professor) member;
+                dtoList.add(professor.toDto());
+            }
+            return dtoList;
+        }
+        else if(position.equals("Researcher")){
+            List<ResearcherSaveRequestDto> dtoList = new ArrayList<>();
+            for (Member member: members) {
+                Researcher researcher = (Researcher) member;
+                dtoList.add(researcher.toDto());
+            }
+            return dtoList;
+        }
+        else if(position.equals("Undergraduate")){
+            List<UndergraduateSaveRequestDto> dtoList = new ArrayList<>();
+            for (Member member: members) {
+                Undergraduate undergraduate = (Undergraduate) member;
+                dtoList.add(undergraduate.toDto());
+            }
+            return dtoList;
+        }
+        else{
+            throw new TypeNotExistException();
+        }
+
     }
+
+    /*public MembersLookupDto findAllByPosition(final String position) {
+        List<Member> members = memberRepository.findAllByPosition(position);
+
+        MembersLookupDto dto;
+        List<MemberLookupDto> memberLookupDtoList = new ArrayList<>();
+        for (Member member: members) {
+            memberLookupDtoList.add(MemberLookupDto.builder().name(member.getName()).email(member.getEmail()).major(member.getMajor()).id(member.getId()).build());
+
+        }
+        dto = MembersLookupDto.builder().members(memberLookupDtoList).build();
+        return dto;
+    }*/
 }

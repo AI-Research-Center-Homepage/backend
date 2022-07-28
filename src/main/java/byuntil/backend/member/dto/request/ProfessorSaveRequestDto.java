@@ -13,14 +13,14 @@ public class ProfessorSaveRequestDto extends MemberSaveRequestDto {
     private String number;
 
     @Builder
-    public ProfessorSaveRequestDto(String name, String major, String email, String image, String location, LoginDto loginDto, String doctorate, String number) {
-        super(name, major, email, image, location, loginDto);
+    public ProfessorSaveRequestDto(Long id, String name, String major, String email, String image, String location, LoginDto loginDto, String doctorate, String number) {
+        super(id, name, major, email, image, location, loginDto);
         this.doctorate = doctorate;
         this.number = number;
     }
 
     public ProfessorSaveRequestDto(final Professor professor, final LoginDto loginDto) {
-        super(professor.getName(), professor.getMajor(), professor.getEmail(), professor.getImage(), professor.getLocation(), loginDto);
+        super(professor.getId(), professor.getName(), professor.getMajor(), professor.getEmail(), professor.getImage(), professor.getLocation(), loginDto);
         this.doctorate = professor.getDoctorate();
         this.number = professor.getNumber();
     }
