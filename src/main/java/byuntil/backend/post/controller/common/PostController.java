@@ -5,7 +5,7 @@ import byuntil.backend.post.domain.entity.Board;
 import byuntil.backend.post.domain.entity.Post;
 import byuntil.backend.post.dto.response.ArticleAndNewsResponseDto;
 import byuntil.backend.post.dto.response.AttachResponseDto;
-import byuntil.backend.post.dto.response.NoticeResponseDto;
+import byuntil.backend.post.dto.response.readPostDto;
 import byuntil.backend.post.dto.response.PostResponseDto;
 import byuntil.backend.post.service.BoardService;
 import byuntil.backend.post.service.PostService;
@@ -63,17 +63,16 @@ public class PostController {
     }
 
     @GetMapping("/notice/{postId}")
-    public ResponseEntity<NoticeResponseDto> readEachNotice(@PathVariable("postId") final Long postId) {
+    public ResponseEntity<readPostDto> readEachNotice(@PathVariable("postId") final Long postId) {
         Post post = postService.findById(postId);
         List<Attach> attaches = post.getAttaches();
         List<AttachResponseDto> attachResponseDtos = attaches.stream().map(AttachResponseDto::new).toList();
-        NoticeResponseDto response = NoticeResponseDto.builder()
+        readPostDto response = readPostDto.builder()
                 .title(post.getTitle())
                 .content(post.getContent())
                 .viewNum(post.getViewNum())
                 .createdDate(post.getCreatedDate())
                 .modifiedDate(post.getModifiedDate())
-                .attach(attachResponseDtos)
                 .build();
         return ResponseEntity.ok().body(response);
     }

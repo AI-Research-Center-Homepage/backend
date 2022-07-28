@@ -1,8 +1,8 @@
 package byuntil.backend.post.controller.common;
 
-import byuntil.backend.post.domain.entity.Board;
 import byuntil.backend.post.dto.PostDto;
-import byuntil.backend.post.service.BoardService;
+import byuntil.backend.post.dto.response.readAllPostDto;
+import byuntil.backend.post.dto.response.readPostDto;
 import byuntil.backend.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,13 +12,26 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/admin")
 public class PostAdminController {
     private final PostService postService;
+
+
+    @GetMapping("/posts/notice")
+    public ResponseEntity readNotice(){
+        return ResponseEntity.ok().body(readAllPostDto.builder().list(postService.readAllPost("Notice")).build());
+    }
+    @GetMapping("/posts/news")
+    public ResponseEntity readNews(){
+        return ResponseEntity.ok().body(readAllPostDto.builder().list(postService.readAllPost("News")).build());
+    }
+    @GetMapping("/posts/source")
+    public ResponseEntity readSource(){
+        return ResponseEntity.ok().body(readAllPostDto.builder().list(postService.readAllPost("Source")).build());
+    }
 
     //게시글등록
     @PostMapping("/posts")
