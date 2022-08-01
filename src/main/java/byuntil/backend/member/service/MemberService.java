@@ -11,6 +11,7 @@ import byuntil.backend.member.dto.response.CommitteeResponseDto;
 import byuntil.backend.member.dto.response.MemberLookupDto;
 import byuntil.backend.member.dto.response.MemberResponseDto;
 import byuntil.backend.member.dto.response.MembersLookupDto;
+import byuntil.backend.member.dto.response.one.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -165,7 +166,7 @@ public class MemberService implements UserDetailsService {
         List<Member> members = memberRepository.findAllByPosition(position);
 
         if(position.equals("Committee")){
-            List<CommitteeSaveRequestDto> dtoList = new ArrayList<>();
+            List<OneCommitteeResponseDto> dtoList = new ArrayList<>();
             for (Member member: members) {
                 Committee committee = (Committee) member;
                 dtoList.add(committee.toDto());
@@ -173,7 +174,7 @@ public class MemberService implements UserDetailsService {
             return dtoList;
         }
         else if(position.equals("Graduate")){
-            List<GraduateSaveRequestDto> dtoList = new ArrayList<>();
+            List<OneGraduateResponseDto> dtoList = new ArrayList<>();
             for (Member member: members) {
                 Graduate graduate = (Graduate) member;
                 dtoList.add(graduate.toDto());
@@ -181,7 +182,7 @@ public class MemberService implements UserDetailsService {
             return dtoList;
         }
         else if(position.equals("Professor")){
-            List<ProfessorSaveRequestDto> dtoList = new ArrayList<>();
+            List<OneProfessorResponseDto> dtoList = new ArrayList<>();
             for (Member member: members) {
                 Professor professor = (Professor) member;
                 dtoList.add(professor.toDto());
@@ -189,7 +190,7 @@ public class MemberService implements UserDetailsService {
             return dtoList;
         }
         else if(position.equals("Researcher")){
-            List<ResearcherSaveRequestDto> dtoList = new ArrayList<>();
+            List<OneResearcherResponseDto> dtoList = new ArrayList<>();
             for (Member member: members) {
                 Researcher researcher = (Researcher) member;
                 dtoList.add(researcher.toDto());
@@ -197,7 +198,7 @@ public class MemberService implements UserDetailsService {
             return dtoList;
         }
         else if(position.equals("Undergraduate")){
-            List<UndergraduateSaveRequestDto> dtoList = new ArrayList<>();
+            List<OneUndergraduateResponseDto> dtoList = new ArrayList<>();
             for (Member member: members) {
                 Undergraduate undergraduate = (Undergraduate) member;
                 dtoList.add(undergraduate.toDto());

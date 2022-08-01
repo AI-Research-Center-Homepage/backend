@@ -8,6 +8,7 @@ import byuntil.backend.member.domain.entity.member.Researcher;
 import byuntil.backend.member.dto.request.*;
 import byuntil.backend.member.dto.response.MemberLookupDto;
 import byuntil.backend.member.dto.response.MembersLookupDto;
+import byuntil.backend.member.dto.response.one.*;
 import byuntil.backend.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -104,25 +105,25 @@ public class MemberAdminController {
         Member member = (Member) memberService.findOneMember(id).get();
         String dType = member.getDtype();
         if (dType.equals("Committee")){
-            CommitteeSaveRequestDto dto = memberService.findOneCommittee(id).toDto();
+            OneCommitteeResponseDto dto = memberService.findOneCommittee(id).toDto();
             return ResponseEntity.ok().body(dto);
         }
         else if(dType.equals("Graduate")){
-            GraduateSaveRequestDto dto = memberService.findOneGraduate(id).toDto();
+            OneGraduateResponseDto dto = memberService.findOneGraduate(id).toDto();
             return ResponseEntity.ok().body(dto);
 
         }
         else if(dType.equals("Professor")){
-            ProfessorSaveRequestDto dto = memberService.findOneProfessor(id).toDto();
+            OneProfessorResponseDto dto = memberService.findOneProfessor(id).toDto();
             return ResponseEntity.ok().body(dto);
         }
         else if(dType.equals("Researcher")){
-            ResearcherSaveRequestDto dto = memberService.findOneResearcher(id).toDto();
+            OneResearcherResponseDto dto = memberService.findOneResearcher(id).toDto();
             return ResponseEntity.ok().body(dto);
 
         }
         else if(dType.equals("Undergraduate")){
-            UndergraduateSaveRequestDto dto = memberService.findOneUndergraduate(id).toDto();
+            OneUndergraduateResponseDto dto = memberService.findOneUndergraduate(id).toDto();
             return ResponseEntity.ok().body(dto);
         }
         else{
