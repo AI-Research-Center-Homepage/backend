@@ -8,9 +8,13 @@
 <body>
 <h1>TEST ToastUI</h1>
 <div id="editor"></div>
-<form name = "testform" action="/submit" method="post" onsubmit="return submitFunc()" >
-    <input  type="hidden" name="text">
+<form name = "testform" action="/post/submit" method="post" onsubmit="return submitFunc()" >
+    <input  type="hidden" name="content">
     <input type="submit" value="버튼">
+</form>
+<form action="/post/attach/submit" method="post" enctype="multipart/form-data">
+    <input type="file" name="file1"/>
+    <button type="submit">전송</button>
 </form>
 <script th:src="@{https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js}"></script>
 <script>
@@ -31,19 +35,19 @@
         // !!!!! 여기서 이미지를 받아와서 이미지 주소를 받아오고 (ajax 등으로)
         // callback의 인수로 넣으시면 됩니다.
 
+        let frm = document.testform
         //blob이 파일같은거랬으니까 넣음
         let formdata = new FormData();
         formdata.append("data", blob);
-
         let requestOptions = {
             method: 'POST',
             body: formdata,
             redirect: 'follow'
         };
 
-        fetch("http://localhost:8080/upload", requestOptions)
-            .then(response =>response.text())
-            .then(result => callback(result))
+        fetch("http://localhost:8080/post/upload", requestOptions)
+            .then(response =>response.text()) //응답을 읽고 응답을 text로 반환한다
+            .then(result => callback(result)) // 화살표 함수 () => x는 () => {return x;}와 같습니다.
             .catch(error => console.log('error', error));
 
     })
@@ -54,7 +58,7 @@
         let frm = document.testform
         alert(editor.getHTML());
         console.log(editor.getHTML().toString() + "콘솔로그")
-        frm.text.value = editor.getHTML();
+        frm.content.value = editor.getHTML();
         if(typeof frm === "undefined") return false;
 
     }

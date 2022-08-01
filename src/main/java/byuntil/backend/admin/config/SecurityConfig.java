@@ -37,9 +37,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.logout();
         http.httpBasic();
 
-
-
-
         //쿠키(서버가 사용자의 웹브라우저에 저장하는 데아터) 의 만료시간 설정
         http.rememberMe().tokenValiditySeconds(60*60*7).userDetailsService(userDetailsService());//7days
 

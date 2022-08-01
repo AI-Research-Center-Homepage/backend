@@ -11,6 +11,7 @@ import byuntil.backend.research.domain.entity.Thesis;
 import byuntil.backend.research.dto.request.FieldDto;
 import byuntil.backend.research.dto.request.ThesisDto;
 import byuntil.backend.research.service.ThesisService;
+import byuntil.backend.s3.service.S3ServiceImpl;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,16 @@ public class IntegrationTest {
     ThesisService thesisService;
     @Autowired
     BoardRepository boardRepository;
+
+    @Autowired
+    S3ServiceImpl s3Service;
+
+    @Test
+    public void url반환(){
+        String url = "s3://aihomepage/028bd8da84d54db6b84449ad8ad44487.jpg";
+        String key = s3Service.urlToKey(url);
+        Assertions.assertThat(key).isEqualTo("028bd8da84d54db6b84449ad8ad44487");
+    }
 
     @Test
     @Transactional

@@ -12,6 +12,7 @@ public class AttachDto {
     //나머지값들은 그냥 attach를 만든다음에 주입해주는걸로..
     private Long id;
     private String originFileName;
+    private Long postId;
     @Builder
     public AttachDto(String originFileName, String serverFileName, String filePath, Post post) {
         this.originFileName = originFileName;

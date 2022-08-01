@@ -23,7 +23,7 @@ public class Attach {
     private String serverFileName;
 
     @Column(nullable = false)
-    private String filePath;
+    private String fileUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "POST_ID")
@@ -35,7 +35,7 @@ public class Attach {
         this.id = id;
         this.originFileName = originFileName;
         this.serverFileName = serverFileName;
-        this.filePath = filePath;
+        this.fileUrl = fileUrl;
     }
 
     //연관관계 편의 메서드

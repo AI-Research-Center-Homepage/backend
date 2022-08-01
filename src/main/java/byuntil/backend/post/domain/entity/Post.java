@@ -21,12 +21,19 @@ public class Post extends BaseTimeEntity {
     @Column(nullable = false)
     private String title;
 
-    private String image;
     @Column(columnDefinition = "LONGTEXT")
     private String content;
 
     private String author;
 
+    @ElementCollection
+    @CollectionTable(
+            name = "URL",
+            joinColumns = @JoinColumn(name = "POST_ID")
+    )
+    @OrderColumn
+    @Column(name = "URL_NAME")
+    private List<String> imageList = new ArrayList<>();
 
     @Column(columnDefinition = "integer default 0", nullable = false)
     private int viewNum;
@@ -39,10 +46,10 @@ public class Post extends BaseTimeEntity {
     private Board board;
 
     @Builder
-    public Post(final Long id, final String title, final String image, final String content, final int viewNum, String author) {
+    public Post(final Long id, final String title, final List<String> images, final String content, final int viewNum, String author) {
         this.id = id;
         this.title = title;
-        this.image = image;
+        this.imageList = images;
         this.content = content;
         this.viewNum = viewNum;
         this.author = author;
@@ -69,13 +76,14 @@ public class Post extends BaseTimeEntity {
 
     public void updatePost(final PostDto dto) {
         this.title = dto.getTitle();
-        this.image = dto.getImage();
+        this.imageList = dto.getImageList();
         this.content = dto.getContent();
+        this.imageList = dto.getImageList();
         this.attaches = dto.toEntity().getAttaches();
         this.author = dto.getAuthor();
     }
     public PostDto toDto(){
         return PostDto.builder().boardName(board.getName()).content(content).title(title).author(author)
-                .id(id).image(image).build();
+                .id(id).images(imageList).build();
     }
 }
