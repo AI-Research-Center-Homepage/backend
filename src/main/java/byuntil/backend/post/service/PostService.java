@@ -125,6 +125,7 @@ public class PostService {
             fileUpload(file).ifPresent(fileStatus -> {
                 //todo: 이게 표면적으로 지워지긴 하지만 s3에는 지워지지 않음 나중에 추가
                 post.deleteAttaches();
+
                 String url = fileStatus.fileUrl();
                 Attach build = Attach.builder()
                         .filePath(url)

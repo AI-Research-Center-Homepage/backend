@@ -55,7 +55,7 @@ public class IntegrationTest {
 
         //field를 안넣은 thesis
         Long thesisId2 = thesisService.save(thesisDto2);
-        Thesis thesis2 = thesisService.findById(thesisId2).get();
+        Thesis thesis2 = thesisService.findById(thesisId2);
 
         Long MTId1 = member_thesisService.createThesis(memberId, thesisId1);
         Long MTId2 = member_thesisService.createThesis(memberId2, thesisId2);

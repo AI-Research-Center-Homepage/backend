@@ -76,6 +76,6 @@ public class Post extends BaseTimeEntity {
     }
     public PostDto toDto(){
         return PostDto.builder().boardName(board.getName()).content(content).title(title).author(author)
-                .image(image).build();
+                .id(id).image(image).build();
     }
 }
