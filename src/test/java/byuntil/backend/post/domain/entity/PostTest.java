@@ -23,7 +23,7 @@ class PostTest {
         assertAll("첨부파일 저장 테스트",
                 () -> assertThat(post.getAttaches().get(0).getServerFileName()).isEqualTo("orginal.txt1234"),
                 () -> assertThat(post.getAttaches().get(0).getOriginFileName()).isEqualTo("orginal.txt"),
-                () -> assertThat(post.getAttaches().get(0).getFilePath()).isEqualTo("/path")
+                () -> assertThat(post.getAttaches().get(0).getFileUrl()).isEqualTo("/path")
         );
     }
 

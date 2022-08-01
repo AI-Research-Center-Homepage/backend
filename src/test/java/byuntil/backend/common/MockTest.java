@@ -1,10 +1,12 @@
 package byuntil.backend.common;
 
+import byuntil.backend.s3.service.S3ServiceImpl;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import io.findify.s3mock.S3Mock;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -35,6 +37,9 @@ public class MockTest {
 
     @Autowired
     static private AmazonS3 amazonS3;
+
+    @Autowired
+    private S3ServiceImpl s3Service;
 
     //BeforeAll에서 S3Mock서버를 실행시켜야하고 test에서 사용할 Bucket을 미리 생성해둔다
     @BeforeAll

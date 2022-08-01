@@ -40,23 +40,28 @@ public class PostService {
         */
 
         Post post = postDto.toEntity();
-        List<Attach> attachList = s3Service.upload(fileList);
+        List<Attach> attachList = s3Service.uploadReturnAttachList(fileList);
         post.addAttaches(attachList);
         //보드 이름으로 보드 찾아오는 명령어 수행해야함 없으면 예외터뜨리기
         Board board = boardRepository.findByName(postDto.getBoardName()).orElseThrow(BoardNotFoundException::new);
         //찾아온 board로
         post.setBoard(board);
         //그럼 cascade설정으로 attach도 같이 저장이 될 것이다
-        postRepository.save(post);
-
-        return post.getId();
+        return postRepository.save(post).getId();
 
     }
 
     /*
+<<<<<<< HEAD
+    성재
+    1. file 하나가 아니라 여러개가 들어가야해
+    2. dto안에 entity가 들어가면 안될것같아
+    3. board도 처리해야해!
+=======
     문제 1. file 하나가 아니라 여러개가 들어가야한다는점
     2. dto안에 entity가 들어가면 안됨
     3. board도 처리해야함
+>>>>>>> 6f63700fdae2fa7eaba629c57d15c19aa6791d56
     @Transactional
     public Long save(PostDto postDto, MultipartFile file) {
         Post post = postDto.toEntity();
