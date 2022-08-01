@@ -219,7 +219,8 @@ public class S3ServiceImpl implements S3Service {
                 file.delete();
 
                 //dto정보 입력
-                attach = Attach.builder().filePath(url).originFileName(origName).serverFileName(saveFileName).build();
+                attach = Attach.builder().
+                        filePath(url).originFileName(origName).serverFileName(saveFileName).build();
 
             } catch (StringIndexOutOfBoundsException e) {
                 url = null;

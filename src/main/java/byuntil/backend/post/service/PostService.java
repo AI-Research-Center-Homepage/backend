@@ -126,18 +126,25 @@ public class PostService {
         Optional<Post> postOptional = postRepository.findById(postId);
         postOptional.ifPresent(post -> {
             post.updatePost(request);
-            fileUpload(file).ifPresent(fileStatus -> {
-                //todo: 이게 표면적으로 지워지긴 하지만 s3에는 지워지지 않음 나중에 추가
-                post.deleteAttaches();
 
+            post.deleteAttaches();
+
+            Optional.ofNullable(post.getImageList()).ifPresent(
+                    list -> {
+                        for (String url: list) {
+                            s3Service.delete(url);
+                        }
+                    }
+            );
+            fileUpload(file).ifPresent(
+                    fileStatus -> {
                 String url = fileStatus.fileUrl();
-                Attach build = Attach.builder()
+                Attach attach = Attach.builder()
                         .filePath(url)
                         .originFileName(file.getName())
                         .serverFileName(createStoreFilename(file.getName()))
                         .build();
-                build.addPost(post);
-                post.addAttach(build);
+                attach.addPost(post);
             });
         });
     }

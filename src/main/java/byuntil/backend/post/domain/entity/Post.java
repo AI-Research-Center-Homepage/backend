@@ -38,7 +38,7 @@ public class Post extends BaseTimeEntity {
     @Column(columnDefinition = "integer default 0", nullable = false)
     private int viewNum;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Attach> attaches = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -79,7 +79,7 @@ public class Post extends BaseTimeEntity {
         this.imageList = dto.getImageList();
         this.content = dto.getContent();
         this.imageList = dto.getImageList();
-        this.attaches = dto.toEntity().getAttaches();
+        //attach는 따로 update
         this.author = dto.getAuthor();
     }
     public PostDto toDto(){

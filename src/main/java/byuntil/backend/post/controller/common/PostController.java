@@ -97,7 +97,7 @@ public class PostController {
     static class PostPreviewDto {
         private final Long id;
         private final String title;
-        private final String image;
+        private final List<String> images;
         @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private final LocalDateTime createdDate;
         @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
@@ -106,7 +106,7 @@ public class PostController {
         public PostPreviewDto(final Post post) {
             this.id = post.getId();
             this.title = post.getTitle();
-            this.image = post.getImage();
+            this.images = post.getImageList();
             this.createdDate = post.getCreatedDate();
             this.modifiedDate = post.getModifiedDate();
         }

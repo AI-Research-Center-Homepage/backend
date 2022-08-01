@@ -16,13 +16,10 @@ public class Attach {
     @Column(name = "ATTACH_ID")
     private Long id;
 
-    @Column(nullable = false)
     private String originFileName;
 
-    @Column(nullable = false)
     private String serverFileName;
 
-    @Column(nullable = false)
     private String fileUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -35,7 +32,7 @@ public class Attach {
         this.id = id;
         this.originFileName = originFileName;
         this.serverFileName = serverFileName;
-        this.fileUrl = fileUrl;
+        this.fileUrl = filePath;
     }
 
     //연관관계 편의 메서드

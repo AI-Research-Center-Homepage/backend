@@ -28,8 +28,6 @@ public class PostDto {
         this.author = author;
     }
 
-
-    //toEntity를 할때는 nullable인것을 제외하고는 모두 넣어야한다
     public Post toEntity() {
         Post build = Post.builder()
                 .title(title).author(author)

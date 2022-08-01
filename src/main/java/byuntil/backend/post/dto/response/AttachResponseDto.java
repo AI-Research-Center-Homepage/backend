@@ -10,7 +10,7 @@ public class AttachResponseDto {
 
     public AttachResponseDto(final Attach attach) {
         this.fileName = attach.getOriginFileName();
-        this.filePath = attach.getFilePath();
+        this.filePath = attach.getFileUrl();
     }
 }
 
