@@ -22,15 +22,14 @@ public class AttachService {
     private final AttachRepository attachRepository;
 
     @Transactional
-    public DefaultRes save(AttachDto dto, MultipartFile multipartFile) {
+    public DefaultRes save(final AttachDto dto, final List<MultipartFile> multipartFileList) {
         try {
-            if (!multipartFile.isEmpty()) {
+            if (!multipartFileList.isEmpty()) {
                 //upload후에 dto에 적절한 serverfilename이 들어가게 된다
-                s3Service.upload(multipartFile);
+                s3Service.uploads(multipartFileList);
             }
             //적절한 값이 들어가게 된 dto를 entity로 변환하여 db에 저장한다
             Attach attach = attachRepository.save(dto.toEntity());
-            System.out.println(attachRepository.findById(attach.getId()).get().getServerFileName() + "d!!!!!!!!!!!!!!!!!!!!!");
             return DefaultRes.res(StatusCode.OK, ResponseMessage.SUCCESS_PROFILE_REGISTER);
         } catch (Exception e) {
             return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);

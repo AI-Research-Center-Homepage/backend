@@ -151,6 +151,13 @@ public class S3ServiceImpl implements S3Service {
         return PERMISSION_FILE_EXTENSIONS.contains(extension);
     }
 
+    public List<String> uploads(List<MultipartFile> files) throws IOException {
+        List<String> urlList = new ArrayList<>();
+        for (MultipartFile file : files) {
+            urlList.add(upload(file));
+        }
+        return urlList;
+    }
     private String upload(final MultipartFile file, final String fileName) throws IOException {
         s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
                 .withCannedAcl(CannedAccessControlList.PublicRead));

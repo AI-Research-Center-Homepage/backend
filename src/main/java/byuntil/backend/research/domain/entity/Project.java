@@ -1,12 +1,11 @@
 package byuntil.backend.research.domain.entity;
 
-import byuntil.backend.research.dto.ProjectDto;
+import byuntil.backend.research.dto.request.ProjectDto;
 import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Builder
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -20,7 +19,9 @@ public class Project {
     //아이거 mappedyby 아래 image에 project에 대한 멤버변수가 있어야 인식가능함 !
 
     @Column(nullable = false)
-    private String name;
+    private String title;
+
+    private String description;
 
     @Column(columnDefinition = "LONGTEXT")
     private String content;
@@ -32,18 +33,21 @@ public class Project {
     private Field field;
 
     //연관관계 설정 메서드
-    public void setField(Field field){
+    public void setField(final Field field) {
         this.field = field;
     }
 
-    public void update(ProjectDto projectDto){
-        this.name = projectDto.getName();
+    public void update(final ProjectDto projectDto) {
+        this.title = projectDto.getName();
+        this.description = projectDto.getDescription();
         this.content = projectDto.getContent();
         this.participants = projectDto.getParticipants();
     }
+
     @Builder
-    public Project(String name, String content, String participants) {
-        this.name = name;
+    public Project(final String title, final String description, final String content, final String participants) {
+        this.title = title;
+        this.description = description;
         this.content = content;
         this.participants = participants;
     }

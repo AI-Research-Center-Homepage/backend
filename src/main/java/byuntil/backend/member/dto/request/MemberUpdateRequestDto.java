@@ -14,8 +14,7 @@ public class MemberUpdateRequestDto {
     private String major;
     private String email;
     private String image;
-    private String office;
-    private String fields;
+    private String location;
 
     private String position;
     private LocalDateTime admission;
@@ -25,9 +24,9 @@ public class MemberUpdateRequestDto {
     private LoginDto loginDto;
 
     @Builder
-    public MemberUpdateRequestDto(String name, String major, String email, String image, String position, String office,
-                                  LocalDateTime admission, String doctorate, String number, String fields,
-                                  LoginDto loginDto){
+    public MemberUpdateRequestDto(String name, String major, String email, String image, String position, String location,
+                                  LocalDateTime admission, String doctorate, String number,
+                                  LoginDto loginDto) {
         this.name = name;
         this.major = major;
         this.email = email;
@@ -36,8 +35,7 @@ public class MemberUpdateRequestDto {
         this.admission = admission;
         this.doctorate = doctorate;
         this.number = number;
-        this.office = office;
-        this.fields = fields;
+        this.location = location;
         this.loginDto = loginDto;
     }
 }

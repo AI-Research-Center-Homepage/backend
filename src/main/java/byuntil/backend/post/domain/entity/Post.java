@@ -31,7 +31,7 @@ public class Post extends BaseTimeEntity {
     )
     @OrderColumn
     @Column(name = "URL_NAME")
-    private List<String> urlList = new ArrayList<>();
+    private List<String> imageList = new ArrayList<>();
 
     @Column(columnDefinition = "integer default 0", nullable = false)
     private int viewNum;
@@ -44,24 +44,26 @@ public class Post extends BaseTimeEntity {
     private Board board;
 
     @Builder
-    public Post(Long id, String title, String content, int viewNum, List<String> urlList) {
+    public Post(final Long id, final String title, final List<String> images, final String content, final int viewNum) {
         this.id = id;
         this.title = title;
+        this.imageList = images;
         this.content = content;
         this.viewNum = viewNum;
-        this.urlList = urlList;
     }
 
     public void addAttach(final Attach attach) {
         attaches.add(attach);
     }
+
     //연관관계 설정
-    public void addAttaches(List<Attach> attachList){
-        for(Attach attach : attachList){
+    public void addAttaches(final List<Attach> attachList) {
+        for (Attach attach : attachList) {
             attach.addPost(this);
         }
     }
-    public void setBoard(Board board){
+
+    public void setBoard(final Board board) {
         this.board = board;
     }
 
@@ -71,8 +73,9 @@ public class Post extends BaseTimeEntity {
 
     public void updatePost(final PostDto dto) {
         this.title = dto.getTitle();
+        this.imageList = dto.getImageList();
         this.content = dto.getContent();
-        this.urlList = dto.getUrlList();
+        this.imageList = dto.getImageList();
         //attach와 같은 연관관계 설정되어있는것은
     }
 }
