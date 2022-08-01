@@ -23,7 +23,7 @@ public class Researcher extends Member {
 
     public ResearcherSaveRequestDto toDto(){
         if(getLogin()!=null){
-            LoginDto loginDto = new LoginDto(getLogin().getLoginId(), getLogin().getLoginPw());
+            LoginDto loginDto = new LoginDto(getLogin().getLoginId(), getLogin().getLoginPw(), getLogin().getDeleted());
             return ResearcherSaveRequestDto.builder().loginDto(loginDto).email(getEmail()).location(getLocation()).image(getImage()).major(getMajor()).id(getId())
                     .name(getName()).build();
         }

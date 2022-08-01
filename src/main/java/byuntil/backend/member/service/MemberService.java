@@ -48,14 +48,18 @@ public class MemberService implements UserDetailsService {
             }
             member.getLogin().setDeleted(true);
 
-
             byte[] array = new byte[7]; // length is bounded by 7
             new Random().nextBytes(array);
             String generatedString = new String(array, StandardCharsets.UTF_8);
 
-            member.getLogin().setLoginPw(generatedString);
-            MemberUpdateRequestDto dto = MemberUpdateRequestDto.builder().admission(LocalDateTime.now()).email("del").major("del").doctorate("del")
-                    .position("del").number("del").name("del").image("del").location("del").build();
+            member.getLogin().setLoginId(generatedString);
+
+            LoginDto loginDto = new LoginDto(member.getLogin().getLoginId(),
+                    member.getLogin().getLoginPw(), true);
+
+            MemberAllInfoDto dto = MemberAllInfoDto.builder().loginDto(loginDto)
+                    .admission(LocalDateTime.now()).email("del").major("del").doctorate("del")
+                    .position("del").number("del").name("del").image("del").location("del").research("del").location("del").build();
             updateMember(member.getId(), dto);
         }
     }
@@ -115,12 +119,12 @@ public class MemberService implements UserDetailsService {
     }
 
     @Transactional
-    public void updateMember(final Long id, final MemberUpdateRequestDto requestDto) throws Throwable {
+    public void updateMember(final Long id, final MemberAllInfoDto requestDto) throws Throwable {
         Member member = (Member) memberRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         member.update(requestDto);
         //그리고 암호화를 해주어야한다
         String encodedPw = passwordEncoder.encode(member.getLogin().getLoginPw());
-        member.getLogin().setLoginId(encodedPw);
+        member.getLogin().setLoginPw(encodedPw);
 
         if (member instanceof Professor professor) {
             professor.update(requestDto.getDoctorate(), requestDto.getNumber());

@@ -30,7 +30,7 @@ public class Undergraduate extends Member {
 
     public UndergraduateSaveRequestDto toDto(){
         if(getLogin()!=null){
-            LoginDto loginDto = new LoginDto(getLogin().getLoginId(), getLogin().getLoginPw());
+            LoginDto loginDto = new LoginDto(getLogin().getLoginId(), getLogin().getLoginPw(), getLogin().getDeleted());
             return UndergraduateSaveRequestDto.builder().email(getEmail()).loginDto(loginDto).location(getLocation()).image(getImage()).admission(getAdmission()).id(getId())
                     .name(getName()).major(getMajor()).build();
         }

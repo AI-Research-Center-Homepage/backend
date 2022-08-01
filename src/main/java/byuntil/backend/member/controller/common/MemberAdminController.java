@@ -26,7 +26,14 @@ import java.util.Optional;
 public class MemberAdminController {
     private final MemberService memberService;
 
-    //
+    @PutMapping("/members/{memberId}")
+    public ResponseEntity updateMember(@PathVariable Long memberId, @RequestBody MemberAllInfoDto memberDto) throws Throwable {
+        memberService.updateMember(memberId, memberDto);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(memberId);
+    }
+
+
     @GetMapping("/members/{position}")
     public ResponseEntity readMembersByPosition(@PathVariable String position){
         List<MemberSaveRequestDto> members = (List<MemberSaveRequestDto>) memberService.findAllByPosition(position);

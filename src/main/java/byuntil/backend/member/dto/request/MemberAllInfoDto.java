@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Getter
+@Builder
 @Setter
 public class MemberAllInfoDto {
     private String name;
@@ -22,4 +23,5 @@ public class MemberAllInfoDto {
     private String doctorate;
     private String number;
     private String research;
+
 }

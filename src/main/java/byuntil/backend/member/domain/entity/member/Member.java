@@ -1,7 +1,7 @@
 package byuntil.backend.member.domain.entity.member;
 
 import byuntil.backend.admin.controlller.domain.Login;
-import byuntil.backend.member.dto.request.MemberUpdateRequestDto;
+import byuntil.backend.member.dto.request.MemberAllInfoDto;
 import byuntil.backend.member_thesis.entity.Member_Thesis;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -68,7 +68,7 @@ public abstract class Member {
     private List<Member_Thesis> member_theses = new ArrayList<>();
 
 
-    public void update(final MemberUpdateRequestDto dto) {
+    public void update(final MemberAllInfoDto dto) {
         this.name = dto.getName();
         this.email = dto.getEmail();
         this.major = dto.getMajor();
@@ -76,7 +76,6 @@ public abstract class Member {
         this.location = dto.getLocation();
         this.login.setLoginId(dto.getLoginDto().getLoginId());
         this.login.setLoginPw(dto.getLoginDto().getLoginPw());
-        //this.login.setRole(UserRole.valueOf(dto.getLoginDto().getAuthorities().toArray()[0].toString()));
         this.login.setDeleted(dto.getLoginDto().getDeleted());
     }
 
