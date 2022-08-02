@@ -59,6 +59,9 @@ public class Post extends BaseTimeEntity {
         attaches.add(attach);
     }
 
+    public void setImageList(List<String> imageList){
+        this.imageList = imageList;
+    }
     //연관관계 설정
     public void addAttaches(final List<Attach> attachList) {
         for (Attach attach : attachList) {

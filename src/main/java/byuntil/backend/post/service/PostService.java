@@ -14,6 +14,7 @@ import byuntil.backend.post.dto.response.readPostDto;
 import byuntil.backend.s3.domain.FileStatus;
 import byuntil.backend.s3.service.S3ServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.boot.model.source.internal.hbm.AttributesHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -122,32 +123,16 @@ public class PostService {
     }
 
     @Transactional
-    public void updatePost(final Long postId, final PostDto request, final MultipartFile file) {
+    public void updatePost(final Long postId, final PostDto postDto, final List<MultipartFile> files) {
         Optional<Post> postOptional = postRepository.findById(postId);
         postOptional.ifPresent(post -> {
-            post.updatePost(request);
-
-            post.deleteAttaches();
-
-            Optional.ofNullable(post.getImageList()).ifPresent(
-                    list -> {
-                        for (String url: list) {
-                            s3Service.delete(url);
-                        }
-                    }
-            );
-            fileUpload(file).ifPresent(
-                    fileStatus -> {
-                String url = fileStatus.fileUrl();
-                Attach attach = Attach.builder()
-                        .filePath(url)
-                        .originFileName(file.getName())
-                        .serverFileName(createStoreFilename(file.getName()))
-                        .build();
-                attach.addPost(post);
-            });
+            post.updatePost(postDto);
+            changeUrlOfAttach(post, files);
+            changeUrlOfImageList(postDto, post);
         });
     }
+
+
 
     @Transactional
     public void deletePost(final Long postId) {
@@ -174,6 +159,64 @@ public class PostService {
         }
         return noticeResponseDtoList;
 
+    }
+    public void changeUrlOfAttach(Post post, List<MultipartFile> files){
+        //1. post의 attach모두 제거
+        Optional.ofNullable(post.getAttaches()).ifPresent(
+                list -> {
+                    for (Attach attach: list) {
+                        s3Service.delete(attach.getFileUrl());
+                    }
+                    post.deleteAttaches();
+                }
+        );
+        //2. files를 모두 post에 넣어주기
+        Optional.ofNullable(files).ifPresent(
+                fileList -> {
+                    for (MultipartFile file: files) {
+                        fileUpload(file).ifPresent(
+                                fileStatus -> {
+                                    String url = fileStatus.fileUrl();
+                                    Attach attach = Attach.builder()
+                                            .filePath(url)
+                                            .originFileName(file.getName())
+                                            .serverFileName(createStoreFilename(file.getName()))
+                                            .build();
+                                    attach.addPost(post);
+                                });
+                    }
+                }
+        );
+
+
+
+
+    }
+    public void changeUrlOfImageList(PostDto postDto, Post post){
+        if(postDto.getImageList()==null){
+            Optional.ofNullable(post.getImageList()).ifPresent(
+                    list -> {
+                        for (String url: list) {
+                            s3Service.delete(url);
+                        }
+                    }
+            );
+        }
+        else if(post.getImageList() == null){
+            //postDto에 있는 imageList를 추가한다
+            post.setImageList(postDto.getImageList());
+        }
+        else{
+            //비교해봐서 post에 있던 사진이 postDto에 없다면 삭제해주어야함
+            //postDto에 있는 사진들은 이미 추가됐을것이기 때문에 이에 대한 처리는 필요 없음
+            for (String url : postDto.getImageList()) {
+                if(!post.getImageList().contains(url)){
+                    s3Service.delete(url);
+                }
+            }
+
+
+        }
     }
 
 }

@@ -56,8 +56,8 @@ public class PostAdminController {
     //게시글 수정
     @PutMapping("/posts")
     public ResponseEntity updatePost(@RequestParam Long id, @RequestPart PostDto postDto,
-                                        @RequestPart(value = "file", required = false)MultipartFile file){
-        postService.updatePost(id, postDto, file);
+                                        @RequestPart(value = "file", required = false)List<MultipartFile> files){
+        postService.updatePost(id, postDto, files);
         return ResponseEntity.status(HttpStatus.CREATED).body(id);
     }
 }
