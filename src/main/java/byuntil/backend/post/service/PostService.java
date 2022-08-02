@@ -127,7 +127,7 @@ public class PostService {
         Optional<Post> postOptional = postRepository.findById(postId);
         postOptional.ifPresent(post -> {
             post.updatePost(postDto);
-            changeUrlOfAttach(post, files);
+            changeUrlOfAttach(postDto, post, files);
             changeUrlOfImageList(postDto, post);
         });
     }
@@ -160,7 +160,7 @@ public class PostService {
         return noticeResponseDtoList;
 
     }
-    public void changeUrlOfAttach(Post post, List<MultipartFile> files){
+    public void changeUrlOfAttach(PostDto postDto, Post post, List<MultipartFile> files){
         //1. post의 attach모두 제거
         Optional.ofNullable(post.getAttaches()).ifPresent(
                 list -> {
@@ -173,18 +173,18 @@ public class PostService {
         //2. files를 모두 post에 넣어주기
         Optional.ofNullable(files).ifPresent(
                 fileList -> {
-                    for (MultipartFile file: files) {
-                        fileUpload(file).ifPresent(
-                                fileStatus -> {
-                                    String url = fileStatus.fileUrl();
-                                    Attach attach = Attach.builder()
-                                            .filePath(url)
-                                            .originFileName(file.getName())
-                                            .serverFileName(createStoreFilename(file.getName()))
-                                            .build();
-                                    attach.addPost(post);
-                                });
+                    List<Attach> attachList = null;
+                    try {
+                        attachList = s3Service.uploadReturnAttachList(fileList);
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
+                    post.addAttaches(attachList);
+
+                    Board board = boardRepository.findByName(postDto.getBoardName()).orElseThrow(BoardNotFoundException::new);
+
+                    post.setBoard(board);
+                    postRepository.save(post);
                 }
         );
 
