@@ -33,11 +33,13 @@ public class PostController {
     public ResponseEntity<PostResponseDto<PostPreviewDto>> readPreviewArticle() {
         Board article = boardService.findByName("Article");
         List<Post> posts = article.getPosts();
+
         return getPostResponseDtoResponseEntity(posts, article.getName());
     }
 
     @GetMapping("/article/{postId}")
     public ResponseEntity<ArticleAndNewsResponseDto> readEachArticle(@PathVariable("postId") final Long postId) {
+        postService.updateView(postId);
         return getArticleAndNewsResponseDtoResponseEntity(postId);
     }
 
@@ -51,6 +53,7 @@ public class PostController {
 
     @GetMapping("/news/{postId}")
     public ResponseEntity<ArticleAndNewsResponseDto> readEachNews(@PathVariable("postId") final Long postId) {
+        postService.updateView(postId);
         return getArticleAndNewsResponseDtoResponseEntity(postId);
     }
 
@@ -74,6 +77,7 @@ public class PostController {
                 .createdDate(post.getCreatedDate())
                 .modifiedDate(post.getModifiedDate())
                 .build();
+        postService.updateView(postId);
         return ResponseEntity.ok().body(response);
     }
 
@@ -85,9 +89,11 @@ public class PostController {
 
     private ResponseEntity<ArticleAndNewsResponseDto> getArticleAndNewsResponseDtoResponseEntity(final Long postId) {
         Post post = postService.findById(postId);
+
         ArticleAndNewsResponseDto response = ArticleAndNewsResponseDto.builder()
                 .title(post.getTitle())
                 .content(post.getContent())
+                .viewNum(post.getViewNum())
                 .createdDate(post.getCreatedDate())
                 .modifiedDate(post.getModifiedDate()).build();
         return ResponseEntity.ok().body(response);
@@ -97,6 +103,7 @@ public class PostController {
     static class PostPreviewDto {
         private final Long id;
         private final String title;
+        private final Integer viewNum;
         private final List<String> images;
         @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private final LocalDateTime createdDate;
@@ -106,6 +113,7 @@ public class PostController {
         public PostPreviewDto(final Post post) {
             this.id = post.getId();
             this.title = post.getTitle();
+            this.viewNum = post.getViewNum();
             this.images = post.getImageList();
             this.createdDate = post.getCreatedDate();
             this.modifiedDate = post.getModifiedDate();

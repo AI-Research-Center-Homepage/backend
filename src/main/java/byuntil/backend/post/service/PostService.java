@@ -137,6 +137,12 @@ public class PostService {
     @Transactional
     public void deletePost(final Long postId) {
         final Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
+        for (Attach attach: post.getAttaches()) {
+            s3Service.delete(attach.getFileUrl());
+        }
+        for(String url : post.getImageList()){
+            s3Service.delete(url);
+        }
         postRepository.delete(post);
     }
 

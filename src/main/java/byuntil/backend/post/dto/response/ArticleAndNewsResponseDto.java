@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 public class ArticleAndNewsResponseDto {
     private final String title;
     private final String content;
+    private final Integer viewNum;
     private final LocalDateTime createdDate;
     private final LocalDateTime modifiedDate;
 }
