@@ -18,16 +18,19 @@ public class PostDto {
     private String boardName;
     private String author;
     private List<String> imageList;
+    private List<AttachResponseDto> attaches;
     //board에 대한 dto도 필요
 
     @Builder
-    public PostDto(Long id, String title, List<String> images, String content, String boardName, String author) {
+    public PostDto(Long id, String title, List<String> images, String content,
+                   String boardName, String author, List<AttachResponseDto> attaches) {
         this.id = id;
         this.title = title;
         this.imageList = images;
         this.content = content;
         this.boardName = boardName;
         this.author = author;
+        this.attaches = attaches;
     }
 
 

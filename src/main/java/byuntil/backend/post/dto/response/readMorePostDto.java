@@ -2,7 +2,6 @@ package byuntil.backend.post.dto.response;
 
 import byuntil.backend.post.domain.entity.Attach;
 import byuntil.backend.post.domain.entity.Post;
-import lombok.Builder;
 import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -10,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
-public class readAdminPostDto {
+public class readMorePostDto {
     private final String title;
     private final String content;
     private final String author;
@@ -21,7 +20,7 @@ public class readAdminPostDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private final LocalDateTime modifiedDate;
 
-    public readAdminPostDto(Post post) {
+    public readMorePostDto(Post post) {
         this.title = post.getTitle();
         this.content = post.getContent();
         this.author = post.getAuthor();

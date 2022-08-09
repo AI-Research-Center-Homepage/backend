@@ -12,12 +12,10 @@ import byuntil.backend.post.domain.repository.PostRepository;
 import byuntil.backend.post.dto.PostDto;
 import byuntil.backend.post.dto.response.AttachResponseDto;
 import byuntil.backend.post.dto.response.readAdminAllPostDto;
-import byuntil.backend.post.dto.response.readAdminPostDto;
 import byuntil.backend.post.dto.response.readPostDto;
 import byuntil.backend.s3.domain.FileStatus;
 import byuntil.backend.s3.service.S3ServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.boot.model.source.internal.hbm.AttributesHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -139,7 +137,6 @@ public class PostService {
     }
 
 
-
     @Transactional
     public void deletePost(final Long postId) {
         final Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
@@ -157,7 +154,7 @@ public class PostService {
         return postRepository.updateView(id);
     }
 
-    public readPostDto updateNotice(Long postId){
+    public readPostDto readNotice(Long postId){
         Post post = postRepository.findByBoardNameAndId( "Notice",postId);
         List<Attach> attaches = post.getAttaches();
         List<AttachResponseDto> attachResponseDtos = attaches.stream().map(AttachResponseDto::new).toList();
@@ -165,6 +162,7 @@ public class PostService {
                 .title(post.getTitle())
                 .content(post.getContent())
                 .viewNum(post.getViewNum())
+                .author(post.getAuthor())
                 .attaches(attachResponseDtos)
                 .createdDate(post.getCreatedDate())
                 .modifiedDate(post.getModifiedDate())
@@ -194,7 +192,8 @@ public class PostService {
 
         List<readAdminAllPostDto> noticeResponseDtoList = new ArrayList<>();
         for (Post post: posts) {
-            noticeResponseDtoList.add(readAdminAllPostDto.builder().title(post.getTitle()).createdDate(post.getCreatedDate())
+            noticeResponseDtoList.add(readAdminAllPostDto.builder().title(post.getTitle())
+                    .author(post.getAuthor()).createdDate(post.getCreatedDate())
                     .modifiedDate(post.getModifiedDate()).viewNum(post.getViewNum()).build());
         }
         return noticeResponseDtoList;

@@ -2,9 +2,7 @@ package byuntil.backend.post.controller.common;
 
 import byuntil.backend.post.dto.PostDto;
 import byuntil.backend.post.dto.response.readAdminAllPostDto;
-import byuntil.backend.post.dto.response.readAdminPostDto;
-import byuntil.backend.post.dto.response.readAllPostDto;
-import byuntil.backend.post.dto.response.readPostDto;
+import byuntil.backend.post.dto.response.readMorePostDto;
 import byuntil.backend.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -54,7 +52,7 @@ public class PostAdminController {
     //게시글 조회
     @GetMapping("/posts")
     public ResponseEntity readPost(@RequestParam Long id){
-        readAdminPostDto dto = postService.findById(id).toReadAdminDto();
+        readMorePostDto dto = postService.findById(id).toReadAdminDto();
         //만약에 해당하는 id로 조회된 post가 없을 경우 예외 터뜨리기 -> service부분에 예외터뜨리는 부분 있음
         return ResponseEntity.ok().body(dto);
     }

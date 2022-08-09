@@ -13,7 +13,7 @@ public class readPostDto {
     private final String title;
     private final String content;
     private final String author;
-    private final int viewNum;
+    private final Integer viewNum;
     private final List<AttachResponseDto> attaches;
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private final LocalDateTime createdDate;

@@ -1,10 +1,8 @@
 package byuntil.backend.post.controller.common;
 
-import byuntil.backend.post.domain.entity.Attach;
 import byuntil.backend.post.domain.entity.Board;
 import byuntil.backend.post.domain.entity.Post;
 import byuntil.backend.post.dto.response.ArticleAndNewsResponseDto;
-import byuntil.backend.post.dto.response.AttachResponseDto;
 import byuntil.backend.post.dto.response.readPostDto;
 import byuntil.backend.post.dto.response.PostResponseDto;
 import byuntil.backend.post.service.BoardService;
@@ -74,7 +72,7 @@ public class PostController {
 
     @GetMapping("/notice/{postId}")
     public ResponseEntity<readPostDto> readEachNotice(@PathVariable("postId") final Long postId) {
-        readPostDto response = postService.updateNotice(postId);
+        readPostDto response = postService.readNotice(postId);
         return ResponseEntity.ok().body(response);
     }
 
