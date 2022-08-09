@@ -10,6 +10,8 @@ import byuntil.backend.post.domain.entity.Post;
 import byuntil.backend.post.domain.repository.BoardRepository;
 import byuntil.backend.post.domain.repository.PostRepository;
 import byuntil.backend.post.dto.PostDto;
+import byuntil.backend.post.dto.response.AttachResponseDto;
+import byuntil.backend.post.dto.response.readAdminPostDto;
 import byuntil.backend.post.dto.response.readPostDto;
 import byuntil.backend.s3.domain.FileStatus;
 import byuntil.backend.s3.service.S3ServiceImpl;
@@ -36,8 +38,11 @@ public class PostService {
     @Transactional
     public Long save(final PostDto postDto, final List<MultipartFile> fileList) throws IOException {
         //지워야하는코드
-        Board board1 = Board.builder().name("News").build();
-        if(!boardRepository.findByName("News").isPresent()) boardRepository.save(board1);
+        Board board1 = Board.builder().name("Notice").build();
+        if(!boardRepository.findByName("Notice").isPresent()) boardRepository.save(board1);
+
+        Board board2 = Board.builder().name("News").build();
+        if(!boardRepository.findByName("News").isPresent()) boardRepository.save(board2);
 
         Post post = postDto.toEntity();
         if(fileList!=null){
@@ -151,8 +156,34 @@ public class PostService {
         return postRepository.updateView(id);
     }
 
+    public readPostDto updateNotice(Long postId){
+        Post post = postRepository.findByBoardNameAndId( "Notice",postId);
+        List<Attach> attaches = post.getAttaches();
+        List<AttachResponseDto> attachResponseDtos = attaches.stream().map(AttachResponseDto::new).toList();
+        readPostDto response = readPostDto.builder()
+                .title(post.getTitle())
+                .content(post.getContent())
+                .viewNum(post.getViewNum())
+                .attaches(attachResponseDtos)
+                .createdDate(post.getCreatedDate())
+                .modifiedDate(post.getModifiedDate())
+                .build();
+        updateView(postId);
+        return response;
+    }
+
+    public Optional<PostDto> findById(Long id, String boardName){
+        Post post =postRepository.findByBoardNameAndId(boardName, id);
+        PostDto postDto = null;
+        if(Optional.ofNullable(post).isPresent()){
+            postDto = PostDto.builder().title(post.getTitle()).author(post.getAuthor()).content(post.getContent())
+                    .boardName(boardName).images(post.getImageList()).build();
+        }
+        return Optional.ofNullable(postDto);
+    }
     public Post findById(final Long postId) {
-        return postRepository.findById(postId).orElseThrow(NoSuchElementException::new);
+
+        return  postRepository.findById(postId).orElseThrow(NoSuchElementException::new);
     }
 
     public List<readPostDto> readAllPost(String boardName){

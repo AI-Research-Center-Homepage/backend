@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
     //List<NewsAndNoticePreviewMapping> findNewById();
@@ -16,4 +17,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     @Query("SELECT p from Post p join p.board b where b.name = :name")
     List<Post> findByBoardName(String name);
+
+    @Query("SELECT p from Post p join p.board b where b.name = :name and p.id = :id")
+    Post findByBoardNameAndId(String name, Long id);
 }

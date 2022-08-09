@@ -1,6 +1,8 @@
 package byuntil.backend.post.dto;
 
+import byuntil.backend.post.domain.entity.Attach;
 import byuntil.backend.post.domain.entity.Post;
+import byuntil.backend.post.dto.response.AttachResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,6 +29,7 @@ public class PostDto {
         this.boardName = boardName;
         this.author = author;
     }
+
 
     public Post toEntity() {
         Post build = Post.builder()

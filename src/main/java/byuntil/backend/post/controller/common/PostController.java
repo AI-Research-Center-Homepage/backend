@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,33 +29,20 @@ public class PostController {
     private final BoardService boardService;
     private final PostService postService;
 
-    //article
-    @GetMapping("/article ")
+    //미리보기
+    @GetMapping("/article")
     public ResponseEntity<PostResponseDto<PostPreviewDto>> readPreviewArticle() {
         Board article = boardService.findByName("Article");
         List<Post> posts = article.getPosts();
 
         return getPostResponseDtoResponseEntity(posts, article.getName());
     }
-
-    @GetMapping("/article/{postId}")
-    public ResponseEntity<ArticleAndNewsResponseDto> readEachArticle(@PathVariable("postId") final Long postId) {
-        postService.updateView(postId);
-        return getArticleAndNewsResponseDtoResponseEntity(postId);
-    }
-
     //news
     @GetMapping("/news")
     public ResponseEntity<PostResponseDto<PostPreviewDto>> readPreviewNews() {
         Board news = boardService.findByName("News");
         List<Post> posts = news.getPosts();
         return getPostResponseDtoResponseEntity(posts, news.getName());
-    }
-
-    @GetMapping("/news/{postId}")
-    public ResponseEntity<ArticleAndNewsResponseDto> readEachNews(@PathVariable("postId") final Long postId) {
-        postService.updateView(postId);
-        return getArticleAndNewsResponseDtoResponseEntity(postId);
     }
 
     //notice
@@ -65,19 +53,28 @@ public class PostController {
         return getPostResponseDtoResponseEntity(posts, notice.getName());
     }
 
+
+    @GetMapping("/article/{postId}")
+    public ResponseEntity<ArticleAndNewsResponseDto> readEachArticle(@PathVariable("postId") final Long postId) {
+        postService.findById(postId, "Article").ifPresent(
+                post -> {postService.updateView(postId);}
+        );
+
+        return getArticleAndNewsResponseDtoResponseEntity(postId);
+    }
+
+
+    @GetMapping("/news/{postId}")
+    public ResponseEntity<ArticleAndNewsResponseDto> readEachNews(@PathVariable("postId") final Long postId) {
+        postService.findById(postId, "News").ifPresent(
+                post -> {postService.updateView(postId);}
+        );
+        return getArticleAndNewsResponseDtoResponseEntity(postId);
+    }
+
     @GetMapping("/notice/{postId}")
     public ResponseEntity<readPostDto> readEachNotice(@PathVariable("postId") final Long postId) {
-        Post post = postService.findById(postId);
-        List<Attach> attaches = post.getAttaches();
-        List<AttachResponseDto> attachResponseDtos = attaches.stream().map(AttachResponseDto::new).toList();
-        readPostDto response = readPostDto.builder()
-                .title(post.getTitle())
-                .content(post.getContent())
-                .viewNum(post.getViewNum())
-                .createdDate(post.getCreatedDate())
-                .modifiedDate(post.getModifiedDate())
-                .build();
-        postService.updateView(postId);
+        readPostDto response = postService.updateNotice(postId);
         return ResponseEntity.ok().body(response);
     }
 
@@ -104,7 +101,7 @@ public class PostController {
         private final Long id;
         private final String title;
         private final Integer viewNum;
-        private final List<String> images;
+        private String image;
         @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private final LocalDateTime createdDate;
         @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
@@ -114,7 +111,11 @@ public class PostController {
             this.id = post.getId();
             this.title = post.getTitle();
             this.viewNum = post.getViewNum();
-            this.images = post.getImageList();
+            Optional.ofNullable(post.getImageList()).ifPresent(
+                    imageList -> {
+                        if (post.getImageList().size() >= 1) this.image = post.getImageList().get(0);
+                    }
+            );
             this.createdDate = post.getCreatedDate();
             this.modifiedDate = post.getModifiedDate();
         }

@@ -1,6 +1,7 @@
 package byuntil.backend.post.domain.entity;
 
 import byuntil.backend.post.dto.PostDto;
+import byuntil.backend.post.dto.response.readAdminPostDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,7 +27,7 @@ public class Post extends BaseTimeEntity {
 
     private String author;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(
             name = "URL",
             joinColumns = @JoinColumn(name = "POST_ID")
@@ -88,5 +89,8 @@ public class Post extends BaseTimeEntity {
     public PostDto toDto(){
         return PostDto.builder().boardName(board.getName()).content(content).title(title).author(author)
                 .id(id).images(imageList).build();
+    }
+    public readAdminPostDto toReadAdminDto(){
+        return new readAdminPostDto(this);
     }
 }
