@@ -1,4 +1,4 @@
-package byuntil.backend.member.dto.request;
+package byuntil.backend.member.dto.request.save;
 
 import byuntil.backend.admin.controlller.domain.Login;
 import byuntil.backend.admin.controlller.domain.dto.LoginDto;
@@ -8,16 +8,15 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Getter
-public class UndergraduateSaveRequestDto extends MemberSaveRequestDto {
+public class UndergraduateSaveDto extends MemberSaveDto {
 
     private LocalDateTime admission;
 
     @Builder
-    public UndergraduateSaveRequestDto(Long id, String name, String major, String email, String image,
-                                       LocalDateTime admission,String location, LoginDto loginDto) {
+    public UndergraduateSaveDto(Long id, String name, String major, String email, String image,
+                                LocalDateTime admission, String location, LoginDto loginDto) {
         super(id, name, major, email, image, location, loginDto);
         this.admission = admission;
     }

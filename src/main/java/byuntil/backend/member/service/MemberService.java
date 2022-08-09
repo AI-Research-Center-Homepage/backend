@@ -6,15 +6,11 @@ import byuntil.backend.common.exception.LoginIdDuplicationException;
 import byuntil.backend.common.exception.TypeNotExistException;
 import byuntil.backend.member.domain.entity.member.*;
 import byuntil.backend.member.domain.repository.MemberRepository;
-import byuntil.backend.member.dto.request.*;
-import byuntil.backend.member.dto.response.CommitteeResponseDto;
-import byuntil.backend.member.dto.response.MemberLookupDto;
+import byuntil.backend.member.dto.request.MemberAllInfoDto;
+import byuntil.backend.member.dto.request.save.MemberSaveDto;
 import byuntil.backend.member.dto.response.MemberResponseDto;
-import byuntil.backend.member.dto.response.MembersLookupDto;
 import byuntil.backend.member.dto.response.one.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -66,11 +62,11 @@ public class MemberService implements UserDetailsService {
     }
 
     @Transactional
-    public Long saveMember(final MemberSaveRequestDto dto) {
+    public Long saveMember(final MemberSaveDto dto) {
         //dto를 entity로 만들고 admin도 entity로만든다음에 return함
         //loginDto가 null일 경우 처리를 해주어야함
         Optional<String> id = Optional.ofNullable(dto)
-                .map(MemberSaveRequestDto::getLoginDto)
+                .map(MemberSaveDto::getLoginDto)
                 .map(LoginDto::getLoginId);
 
         id.ifPresentOrElse(x -> memberRepository.findByLoginId(id.get()).ifPresentOrElse(m -> {

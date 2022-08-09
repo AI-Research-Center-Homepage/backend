@@ -1,26 +1,21 @@
 package byuntil.backend.member.controller.common;
-import static org.mockito.Mockito.when;
 
 import byuntil.backend.admin.controlller.domain.dto.LoginDto;
-import byuntil.backend.member.domain.entity.member.Member;
 import byuntil.backend.member.domain.repository.MemberRepository;
 import byuntil.backend.member.dto.request.MemberAllInfoDto;
-import byuntil.backend.member.dto.request.ProfessorSaveRequestDto;
+import byuntil.backend.member.dto.request.save.ProfessorSaveDto;
 import byuntil.backend.member.service.MemberService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import static byuntil.backend.common.factory.MockMemberFactory.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -82,7 +77,7 @@ class MemberMockControllerTest {
     @Test
     void readProfessors() throws Exception {
         int PROFESSOR_NUM = 4;
-        List<ProfessorSaveRequestDto> mockProfessorDtos = createMockProfessorDtos(createMockProfessors(PROFESSOR_NUM));
+        List<ProfessorSaveDto> mockProfessorDtos = createMockProfessorDtos(createMockProfessors(PROFESSOR_NUM));
 
         mockProfessorDtos.stream().map(professorDto -> memberService.saveMember(professorDto)).toList();
         /*List<Member> allMembers = memberService.findAllByPosition(MemberDtype.Professor.toString());

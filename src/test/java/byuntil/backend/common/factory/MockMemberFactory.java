@@ -2,7 +2,7 @@ package byuntil.backend.common.factory;
 
 import byuntil.backend.admin.controlller.domain.dto.LoginDto;
 import byuntil.backend.member.domain.entity.member.Professor;
-import byuntil.backend.member.dto.request.ProfessorSaveRequestDto;
+import byuntil.backend.member.dto.request.save.ProfessorSaveDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -50,11 +50,11 @@ public class MockMemberFactory {
         return professors;
     }
 
-    public static List<ProfessorSaveRequestDto> createMockProfessorDtos(List<Professor> professors) {
-        List<ProfessorSaveRequestDto> dtos = new ArrayList<>();
+    public static List<ProfessorSaveDto> createMockProfessorDtos(List<Professor> professors) {
+        List<ProfessorSaveDto> dtos = new ArrayList<>();
         for (int i = 0; i < professors.size(); i++) {
             LoginDto loginDto = new LoginDto("id" + i, "A" + i, false);
-            dtos.add(new ProfessorSaveRequestDto(professors.get(i), loginDto));
+            dtos.add(new ProfessorSaveDto(professors.get(i), loginDto));
         }
         return dtos;
     }

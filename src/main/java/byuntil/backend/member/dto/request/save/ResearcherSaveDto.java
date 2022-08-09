@@ -1,21 +1,18 @@
-package byuntil.backend.member.dto.request;
+package byuntil.backend.member.dto.request.save;
 
 import byuntil.backend.admin.controlller.domain.Login;
 import byuntil.backend.admin.controlller.domain.dto.LoginDto;
-import byuntil.backend.member.domain.entity.member.Committee;
 import byuntil.backend.member.domain.entity.member.Member;
+import byuntil.backend.member.domain.entity.member.Researcher;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class CommitteeSaveRequestDto extends MemberSaveRequestDto {
-    private String position;
+public class ResearcherSaveDto extends MemberSaveDto {
 
     @Builder
-    public CommitteeSaveRequestDto(Long id, String name, String major, String email,
-                                   String image, String position, String location, LoginDto loginDto) {
+    public ResearcherSaveDto(Long id, String name, String major, String email, String image, String location, LoginDto loginDto) {
         super(id, name, major, email, image, location, loginDto);
-        this.position = position;
     }
 
 
@@ -26,12 +23,11 @@ public class CommitteeSaveRequestDto extends MemberSaveRequestDto {
         if (getLoginDto()!=null){
             login = getLoginDto().toEntity();
         }
-        return Committee.builder()
+        return Researcher.builder()
                 .name(getName())
+                .major(getMajor())
                 .email(getEmail())
                 .image(getImage())
-                .major(getMajor())
-                .position(getPosition())
                 .location(getLocation())
                 .login(login)
                 .build();

@@ -1,4 +1,4 @@
-package byuntil.backend.member.dto.request;
+package byuntil.backend.member.dto.request.save;
 
 import byuntil.backend.admin.controlller.domain.Login;
 import byuntil.backend.admin.controlller.domain.dto.LoginDto;
@@ -7,19 +7,19 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class ProfessorSaveRequestDto extends MemberSaveRequestDto {
+public class ProfessorSaveDto extends MemberSaveDto {
 
     private String doctorate;
     private String number;
 
     @Builder
-    public ProfessorSaveRequestDto(Long id, String name, String major, String email, String image, String location, LoginDto loginDto, String doctorate, String number) {
+    public ProfessorSaveDto(Long id, String name, String major, String email, String image, String location, LoginDto loginDto, String doctorate, String number) {
         super(id, name, major, email, image, location, loginDto);
         this.doctorate = doctorate;
         this.number = number;
     }
 
-    public ProfessorSaveRequestDto(final Professor professor, final LoginDto loginDto) {
+    public ProfessorSaveDto(final Professor professor, final LoginDto loginDto) {
         super(professor.getId(), professor.getName(), professor.getMajor(), professor.getEmail(), professor.getImage(), professor.getLocation(), loginDto);
         this.doctorate = professor.getDoctorate();
         this.number = professor.getNumber();

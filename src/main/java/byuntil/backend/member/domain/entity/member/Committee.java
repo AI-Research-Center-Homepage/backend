@@ -1,8 +1,6 @@
 package byuntil.backend.member.domain.entity.member;
 
 import byuntil.backend.admin.controlller.domain.Login;
-import byuntil.backend.admin.controlller.domain.dto.LoginDto;
-import byuntil.backend.member.dto.request.CommitteeSaveRequestDto;
 import byuntil.backend.member.dto.response.LoginResponseDto;
 import byuntil.backend.member.dto.response.one.OneCommitteeResponseDto;
 import lombok.AccessLevel;
