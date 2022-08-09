@@ -11,6 +11,7 @@ import byuntil.backend.post.domain.repository.BoardRepository;
 import byuntil.backend.post.domain.repository.PostRepository;
 import byuntil.backend.post.dto.PostDto;
 import byuntil.backend.post.dto.response.AttachResponseDto;
+import byuntil.backend.post.dto.response.readAdminAllPostDto;
 import byuntil.backend.post.dto.response.readAdminPostDto;
 import byuntil.backend.post.dto.response.readPostDto;
 import byuntil.backend.s3.domain.FileStatus;
@@ -183,16 +184,18 @@ public class PostService {
     }
     public Post findById(final Long postId) {
 
-        return  postRepository.findById(postId).orElseThrow(NoSuchElementException::new);
+        return  postRepository.findById(postId).
+                orElseThrow(NoSuchElementException::new);
     }
 
-    public List<readPostDto> readAllPost(String boardName){
+
+    public List<readAdminAllPostDto> readAllPost(String boardName){
         List<Post> posts = postRepository.findByBoardName(boardName);
 
-        List<readPostDto> noticeResponseDtoList = new ArrayList<>();
+        List<readAdminAllPostDto> noticeResponseDtoList = new ArrayList<>();
         for (Post post: posts) {
-            noticeResponseDtoList.add(readPostDto.builder().title(post.getTitle()).createdDate(post.getCreatedDate())
-                    .modifiedDate(post.getModifiedDate()).content(post.getContent()).viewNum(post.getViewNum()).build());
+            noticeResponseDtoList.add(readAdminAllPostDto.builder().title(post.getTitle()).createdDate(post.getCreatedDate())
+                    .modifiedDate(post.getModifiedDate()).viewNum(post.getViewNum()).build());
         }
         return noticeResponseDtoList;
 

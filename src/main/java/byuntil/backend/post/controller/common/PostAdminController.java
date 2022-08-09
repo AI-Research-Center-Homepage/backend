@@ -1,6 +1,7 @@
 package byuntil.backend.post.controller.common;
 
 import byuntil.backend.post.dto.PostDto;
+import byuntil.backend.post.dto.response.readAdminAllPostDto;
 import byuntil.backend.post.dto.response.readAdminPostDto;
 import byuntil.backend.post.dto.response.readAllPostDto;
 import byuntil.backend.post.dto.response.readPostDto;
@@ -23,15 +24,18 @@ public class PostAdminController {
 
     @GetMapping("/posts/notice")
     public ResponseEntity readNotice(){
-        return ResponseEntity.ok().body(readAllPostDto.builder().list(postService.readAllPost("Notice")).build());
+        List<readAdminAllPostDto> list = postService.readAllPost("Notice");
+        return ResponseEntity.ok().body(list);
     }
     @GetMapping("/posts/news")
     public ResponseEntity readNews(){
-        return ResponseEntity.ok().body(readAllPostDto.builder().list(postService.readAllPost("News")).build());
+        List<readAdminAllPostDto> list = postService.readAllPost("News");
+        return ResponseEntity.ok().body(list);
     }
     @GetMapping("/posts/source")
     public ResponseEntity readSource(){
-        return ResponseEntity.ok().body(readAllPostDto.builder().list(postService.readAllPost("Source")).build());
+        List<readAdminAllPostDto> list = postService.readAllPost("Source");
+        return ResponseEntity.ok().body(list);
     }
 
     //게시글등록
