@@ -1,6 +1,6 @@
 package byuntil.backend.common.member.service;
 
-import byuntil.backend.admin.controlller.domain.dto.LoginDto;
+import byuntil.backend.admin.controller.domain.dto.LoginDto;
 import byuntil.backend.member.domain.entity.member.Professor;
 import byuntil.backend.member.dto.request.save.ProfessorSaveDto;
 import byuntil.backend.member.service.MemberService;

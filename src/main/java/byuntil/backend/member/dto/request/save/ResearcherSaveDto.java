@@ -1,7 +1,7 @@
 package byuntil.backend.member.dto.request.save;
 
-import byuntil.backend.admin.controlller.domain.Login;
-import byuntil.backend.admin.controlller.domain.dto.LoginDto;
+import byuntil.backend.admin.controller.domain.Login;
+import byuntil.backend.admin.controller.domain.dto.LoginDto;
 import byuntil.backend.member.domain.entity.member.Member;
 import byuntil.backend.member.domain.entity.member.Researcher;
 import lombok.Builder;

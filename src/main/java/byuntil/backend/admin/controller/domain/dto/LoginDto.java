@@ -1,7 +1,6 @@
-package byuntil.backend.admin.controlller.domain.dto;
+package byuntil.backend.admin.controller.domain.dto;
 
-import byuntil.backend.admin.controlller.domain.Login;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import byuntil.backend.admin.controller.domain.Login;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

@@ -1,6 +1,6 @@
 package byuntil.backend.member.controller.common;
 
-import byuntil.backend.admin.controlller.domain.dto.LoginDto;
+import byuntil.backend.admin.controller.domain.dto.LoginDto;
 import byuntil.backend.member.domain.repository.MemberRepository;
 import byuntil.backend.member.dto.request.MemberAllInfoDto;
 import byuntil.backend.member.dto.request.save.ProfessorSaveDto;

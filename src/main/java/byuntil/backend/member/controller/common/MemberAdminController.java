@@ -1,6 +1,6 @@
 package byuntil.backend.member.controller.common;
 
-import byuntil.backend.admin.controlller.domain.dto.LoginDto;
+import byuntil.backend.admin.controller.domain.dto.LoginDto;
 import byuntil.backend.common.exception.TypeNotExistException;
 import byuntil.backend.member.domain.entity.member.Member;
 import byuntil.backend.member.dto.request.*;
@@ -88,55 +88,96 @@ public class MemberAdminController {
 
     @PostMapping("/members/committee/new")
     public ResponseEntity join(@RequestBody CommitteeRequestDto memberDto) {
-        LoginDto loginDto = createAuth(memberDto.getLoginDto());
-
-        CommitteeSaveDto dto = CommitteeSaveDto.builder().loginDto(loginDto).email(memberDto.getEmail())
-                .location(memberDto.getLocation()).image(memberDto.getImage()).position(memberDto.getPosition())
-                .major(memberDto.getMajor()).build();
-        memberService.saveMember(dto);
+        if(memberDto.getLoginDto()!=null && !memberDto.getLoginDto().getLoginId().equals("")){
+            LoginDto loginDto = createAuth(memberDto.getLoginDto());
+            CommitteeSaveDto dto = CommitteeSaveDto.builder().loginDto(loginDto).email(memberDto.getEmail())
+                    .location(memberDto.getLocation()).image(memberDto.getImage()).position(memberDto.getPosition())
+                    .major(memberDto.getMajor()).build();
+            memberService.saveMember(dto);
+        }
+        else{
+            CommitteeSaveDto dto = CommitteeSaveDto.builder().email(memberDto.getEmail())
+                    .location(memberDto.getLocation()).image(memberDto.getImage()).position(memberDto.getPosition())
+                    .major(memberDto.getMajor()).build();
+            memberService.saveMember(dto);
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body("");
     }
     @PostMapping("/members/graduate/new")
     public ResponseEntity join(@RequestBody GraduateRequestDto memberDto) {
-        LoginDto loginDto = createAuth(memberDto.getLoginDto());
+        if(memberDto.getLoginDto()!=null && !memberDto.getLoginDto().getLoginId().equals("")){
+            LoginDto loginDto = createAuth(memberDto.getLoginDto());
+            GraduateSaveDto dto = GraduateSaveDto.builder().loginDto(loginDto).email(memberDto.getEmail())
+                    .admission(memberDto.getAdmission()).major(memberDto.getMajor()).location(memberDto.getLocation())
+                    .name(memberDto.getName()).image(memberDto.getImage()).build();
+            memberService.saveMember(dto);
+        }
+        else{
+            GraduateSaveDto dto = GraduateSaveDto.builder().email(memberDto.getEmail())
+                    .admission(memberDto.getAdmission()).major(memberDto.getMajor()).location(memberDto.getLocation())
+                    .name(memberDto.getName()).image(memberDto.getImage()).build();
+            memberService.saveMember(dto);
+        }
 
-        GraduateSaveDto dto = GraduateSaveDto.builder().loginDto(loginDto).email(memberDto.getEmail())
-                .admission(memberDto.getAdmission()).major(memberDto.getMajor()).location(memberDto.getLocation())
-                .name(memberDto.getName()).image(memberDto.getImage()).build();
-        memberService.saveMember(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body("");
     }
     @PostMapping("/members/professor/new")
     public ResponseEntity join(@RequestBody ProfessorRequestDto memberDto) {
-        LoginDto loginDto = createAuth(memberDto.getLoginDto());
+        if(memberDto.getLoginDto()!=null && !memberDto.getLoginDto().getLoginId().equals("")){
+            LoginDto loginDto = createAuth(memberDto.getLoginDto());
 
-        ProfessorSaveDto dto = ProfessorSaveDto.builder().loginDto(loginDto).email(memberDto.getEmail())
-                .name(memberDto.getName())
-                .image(memberDto.getImage()).location(memberDto.getLocation()).major(memberDto.getMajor()).doctorate(memberDto.getDoctorate())
-                .number(memberDto.getNumber()).name(memberDto.getName()).build();
-        memberService.saveMember(dto);
+            ProfessorSaveDto dto = ProfessorSaveDto.builder().loginDto(loginDto).email(memberDto.getEmail())
+                    .name(memberDto.getName())
+                    .image(memberDto.getImage()).location(memberDto.getLocation()).major(memberDto.getMajor()).doctorate(memberDto.getDoctorate())
+                    .number(memberDto.getNumber()).name(memberDto.getName()).build();
+            memberService.saveMember(dto);
+        }
+        else{
+            ProfessorSaveDto dto = ProfessorSaveDto.builder().email(memberDto.getEmail())
+                    .name(memberDto.getName())
+                    .image(memberDto.getImage()).location(memberDto.getLocation()).major(memberDto.getMajor()).doctorate(memberDto.getDoctorate())
+                    .number(memberDto.getNumber()).name(memberDto.getName()).build();
+            memberService.saveMember(dto);
+        }
+
         return ResponseEntity.status(HttpStatus.CREATED).body("");
     }
     @PostMapping("/members/undergraduate/new")
     public ResponseEntity join(@RequestBody UndergraduateRequestDto memberDto) {
-        LoginDto loginDto = createAuth(memberDto.getLoginDto());
+        if(memberDto.getLoginDto()!=null && !memberDto.getLoginDto().getLoginId().equals("")){
+            LoginDto loginDto = createAuth(memberDto.getLoginDto());
 
-        UndergraduateSaveDto dto = UndergraduateSaveDto.builder().loginDto(loginDto).admission(memberDto.getAdmission())
-                .image(memberDto.getImage()).location(memberDto.getLocation()).image(memberDto.getImage()).email(memberDto.getEmail())
-                .major(memberDto.getMajor()).name(memberDto.getName()).build();
-        memberService.saveMember(dto);
+            UndergraduateSaveDto dto = UndergraduateSaveDto.builder().loginDto(loginDto).admission(memberDto.getAdmission())
+                    .image(memberDto.getImage()).location(memberDto.getLocation()).image(memberDto.getImage()).email(memberDto.getEmail())
+                    .major(memberDto.getMajor()).name(memberDto.getName()).build();
+            memberService.saveMember(dto);
+        }
+        else {
+            UndergraduateSaveDto dto = UndergraduateSaveDto.builder().admission(memberDto.getAdmission())
+                    .image(memberDto.getImage()).location(memberDto.getLocation()).image(memberDto.getImage()).email(memberDto.getEmail())
+                    .major(memberDto.getMajor()).name(memberDto.getName()).build();
+            memberService.saveMember(dto);
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body("");
     }
 
 
     @PostMapping("/members/researcher/new")
     public ResponseEntity join(@RequestBody ResearcherRequestDto memberDto) {
-        LoginDto loginDto = createAuth(memberDto.getLoginDto());
+        if(memberDto.getLoginDto()!=null && !memberDto.getLoginDto().getLoginId().equals("")){
+            LoginDto loginDto = createAuth(memberDto.getLoginDto());
 
-        ResearcherSaveDto dto = ResearcherSaveDto.builder().loginDto(loginDto).location(memberDto.getLocation())
-                .email(memberDto.getEmail()).major(memberDto.getMajor()).image(memberDto.getImage()).name(memberDto.getName())
-                .image(memberDto.getImage()).build();
-        memberService.saveMember(dto);
+            ResearcherSaveDto dto = ResearcherSaveDto.builder().loginDto(loginDto).location(memberDto.getLocation())
+                    .email(memberDto.getEmail()).major(memberDto.getMajor()).image(memberDto.getImage()).name(memberDto.getName())
+                    .image(memberDto.getImage()).build();
+            memberService.saveMember(dto);
+        }
+        else {
+            ResearcherSaveDto dto = ResearcherSaveDto.builder().location(memberDto.getLocation())
+                    .email(memberDto.getEmail()).major(memberDto.getMajor()).image(memberDto.getImage()).name(memberDto.getName())
+                    .image(memberDto.getImage()).build();
+            memberService.saveMember(dto);
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body("");
 
     }

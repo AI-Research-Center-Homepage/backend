@@ -1,6 +1,6 @@
 package byuntil.backend.member.service;
 
-import byuntil.backend.admin.controlller.domain.dto.LoginDto;
+import byuntil.backend.admin.controller.domain.dto.LoginDto;
 import byuntil.backend.common.exception.IdNotExistException;
 import byuntil.backend.common.exception.LoginIdDuplicationException;
 import byuntil.backend.common.exception.TypeNotExistException;
@@ -207,18 +207,6 @@ public class MemberService implements UserDetailsService {
 
     }
 
-    /*public MembersLookupDto findAllByPosition(final String position) {
-        List<Member> members = memberRepository.findAllByPosition(position);
-
-        MembersLookupDto dto;
-        List<MemberLookupDto> memberLookupDtoList = new ArrayList<>();
-        for (Member member: members) {
-            memberLookupDtoList.add(MemberLookupDto.builder().name(member.getName()).email(member.getEmail()).major(member.getMajor()).id(member.getId()).build());
-
-        }
-        dto = MembersLookupDto.builder().members(memberLookupDtoList).build();
-        return dto;
-    }*/
     public String firstWordToUpper(String str){
         char[] arr = str.toCharArray();
         arr[0] = Character.toUpperCase(arr[0]);

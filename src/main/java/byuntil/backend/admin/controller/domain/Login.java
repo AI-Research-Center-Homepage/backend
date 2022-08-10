@@ -1,4 +1,4 @@
-package byuntil.backend.admin.controlller.domain;
+package byuntil.backend.admin.controller.domain;
 
 import lombok.*;
 

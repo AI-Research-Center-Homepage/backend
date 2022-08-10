@@ -1,6 +1,6 @@
 package byuntil.backend.member.dto.request;
 
-import byuntil.backend.admin.controlller.domain.dto.LoginDto;
+import byuntil.backend.admin.controller.domain.dto.LoginDto;
 import lombok.Builder;
 import lombok.Getter;
 

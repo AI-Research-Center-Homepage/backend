@@ -1,6 +1,6 @@
 package byuntil.backend.member.domain.entity.member;
 
-import byuntil.backend.admin.controlller.domain.Login;
+import byuntil.backend.admin.controller.domain.Login;
 import byuntil.backend.member.dto.request.MemberAllInfoDto;
 import byuntil.backend.member_thesis.entity.Member_Thesis;
 import lombok.AllArgsConstructor;

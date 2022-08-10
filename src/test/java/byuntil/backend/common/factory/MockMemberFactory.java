@@ -1,6 +1,6 @@
 package byuntil.backend.common.factory;
 
-import byuntil.backend.admin.controlller.domain.dto.LoginDto;
+import byuntil.backend.admin.controller.domain.dto.LoginDto;
 import byuntil.backend.member.domain.entity.member.Professor;
 import byuntil.backend.member.dto.request.save.ProfessorSaveDto;
 import lombok.Builder;
