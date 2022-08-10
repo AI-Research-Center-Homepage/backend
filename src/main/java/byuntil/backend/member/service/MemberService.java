@@ -159,9 +159,9 @@ public class MemberService implements UserDetailsService {
     }
 
     public List<?> findAllByPosition(final String position) {
-        List<Member> members = memberRepository.findAllByPosition(position);
+        List<Member> members = memberRepository.findAllByDtype(firstWordToUpper(position));
 
-        if(position.equals("Committee")){
+        if(position.equals("committee")){
             List<OneCommitteeResponseDto> dtoList = new ArrayList<>();
             for (Member member: members) {
                 Committee committee = (Committee) member;
@@ -169,7 +169,7 @@ public class MemberService implements UserDetailsService {
             }
             return dtoList;
         }
-        else if(position.equals("Graduate")){
+        else if(position.equals("graduate")){
             List<OneGraduateResponseDto> dtoList = new ArrayList<>();
             for (Member member: members) {
                 Graduate graduate = (Graduate) member;
@@ -177,7 +177,7 @@ public class MemberService implements UserDetailsService {
             }
             return dtoList;
         }
-        else if(position.equals("Professor")){
+        else if(position.equals("professor")){
             List<OneProfessorResponseDto> dtoList = new ArrayList<>();
             for (Member member: members) {
                 Professor professor = (Professor) member;
@@ -185,7 +185,7 @@ public class MemberService implements UserDetailsService {
             }
             return dtoList;
         }
-        else if(position.equals("Researcher")){
+        else if(position.equals("researcher")){
             List<OneResearcherResponseDto> dtoList = new ArrayList<>();
             for (Member member: members) {
                 Researcher researcher = (Researcher) member;
@@ -193,7 +193,7 @@ public class MemberService implements UserDetailsService {
             }
             return dtoList;
         }
-        else if(position.equals("Undergraduate")){
+        else if(position.equals("undergraduate")){
             List<OneUndergraduateResponseDto> dtoList = new ArrayList<>();
             for (Member member: members) {
                 Undergraduate undergraduate = (Undergraduate) member;
@@ -219,4 +219,13 @@ public class MemberService implements UserDetailsService {
         dto = MembersLookupDto.builder().members(memberLookupDtoList).build();
         return dto;
     }*/
+    public String firstWordToUpper(String str){
+        char[] arr = str.toCharArray();
+        arr[0] = Character.toUpperCase(arr[0]);
+        String newStr = "";
+        for (char c: arr) {
+            newStr += c;
+        }
+        return newStr;
+    }
 }

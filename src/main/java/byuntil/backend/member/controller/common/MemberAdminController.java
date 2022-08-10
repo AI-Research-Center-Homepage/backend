@@ -35,13 +35,55 @@ public class MemberAdminController {
 
     @GetMapping("/members/{position}")
     public ResponseEntity readMembersByPosition(@PathVariable String position){
-        List<MemberSaveDto> members = (List<MemberSaveDto>) memberService.findAllByPosition(position);
-        List<MemberLookupDto> memberLookupDtoList = new ArrayList<>();
-        for (MemberSaveDto dto: members) {
-            memberLookupDtoList.add(MemberLookupDto.builder().name(dto.getName()).id(dto.getId()).email(dto.getEmail()).major(dto.getMajor()).build());
+        if(position.equals("committee")){
+            List<OneCommitteeResponseDto> members = (List<OneCommitteeResponseDto>)memberService.findAllByPosition(position);
+            List<MemberLookupDto> memberLookupDtoList = new ArrayList<>();
+            for (OneCommitteeResponseDto dto: members) {
+                memberLookupDtoList.add(MemberLookupDto.builder().name(dto.getName()).id(dto.getId()).email(dto.getEmail()).major(dto.getMajor()).build());
+            }
+            MembersLookupDto membersLookupDto = MembersLookupDto.builder().members(memberLookupDtoList).build();
+            return ResponseEntity.ok().body(membersLookupDto);
         }
-        MembersLookupDto membersLookupDto = MembersLookupDto.builder().members(memberLookupDtoList).build();
-        return ResponseEntity.ok().body(membersLookupDto);
+        else if(position.equals("graduate")){
+            List<OneGraduateResponseDto> members = (List<OneGraduateResponseDto>)memberService.findAllByPosition(position);
+            List<MemberLookupDto> memberLookupDtoList = new ArrayList<>();
+            for (OneGraduateResponseDto dto: members) {
+                memberLookupDtoList.add(MemberLookupDto.builder().name(dto.getName()).id(dto.getId()).email(dto.getEmail()).major(dto.getMajor()).build());
+            }
+            MembersLookupDto membersLookupDto = MembersLookupDto.builder().members(memberLookupDtoList).build();
+            return ResponseEntity.ok().body(membersLookupDto);
+        }
+        else if(position.equals("professor")){
+            List<OneProfessorResponseDto> members = (List<OneProfessorResponseDto>)memberService.findAllByPosition(position);
+            List<MemberLookupDto> memberLookupDtoList = new ArrayList<>();
+            for (OneProfessorResponseDto dto: members) {
+                memberLookupDtoList.add(MemberLookupDto.builder().name(dto.getName()).id(dto.getId()).email(dto.getEmail()).major(dto.getMajor()).build());
+            }
+            MembersLookupDto membersLookupDto = MembersLookupDto.builder().members(memberLookupDtoList).build();
+            return ResponseEntity.ok().body(membersLookupDto);
+        }
+        else if(position.equals("researcher")){
+            List<OneResearcherResponseDto> members = (List<OneResearcherResponseDto>)memberService.findAllByPosition(position);
+            List<MemberLookupDto> memberLookupDtoList = new ArrayList<>();
+            for (OneResearcherResponseDto dto: members) {
+                memberLookupDtoList.add(MemberLookupDto.builder().name(dto.getName()).id(dto.getId()).email(dto.getEmail()).major(dto.getMajor()).build());
+            }
+            MembersLookupDto membersLookupDto = MembersLookupDto.builder().members(memberLookupDtoList).build();
+            return ResponseEntity.ok().body(membersLookupDto);
+        }
+        else if(position.equals("undergraduate")){
+            List<OneUndergraduateResponseDto> members = (List<OneUndergraduateResponseDto>)memberService.findAllByPosition(position);
+            List<MemberLookupDto> memberLookupDtoList = new ArrayList<>();
+            for (OneUndergraduateResponseDto dto: members) {
+                memberLookupDtoList.add(MemberLookupDto.builder().name(dto.getName()).id(dto.getId()).email(dto.getEmail()).major(dto.getMajor()).build());
+            }
+            MembersLookupDto membersLookupDto = MembersLookupDto.builder().members(memberLookupDtoList).build();
+            return ResponseEntity.ok().body(membersLookupDto);
+        }
+        else{
+            throw new TypeNotExistException();
+        }
+
     }
 
     @PostMapping("/members/committee/new")
@@ -54,7 +96,7 @@ public class MemberAdminController {
         memberService.saveMember(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body("");
     }
-    @PostMapping("/members/gradudate/new")
+    @PostMapping("/members/graduate/new")
     public ResponseEntity join(@RequestBody GraduateRequestDto memberDto) {
         LoginDto loginDto = createAuth(memberDto.getLoginDto());
 
