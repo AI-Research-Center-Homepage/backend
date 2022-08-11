@@ -2,6 +2,7 @@ package byuntil.backend.research.controller.common;
 
 import byuntil.backend.research.domain.entity.Demo;
 import byuntil.backend.research.dto.request.DemoDto;
+import byuntil.backend.research.dto.response.AllDemoResponseDto;
 import byuntil.backend.research.service.DemoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,13 +34,12 @@ public class DemoAdminController {
     }
     @GetMapping
     public ResponseEntity readAll(){
-        List<Demo> demoList = demoService.findAll();
+        List<AllDemoResponseDto> demoList = demoService.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(demoList);
     }
     @GetMapping("/{id}")
-    public ResponseEntity readById(@RequestParam Long id){
-        Demo demo = demoService.findById(id).get();
-        return ResponseEntity.status(HttpStatus.OK).body(demo);
+    public ResponseEntity readById(@PathVariable Long id){
+        return ResponseEntity.status(HttpStatus.OK).body(demoService.findById(id));
     }
 
 }

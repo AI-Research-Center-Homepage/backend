@@ -1,14 +1,17 @@
 package byuntil.backend.research.service;
 
+import byuntil.backend.common.exception.IdNotExistException;
 import byuntil.backend.research.domain.entity.Demo;
 import byuntil.backend.research.domain.repository.DemoRepository;
 import byuntil.backend.research.dto.request.DemoDto;
+import byuntil.backend.research.dto.response.AllDemoResponseDto;
+import byuntil.backend.research.dto.response.IndividualDemoDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,12 +25,21 @@ public class DemoService {
         return demoRepository.save(demo).getId();
     }
 
-    public Optional<Demo> findById(final Long id) {
-        return demoRepository.findById(id);
+    public IndividualDemoDto findById(final Long id) {
+        Demo demo = demoRepository.findById(id).orElseThrow(()-> {
+            throw new IdNotExistException();
+        });
+        return IndividualDemoDto.builder().content(demo.getContent()).name(demo.getTitle()).participants(demo.getParticipants())
+                .url(demo.getUrl()).description(demo.getDescription()).build();
     }
 
-    public List<Demo> findAll() {
-        return demoRepository.findAll();
+    public List<AllDemoResponseDto> findAll() {
+        List<AllDemoResponseDto> demos = new ArrayList<>();
+        for (Demo demo: demoRepository.findAll()) {
+            demos.add(AllDemoResponseDto.builder().title(demo.getTitle()).description(demo.getTitle()).url(demo.getUrl())
+                    .id(demo.getId()).build());
+        }
+        return demos;
     }
 
     @Transactional

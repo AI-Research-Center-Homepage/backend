@@ -20,12 +20,7 @@ public class DemoController {
 
     @GetMapping("/demo")
     public ResponseEntity readDemos() {
-        List<Demo> demos = demoService.findAll();
-        List<DemoDto> demoDtos = demos.stream()
-                .map(DemoDto::new)
-                .toList();
-        DemoResponseDto<DemoDto> response = DemoResponseDto.<DemoDto>builder().demos(demoDtos).build();
-        return ResponseEntity.ok().body(response);
+        return ResponseEntity.ok().body(demoService.findAll());
     }
 
     @Getter
