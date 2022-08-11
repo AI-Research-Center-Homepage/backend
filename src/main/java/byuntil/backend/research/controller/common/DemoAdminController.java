@@ -34,7 +34,7 @@ public class DemoAdminController {
     }
     @GetMapping
     public ResponseEntity readAll(){
-        List<AllDemoResponseDto> demoList = demoService.findAll();
+        List<AllDemoResponseDto> demoList = demoService.findAllWithAdmin();
         return ResponseEntity.status(HttpStatus.OK).body(demoList);
     }
     @GetMapping("/{id}")

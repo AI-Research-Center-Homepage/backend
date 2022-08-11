@@ -4,7 +4,9 @@ import byuntil.backend.common.exception.IdNotExistException;
 import byuntil.backend.research.domain.entity.Demo;
 import byuntil.backend.research.domain.repository.DemoRepository;
 import byuntil.backend.research.dto.request.DemoDto;
+import byuntil.backend.research.dto.response.AllDemoGeneralDto;
 import byuntil.backend.research.dto.response.AllDemoResponseDto;
+import byuntil.backend.research.dto.response.DemoResponseDto;
 import byuntil.backend.research.dto.response.IndividualDemoDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,7 +35,17 @@ public class DemoService {
                 .url(demo.getUrl()).description(demo.getDescription()).build();
     }
 
-    public List<AllDemoResponseDto> findAll() {
+    public DemoResponseDto findAll() {
+        List<AllDemoGeneralDto> list = new ArrayList<>();
+        for (Demo demo: demoRepository.findAll()) {
+            list.add(AllDemoGeneralDto.builder().title(demo.getTitle()).content(demo.getContent()).description(demo.getDescription())
+                    .participants(demo.getParticipants()).id(demo.getId()).url(demo.getUrl()).build());
+        }
+        return DemoResponseDto.builder().demos(list).build();
+    }
+
+    //admin
+    public List<AllDemoResponseDto> findAllWithAdmin() {
         List<AllDemoResponseDto> demos = new ArrayList<>();
         for (Demo demo: demoRepository.findAll()) {
             demos.add(AllDemoResponseDto.builder().title(demo.getTitle()).description(demo.getTitle()).url(demo.getUrl())
