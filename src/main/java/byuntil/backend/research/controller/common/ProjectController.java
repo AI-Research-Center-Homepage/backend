@@ -1,10 +1,8 @@
 package byuntil.backend.research.controller.common;
 
-import byuntil.backend.research.domain.entity.Field;
-import byuntil.backend.research.domain.entity.Project;
 import byuntil.backend.research.dto.request.FieldDto;
 import byuntil.backend.research.dto.request.ProjectDto;
-import byuntil.backend.research.dto.response.ProjectResponseDto;
+import byuntil.backend.research.dto.response.project.ProjectResponseDto;
 import byuntil.backend.research.service.FieldService;
 import byuntil.backend.research.service.ProjectService;
 import lombok.Builder;

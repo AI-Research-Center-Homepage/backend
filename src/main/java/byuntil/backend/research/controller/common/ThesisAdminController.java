@@ -1,17 +1,13 @@
 package byuntil.backend.research.controller.common;
 
-import byuntil.backend.member.domain.entity.member.Member;
 import byuntil.backend.member.dto.response.MemberResponseDto;
 import byuntil.backend.member.service.MemberService;
 import byuntil.backend.research.dto.request.FieldDto;
-import byuntil.backend.research.dto.request.ProjectDto;
 import byuntil.backend.research.dto.request.ThesisDto;
-import byuntil.backend.research.dto.response.AllThesisResponseDto;
-import byuntil.backend.research.dto.response.MemberFieldDto;
+import byuntil.backend.research.dto.response.thesis.AllThesisResponseDto;
+import byuntil.backend.research.dto.response.field.MemberFieldDto;
 import byuntil.backend.research.service.FieldService;
 import byuntil.backend.research.service.ThesisService;
-import lombok.Builder;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +26,7 @@ public class ThesisAdminController {
     @GetMapping("/new")
     public ResponseEntity readMemberField(){
         List<MemberResponseDto> members = memberService.findAllMember();
-        List<byuntil.backend.research.dto.response.FieldDto> fieldDtoList = fieldService.findAllWithName();
+        List<byuntil.backend.research.dto.response.field.FieldDto> fieldDtoList = fieldService.findAllWithName();
         MemberFieldDto memberFieldDto = MemberFieldDto.builder().memberDtoList(members).fieldDtoList(fieldDtoList).build();
 
         return ResponseEntity.status(HttpStatus.OK).body(memberFieldDto);
@@ -58,7 +54,7 @@ public class ThesisAdminController {
     }
     @GetMapping
     public List<AllThesisResponseDto> readAll(){
-        return thesisService.findAll();
+        return thesisService.findAllAdmin();
     }
     @GetMapping("/{id}")
     public ResponseEntity readById(@PathVariable("id") Long id){

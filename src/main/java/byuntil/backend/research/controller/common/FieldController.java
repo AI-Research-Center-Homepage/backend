@@ -1,10 +1,8 @@
 package byuntil.backend.research.controller.common;
 
-import byuntil.backend.research.domain.entity.Field;
 import byuntil.backend.research.dto.request.FieldDto;
-import byuntil.backend.research.dto.response.FieldResponseDto;
+import byuntil.backend.research.dto.response.field.FieldResponseDto;
 import byuntil.backend.research.service.FieldService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
