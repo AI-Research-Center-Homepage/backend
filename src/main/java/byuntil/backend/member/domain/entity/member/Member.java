@@ -74,9 +74,18 @@ public abstract class Member {
         this.major = dto.getMajor();
         this.image = dto.getImage();
         this.location = dto.getLocation();
-        this.login.setLoginId(dto.getLoginDto().getLoginId());
-        this.login.setLoginPw(dto.getLoginDto().getLoginPw());
-        this.login.setDeleted(dto.getLoginDto().getDeleted());
+        if(dto.getLoginDto()!=null){
+            if(this.getLogin()==null){
+                this.login = new Login(dto.getLoginDto().getLoginId(), dto.getLoginDto().getLoginPw(), dto.getLoginDto().getDeleted());
+            }
+            else{
+                this.login.setLoginId(dto.getLoginDto().getLoginId());
+                this.login.setLoginPw(dto.getLoginDto().getLoginPw());
+                this.login.setDeleted(dto.getLoginDto().getDeleted());
+            }
+
+        }
+
     }
 
     public void addMemberThesis(final Member_Thesis memberThesis) {

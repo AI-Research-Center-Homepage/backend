@@ -41,23 +41,29 @@ public class MemberService implements UserDetailsService {
             Member member = (Member) memberRepository.findById(id).get();
             //여기서 member가 login을 가지고 있는지도 확인해야함
             if(!Optional.ofNullable(member.getLogin()).isPresent()){
-                throw new IdNotExistException("존재하지 않는 id입니다");
+                MemberAllInfoDto dto = MemberAllInfoDto.builder()
+                        .admission(LocalDateTime.now()).email("del").major("del").doctorate("del")
+                        .position("del").number("del").name("del").image("del").location("del").research("del").location("del").build();
+                updateMember(member.getId(), dto);
             }
-            member.getLogin().setDeleted(true);
+            else{
+                member.getLogin().setDeleted(true);
 
-            byte[] array = new byte[7]; // length is bounded by 7
-            new Random().nextBytes(array);
-            String generatedString = new String(array, StandardCharsets.UTF_8);
+                byte[] array = new byte[7]; // length is bounded by 7
+                new Random().nextBytes(array);
+                String generatedString = new String(array, StandardCharsets.UTF_8);
 
-            member.getLogin().setLoginId(generatedString);
+                member.getLogin().setLoginId(generatedString);
 
-            LoginDto loginDto = new LoginDto(member.getLogin().getLoginId(),
-                    member.getLogin().getLoginPw(), true);
+                LoginDto loginDto = new LoginDto(member.getLogin().getLoginId(),
+                        member.getLogin().getLoginPw(), true);
 
-            MemberAllInfoDto dto = MemberAllInfoDto.builder().loginDto(loginDto)
-                    .admission(LocalDateTime.now()).email("del").major("del").doctorate("del")
-                    .position("del").number("del").name("del").image("del").location("del").research("del").location("del").build();
-            updateMember(member.getId(), dto);
+                MemberAllInfoDto dto = MemberAllInfoDto.builder().loginDto(loginDto)
+                        .admission(LocalDateTime.now()).email("del").major("del").doctorate("del")
+                        .position("del").number("del").name("del").image("del").location("del").research("del").location("del").build();
+                updateMember(member.getId(), dto);
+            }
+
         }
     }
 
@@ -120,9 +126,10 @@ public class MemberService implements UserDetailsService {
         Member member = (Member) memberRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         member.update(requestDto);
         //그리고 암호화를 해주어야한다
-        String encodedPw = passwordEncoder.encode(member.getLogin().getLoginPw());
-        member.getLogin().setLoginPw(encodedPw);
-
+        if(requestDto.getLoginDto()!=null){
+            String encodedPw = passwordEncoder.encode(member.getLogin().getLoginPw());
+            member.getLogin().setLoginPw(encodedPw);
+        }
         if (member instanceof Professor professor) {
             professor.update(requestDto.getDoctorate(), requestDto.getNumber());
         } else if (member instanceof Committee committee) {
@@ -141,6 +148,7 @@ public class MemberService implements UserDetailsService {
         Member member = (Member) memberRepository.findById(id).get();
         memberRepository.delete(member);
     }
+
 
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
