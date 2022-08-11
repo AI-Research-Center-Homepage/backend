@@ -5,6 +5,7 @@ import byuntil.backend.member.dto.response.*;
 import byuntil.backend.member.service.MemberService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,46 +21,36 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("/professor")
-    public ResponseEntity<?> readProfessors() {
-        List<Member> members = memberService.findAllByPosition(MemberDtype.Professor.toString());
-        List<Professor> professors = members.stream().map(member -> (Professor) member).toList();
-        List<ProfessorDto> professorDtos = professors.stream().map(ProfessorDto::new).toList();
+    public ResponseEntity readProfessors() {
+        List<ProfessorDto> professorDtos = (List<ProfessorDto>) memberService.findAllByPosition(MemberDtype.Professor.toString());
         ProfessorResponseDto<ProfessorDto> response = ProfessorResponseDto.<ProfessorDto>builder().professor(professorDtos).build();
         return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/graduate")
-    public ResponseEntity<?> readGraduates() {
-        List<Member> members = memberService.findAllByPosition(MemberDtype.Graduate.toString());
-        List<Graduate> graduates = members.stream().map(member -> (Graduate) member).toList();
-        List<GraduateDto> graduateDtos = graduates.stream().map(GraduateDto::new).toList();
+    public ResponseEntity readGraduates() {
+        List<GraduateDto> graduateDtos = (List<GraduateDto>) memberService.findAllByPosition(MemberDtype.Graduate.toString());
         GraduateResponseDto<GraduateDto> response = GraduateResponseDto.<GraduateDto>builder().graduate(graduateDtos).build();
         return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/undergraduate")
-    public ResponseEntity<?> readUnderGraduates() {
-        List<Member> members = memberService.findAllByPosition(MemberDtype.Undergraduate.toString());
-        List<Undergraduate> undergraduates = members.stream().map(member -> (Undergraduate) member).toList();
-        List<UndergraduateDto> undergraduateDtos = undergraduates.stream().map(UndergraduateDto::new).toList();
+    public ResponseEntity readUnderGraduates() {
+        List<UndergraduateDto> undergraduateDtos = (List<UndergraduateDto>) memberService.findAllByPosition(MemberDtype.Undergraduate.toString());
         UndergraduateResponseDto<UndergraduateDto> response = UndergraduateResponseDto.<UndergraduateDto>builder().undergraduate(undergraduateDtos).build();
         return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/committee")
-    public ResponseEntity<?> readCommittee() {
-        List<Member> members = memberService.findAllByPosition(MemberDtype.Committee.toString());
-        List<Committee> committees = members.stream().map(member -> (Committee) member).toList();
-        List<CommitteeDto> committeeDtos = committees.stream().map(CommitteeDto::new).toList();
+    public ResponseEntity readCommittee() {
+        List<CommitteeDto> committeeDtos = (List<CommitteeDto>) memberService.findAllByPosition(MemberDtype.Committee.toString());
         CommitteeResponseDto<CommitteeDto> response = CommitteeResponseDto.<CommitteeDto>builder().committee(committeeDtos).build();
         return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/researcher")
-    public ResponseEntity<?> readResearcher() {
-        List<Member> members = memberService.findAllByPosition(MemberDtype.Researcher.toString());
-        List<Researcher> researchers = members.stream().map(member -> (Researcher) member).toList();
-        List<ResearcherDto> researcherDtos = researchers.stream().map(ResearcherDto::new).toList();
+    public ResponseEntity readResearcher() {
+        List<ResearcherDto> researcherDtos  = (List<ResearcherDto>) memberService.findAllByPosition(MemberDtype.Researcher.toString());
         ResearcherResponseDto<ResearcherDto> response = ResearcherResponseDto.<ResearcherDto>builder().researcher(researcherDtos).build();
         return ResponseEntity.ok().body(response);
     }
@@ -89,6 +80,7 @@ public class MemberController {
         private final String name;
         private final String image;
         private final String location;
+        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private final LocalDateTime admission;
 
         public GraduateDto(final Graduate gradate) {
@@ -106,6 +98,7 @@ public class MemberController {
         private final String name;
         private final String image;
         private final String location;
+        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private final LocalDateTime admission;
 
         public UndergraduateDto(final Undergraduate underGradate) {

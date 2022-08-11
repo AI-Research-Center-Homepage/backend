@@ -1,0 +1,30 @@
+### read all field
+GET /api/v1/admin/fields HTTP/1.1
+Host: localhost:8080
+
+### delete field
+DELETE /api/v1/admin/fields?id=1 HTTP/1.1
+Host: localhost:8080
+
+### create field
+POST /api/v1/admin/fields HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+Content-Length: 53
+
+{
+  "name": "연구분야1",
+  "description" : "설명1"
+}
+
+### update field
+PUT /api/v1/admin/fields?id=1 HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+Content-Length: 59
+
+{
+  "name": "수정된연구분야1",
+  "description" : "수정된설명1"
+}
+

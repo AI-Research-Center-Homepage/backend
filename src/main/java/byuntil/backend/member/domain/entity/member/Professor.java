@@ -1,6 +1,8 @@
 package byuntil.backend.member.domain.entity.member;
 
-import byuntil.backend.admin.controlller.domain.Login;
+import byuntil.backend.admin.controller.domain.Login;
+import byuntil.backend.member.dto.response.LoginResponseDto;
+import byuntil.backend.member.dto.response.one.OneProfessorResponseDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,5 +30,17 @@ public class Professor extends Member {
     public void update(final String doctorate, final String number) {
         this.doctorate = doctorate;
         this.number = number;
+    }
+    public OneProfessorResponseDto toDto(){
+        if(getLogin()!=null){
+            LoginResponseDto loginDto = LoginResponseDto.builder().loginId(getLogin().getLoginId()).loginPw(getLogin().getLoginPw()).deleted(getLogin().getDeleted()).build();
+            return OneProfessorResponseDto.builder().loginDto(loginDto).email(getEmail()).location(getLocation()).image(getImage()).id(getId())
+                    .doctorate(getDoctorate()).name(getName()).number(getNumber()).major(getMajor()).build();
+        }
+        else{
+            return OneProfessorResponseDto.builder().email(getEmail()).location(getLocation()).image(getImage()).id(getId())
+                    .doctorate(getDoctorate()).name(getName()).number(getNumber()).major(getMajor()).build();
+        }
+
     }
 }

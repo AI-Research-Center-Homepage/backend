@@ -103,12 +103,12 @@ public class ResearchTest {
         //when
         fieldRepository.save(fieldDto.toEntity());
         Long projectId = projectService.save(projectDto);
-        Project project = projectService.findById(projectId).get();
+        ProjectDto projectDto2 = projectService.findById(projectId);
         Field field = fieldRepository.findByName(projectDto.getFieldName()).get();
 
         //then
         Assertions.assertThrows(ExistException.class, () -> {
-            fieldService.deleteById(project.getField().getId());
+            fieldService.deleteById(fieldService.findByName(projectDto2.getFieldName()).get().getId());
         });
     }
 
@@ -124,7 +124,7 @@ public class ResearchTest {
         Long project1Id = projectService.save(projectDto1);
         Long project2Id = projectService.save(projectDto2);
 
-        List<Project> projects = projectService.findAllByFieldName("field1");
+        List<ProjectDto> projects = projectService.findAllByFieldName("field1");
 
         assertThat(project1Id).isNotEqualTo(project2Id);
         Assertions.assertEquals(2, projects.size());
@@ -146,8 +146,8 @@ public class ResearchTest {
         projectService.save(projectDto2);
         projectService.save(projectDto3);
 
-        List<Project> projects1 = projectService.findAllByFieldName("field1");
-        List<Project> projects2 = projectService.findAllByFieldName("field2");
+        List<ProjectDto> projects1 = projectService.findAllByFieldName("field1");
+        List<ProjectDto> projects2 = projectService.findAllByFieldName("field2");
 
 
         Assertions.assertEquals(1, projects1.size());

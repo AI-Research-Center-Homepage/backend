@@ -1,11 +1,10 @@
-package byuntil.backend.admin.controlller;
+package byuntil.backend.admin.controller;
 
-import byuntil.backend.admin.controlller.domain.dto.LoginDto;
-import byuntil.backend.member.dto.request.ProfessorSaveRequestDto;
+import byuntil.backend.admin.controller.domain.dto.LoginDto;
+import byuntil.backend.member.dto.request.save.ProfessorSaveDto;
 import byuntil.backend.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +28,7 @@ public class SampleController {
         Collection<SimpleGrantedAuthority> auth = new ArrayList<>();
         auth.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         LoginDto loginDto = new LoginDto("user1", "111", auth, false);
-        ProfessorSaveRequestDto dto = ProfessorSaveRequestDto.builder()
+        ProfessorSaveDto dto = ProfessorSaveDto.builder()
                 .email("asdfa")
                 .image("asdfasdfa")
                 .name("홍홍홍")

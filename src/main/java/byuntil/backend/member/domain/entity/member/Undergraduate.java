@@ -1,6 +1,8 @@
 package byuntil.backend.member.domain.entity.member;
 
-import byuntil.backend.admin.controlller.domain.Login;
+import byuntil.backend.admin.controller.domain.Login;
+import byuntil.backend.member.dto.response.LoginResponseDto;
+import byuntil.backend.member.dto.response.one.OneUndergraduateResponseDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,5 +26,19 @@ public class Undergraduate extends Member {
 
     public void update(final LocalDateTime admission) {
         this.admission = admission;
+    }
+
+    public OneUndergraduateResponseDto toDto(){
+        if(getLogin()!=null){
+            LoginResponseDto loginDto = LoginResponseDto.builder().loginId(getLogin().getLoginId()).loginPw(getLogin().getLoginPw()).deleted(getLogin().getDeleted()).build();
+            return OneUndergraduateResponseDto.builder().email(getEmail()).loginDto(loginDto).location(getLocation()).image(getImage()).admission(getAdmission()).id(getId())
+                    .name(getName()).major(getMajor()).build();
+        }
+        else{
+            return OneUndergraduateResponseDto.builder().email(getEmail()).location(getLocation()).image(getImage())
+                    .admission(getAdmission()).id(getId())
+                    .name(getName()).major(getMajor()).build();
+        }
+
     }
 }

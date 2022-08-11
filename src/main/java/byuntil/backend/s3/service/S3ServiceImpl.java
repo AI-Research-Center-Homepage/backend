@@ -219,7 +219,8 @@ public class S3ServiceImpl implements S3Service {
                 file.delete();
 
                 //dto정보 입력
-                attach = Attach.builder().filePath(url).originFileName(origName).serverFileName(saveFileName).build();
+                attach = Attach.builder().
+                        filePath(url).originFileName(origName).serverFileName(saveFileName).build();
 
             } catch (StringIndexOutOfBoundsException e) {
                 url = null;
@@ -285,8 +286,8 @@ public class S3ServiceImpl implements S3Service {
     public String urlToKey(String url){
         // 일단 /을 기준으로 자른다
         String[] div  = url.split("/");
-        String [] div2 = div[div.length-1].split("\\.");
-        return div2[0];
+
+        return div[div.length-1];
     }
     public void deleteList(List<String> urls){
         for (String url: urls){
@@ -299,6 +300,7 @@ public class S3ServiceImpl implements S3Service {
         String key = urlToKey(url);
 
         try {
+
             //Delete 객체 생성
             DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(this.bucket, key);
             //Delete

@@ -1,6 +1,7 @@
 package byuntil.backend.post.domain.entity;
 
 import byuntil.backend.post.dto.PostDto;
+import byuntil.backend.post.dto.response.readMorePostDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +25,9 @@ public class Post extends BaseTimeEntity {
     @Column(columnDefinition = "LONGTEXT")
     private String content;
 
-    @ElementCollection
+    private String author;
+
+    @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(
             name = "URL",
             joinColumns = @JoinColumn(name = "POST_ID")
@@ -36,7 +39,7 @@ public class Post extends BaseTimeEntity {
     @Column(columnDefinition = "integer default 0", nullable = false)
     private int viewNum;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Attach> attaches = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -44,18 +47,22 @@ public class Post extends BaseTimeEntity {
     private Board board;
 
     @Builder
-    public Post(final Long id, final String title, final List<String> images, final String content, final int viewNum) {
+    public Post(final Long id, final String title, final List<String> images, final String content, final int viewNum, String author) {
         this.id = id;
         this.title = title;
         this.imageList = images;
         this.content = content;
         this.viewNum = viewNum;
+        this.author = author;
     }
 
     public void addAttach(final Attach attach) {
         attaches.add(attach);
     }
 
+    public void setImageList(List<String> imageList){
+        this.imageList = imageList;
+    }
     //연관관계 설정
     public void addAttaches(final List<Attach> attachList) {
         for (Attach attach : attachList) {
@@ -76,6 +83,14 @@ public class Post extends BaseTimeEntity {
         this.imageList = dto.getImageList();
         this.content = dto.getContent();
         this.imageList = dto.getImageList();
-        //attach와 같은 연관관계 설정되어있는것은
+        //attach는 따로 update
+        this.author = dto.getAuthor();
+    }
+    public PostDto toDto(){
+        return PostDto.builder().boardName(board.getName()).content(content).title(title).author(author)
+                .id(id).images(imageList).build();
+    }
+    public readMorePostDto toReadAdminDto(){
+        return new readMorePostDto(this);
     }
 }

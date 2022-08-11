@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +18,10 @@ import java.util.Optional;
 public class FieldService {
 
     private final FieldRepository fieldRepository;
+
+    public Optional<Field> findByName(String name){
+        return fieldRepository.findByName(name);
+    }
 
     @Transactional
     public Long save(final FieldDto fieldDto) {
@@ -31,13 +36,14 @@ public class FieldService {
         origin.update(fieldDto);
 
         return fieldDto.getId();
+
     }
 
     //아무랑도 연관관계가 없을때만 지운다.. 만약에 list를 가지고 있으면 그거 모두 옮겨주거나?해서 list를 비워준다음에 delete시켜야함
     @Transactional
     public void deleteById(final Long id) {
         Field field = fieldRepository.findById(id).get();
-        if (field.getProjectList() == null && field.getThesisList() == null) {
+        if (field.getProjectList().size() == 0 && field.getThesisList().size() == 0) {
             fieldRepository.deleteById(id);
         } else {
             throw new ExistException("project, demo, thesis가 모두 비워져야 합니다.");
@@ -45,11 +51,26 @@ public class FieldService {
 
     }
 
-    public Optional<Field> findById(final Long id) {
-        return fieldRepository.findById(id);
+    public FieldDto findById(final Long id) {
+        Field field = fieldRepository.findById(id).get();
+        return FieldDto.builder().id(field.getId()).description(field.getDescription()).name(field.getName()).build();
     }
 
-    public List<Field> findAll() {
-        return fieldRepository.findAll();
+    public List<byuntil.backend.research.dto.response.FieldDto> findAllWithName() {
+        List<Field> fields = fieldRepository.findAll();
+        List<byuntil.backend.research.dto.response.FieldDto> fieldDtoList = new ArrayList<>();
+        for (Field field: fields) {
+            fieldDtoList.add(byuntil.backend.research.dto.response.FieldDto.builder().fieldName(field.getName()).build());
+        }
+        return fieldDtoList;
+    }
+    public List<FieldDto> findAll(){
+        List<Field> fields = fieldRepository.findAll();
+        List<FieldDto> fieldDtoList =  new ArrayList<>();
+        for (Field field: fields) {
+            fieldDtoList.add(FieldDto.builder().name(field.getName()).description(field.getDescription())
+                    .id(field.getId()).build());
+        }
+        return fieldDtoList;
     }
 }

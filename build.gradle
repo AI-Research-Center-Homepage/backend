@@ -28,6 +28,10 @@ dependencies {
     // Spring Security 추가
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
+    //test lombok
+    testCompileOnly 'org.projectlombok:lombok:1.18.22'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
+
     //타임리프
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'

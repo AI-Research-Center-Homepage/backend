@@ -1,8 +1,8 @@
 package byuntil.backend.common.factory;
 
-import byuntil.backend.admin.controlller.domain.dto.LoginDto;
+import byuntil.backend.admin.controller.domain.dto.LoginDto;
 import byuntil.backend.member.domain.entity.member.Professor;
-import byuntil.backend.member.dto.request.ProfessorSaveRequestDto;
+import byuntil.backend.member.dto.request.save.ProfessorSaveDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MockMemberFactory {
-    public static Professor createMockProfessor(ProfessorSaveRequestVO professorVO) {
+    public static Professor createMockVOProfessor(ProfessorSaveRequestVO professorVO) {
         return Professor.builder()
                 .name(professorVO.name)
                 .major(professorVO.major)
@@ -19,6 +19,17 @@ public class MockMemberFactory {
                 .location(professorVO.location)
                 .doctorate(professorVO.doctorate)
                 .number(professorVO.number)
+                .build();
+    }
+    public static Professor createMockProfessor() {
+        return Professor.builder()
+                .name("NAME")
+                .major("MAJOR")
+                .email("EMAIL")
+                .image("IMAGE")
+                .location("LOCATION")
+                .doctorate("DOCTORATE")
+                .number("NUM")
                 .build();
     }
 
@@ -34,16 +45,16 @@ public class MockMemberFactory {
                     .doctorate("학위" + i)
                     .number("번호" + i)
                     .build();
-            professors.add(createMockProfessor(build));
+            professors.add(createMockVOProfessor(build));
         }
         return professors;
     }
 
-    public static List<ProfessorSaveRequestDto> createMockProfessorDtos(List<Professor> professors) {
-        List<ProfessorSaveRequestDto> dtos = new ArrayList<>();
+    public static List<ProfessorSaveDto> createMockProfessorDtos(List<Professor> professors) {
+        List<ProfessorSaveDto> dtos = new ArrayList<>();
         for (int i = 0; i < professors.size(); i++) {
             LoginDto loginDto = new LoginDto("id" + i, "A" + i, false);
-            dtos.add(new ProfessorSaveRequestDto(professors.get(i), loginDto));
+            dtos.add(new ProfessorSaveDto(professors.get(i), loginDto));
         }
         return dtos;
     }

@@ -5,11 +5,18 @@ import byuntil.backend.research.domain.entity.Field;
 import byuntil.backend.research.domain.entity.Project;
 import byuntil.backend.research.domain.repository.FieldRepository;
 import byuntil.backend.research.domain.repository.ProjectRepository;
+import byuntil.backend.research.dto.request.FieldDto;
 import byuntil.backend.research.dto.request.ProjectDto;
+import byuntil.backend.research.dto.request.ThesisDto;
+import byuntil.backend.research.dto.response.AllProjectResponseDto;
+import byuntil.backend.research.dto.response.AllThesisResponseDto;
+import byuntil.backend.research.dto.response.OneProjectDto;
+import byuntil.backend.research.dto.response.OneThesisDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,15 +52,36 @@ public class ProjectService {
         projectRepository.deleteById(id);
     }
 
-    public Optional<Project> findById(final Long id) {
-        return projectRepository.findById(id);
+    public ProjectDto findById(final Long id) {
+        return projectRepository.findById(id).get().toDto();
     }
 
-    public List<Project> findAll() {
-        return projectRepository.findAll();
+    public List<AllProjectResponseDto> findAll() {
+        List<String> fieldNames = new ArrayList<>();
+        List<AllProjectResponseDto> projectDtoList = new ArrayList<>();
+        for (Field field: fieldRepository.findAll()) {
+            fieldNames.add(field.getName());
+        }
+        for (String fieldName: fieldNames) {
+            List<ProjectDto> projectDtoListByName = findAllByFieldName(fieldName);
+            List<OneProjectDto> oneProjectDtoList = new ArrayList<>();
+            for (ProjectDto projectDto : projectDtoListByName) {
+                OneProjectDto one = OneProjectDto.builder().description(projectDto.getDescription()).title(projectDto.getName())
+                                .id(projectDto.getId()).build();
+                oneProjectDtoList.add(one);
+            }
+            projectDtoList.add(AllProjectResponseDto.builder().fieldName(fieldName).projects(oneProjectDtoList).build());
+        }
+
+        return projectDtoList;
     }
 
-    public List<Project> findAllByFieldName(final String name) {
-        return projectRepository.findAllByFieldName(name);
+    public List<ProjectDto> findAllByFieldName(final String name) {
+        List<Project> projectList = projectRepository.findAllByFieldName(name);
+        List<ProjectDto> projectDtoList = new ArrayList<>();
+        for (Project project: projectList) {
+            projectDtoList.add(project.toDto());
+        }
+        return projectDtoList;
     }
 }

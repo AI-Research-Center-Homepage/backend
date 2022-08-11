@@ -1,7 +1,7 @@
 package byuntil.backend.common;
 
 import byuntil.backend.member.domain.entity.member.Member;
-import byuntil.backend.member.dto.request.ProfessorSaveRequestDto;
+import byuntil.backend.member.dto.request.save.ProfessorSaveDto;
 import byuntil.backend.member.service.MemberService;
 import byuntil.backend.member_thesis.entity.Member_Thesis;
 import byuntil.backend.member_thesis.service.Member_ThesisService;
@@ -48,8 +48,8 @@ public class IntegrationTest {
     //member 여러명 thesis 여러명 해서 다대다 test(thesis, member, field)
     public void thesis_member_field() {
         //given
-        ProfessorSaveRequestDto dto1 = makeProfessorDto();
-        ProfessorSaveRequestDto dto2 = makeProfessorDto();
+        ProfessorSaveDto dto1 = makeProfessorDto();
+        ProfessorSaveDto dto2 = makeProfessorDto();
         ThesisDto thesisDto1 = makeThesisDto();
         ThesisDto thesisDto2 = makeThesisDto();
         FieldDto fieldDto1 = makeFieldDto();
@@ -66,7 +66,7 @@ public class IntegrationTest {
 
         //field를 안넣은 thesis
         Long thesisId2 = thesisService.save(thesisDto2);
-        Thesis thesis2 = thesisService.findById(thesisId2).get();
+        Thesis thesis2 = thesisService.findById(thesisId2);
 
         Long MTId1 = member_thesisService.createThesis(memberId, thesisId1);
         Long MTId2 = member_thesisService.createThesis(memberId2, thesisId2);
@@ -108,9 +108,9 @@ public class IntegrationTest {
                 .title("ss").fieldName("field1").publishDate(LocalDateTime.now()).url("sda/ss").build();
     }
 
-    public ProfessorSaveRequestDto makeProfessorDto() {
+    public ProfessorSaveDto makeProfessorDto() {
 
-        ProfessorSaveRequestDto professor = ProfessorSaveRequestDto.builder()
+        ProfessorSaveDto professor = ProfessorSaveDto.builder()
                 .email("asdfa")
                 .image("asdfasdfa")
                 .name("홍길동" + Math.random())

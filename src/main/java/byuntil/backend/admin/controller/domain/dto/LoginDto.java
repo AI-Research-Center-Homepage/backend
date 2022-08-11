@@ -1,6 +1,6 @@
-package byuntil.backend.admin.controlller.domain.dto;
+package byuntil.backend.admin.controller.domain.dto;
 
-import byuntil.backend.admin.controlller.domain.Login;
+import byuntil.backend.admin.controller.domain.Login;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -8,23 +8,29 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
 
 @Slf4j
 @Getter
-@Setter
 @ToString
+@Setter
 public class LoginDto extends User {
     private String loginId;
     private String loginPw;
-    private boolean deleted;
+    private Boolean deleted;
     //일단 초기화 해놓고 toentity할때 모든 user의 권한을 role_admin으로 변경한다
     public LoginDto(String loginId, String loginPw, Collection<SimpleGrantedAuthority> auths ,boolean deleted){
         super(loginId, loginPw, auths);
         this.loginId = loginId;
         this.deleted = deleted;
         this.loginPw = loginPw;
+    }
+
+
+    //기본생성자가 없으면 오류남 -> RequestBody때문에
+    //일단 기본값을 setting 해두고 setter로 바꾸는 방법을 선택,
+    public LoginDto(){
+        super("id","pw", new ArrayList<>());
     }
 
     public LoginDto(String loginId, String loginPw, boolean deleted){

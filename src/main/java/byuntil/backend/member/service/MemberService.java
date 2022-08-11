@@ -1,12 +1,15 @@
 package byuntil.backend.member.service;
 
-import byuntil.backend.admin.controlller.domain.dto.LoginDto;
+import byuntil.backend.admin.controller.domain.dto.LoginDto;
 import byuntil.backend.common.exception.IdNotExistException;
 import byuntil.backend.common.exception.LoginIdDuplicationException;
+import byuntil.backend.common.exception.TypeNotExistException;
 import byuntil.backend.member.domain.entity.member.*;
 import byuntil.backend.member.domain.repository.MemberRepository;
-import byuntil.backend.member.dto.request.MemberSaveRequestDto;
-import byuntil.backend.member.dto.request.MemberUpdateRequestDto;
+import byuntil.backend.member.dto.request.MemberAllInfoDto;
+import byuntil.backend.member.dto.request.save.MemberSaveDto;
+import byuntil.backend.member.dto.response.MemberResponseDto;
+import byuntil.backend.member.dto.response.one.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,29 +39,50 @@ public class MemberService implements UserDetailsService {
             throw new IdNotExistException("존재하지 않는 id입니다");
         } else {
             Member member = (Member) memberRepository.findById(id).get();
-            member.getLogin().setDeleted(true);
+            //여기서 member가 login을 가지고 있는지도 확인해야함
+            if(!Optional.ofNullable(member.getLogin()).isPresent()){
+                MemberAllInfoDto dto = MemberAllInfoDto.builder()
+                        .admission(LocalDateTime.now()).email("del").major("del").doctorate("del")
+                        .position("del").number("del").name("del").image("del").location("del").research("del").location("del").build();
+                updateMember(member.getId(), dto);
+            }
+            else{
+                member.getLogin().setDeleted(true);
 
+                byte[] array = new byte[7]; // length is bounded by 7
+                new Random().nextBytes(array);
+                String generatedString = new String(array, StandardCharsets.UTF_8);
 
-            byte[] array = new byte[7]; // length is bounded by 7
-            new Random().nextBytes(array);
-            String generatedString = new String(array, StandardCharsets.UTF_8);
+                member.getLogin().setLoginId(generatedString);
 
-            member.getLogin().setLoginPw(generatedString);
-            MemberUpdateRequestDto dto = MemberUpdateRequestDto.builder().admission(LocalDateTime.now()).email("del").major("del").doctorate("del")
-                    .position("del").number("del").name("del").image("del").location("del").build();
-            updateMember(member.getId(), dto);
+                LoginDto loginDto = new LoginDto(member.getLogin().getLoginId(),
+                        member.getLogin().getLoginPw(), true);
+
+                MemberAllInfoDto dto = MemberAllInfoDto.builder().loginDto(loginDto)
+                        .admission(LocalDateTime.now()).email("del").major("del").doctorate("del")
+                        .position("del").number("del").name("del").image("del").location("del").research("del").location("del").build();
+                updateMember(member.getId(), dto);
+            }
+
         }
     }
 
     @Transactional
-    public Long saveMember(final MemberSaveRequestDto dto) {
+    public Long saveMember(final MemberSaveDto dto) {
         //dto를 entity로 만들고 admin도 entity로만든다음에 return함
-        memberRepository.findByLoginId(dto.getLoginDto().getLoginId()).ifPresent((m -> {
-            throw new LoginIdDuplicationException("이미 존재하는 회원입니다.");
-        }));
-        String originPW = dto.getLoginDto().getLoginPw();
-        String encodedPW = passwordEncoder.encode(originPW);
-        dto.getLoginDto().setLoginPw(encodedPW);
+        //loginDto가 null일 경우 처리를 해주어야함
+        Optional<String> id = Optional.ofNullable(dto)
+                .map(MemberSaveDto::getLoginDto)
+                .map(LoginDto::getLoginId);
+
+        id.ifPresentOrElse(x -> memberRepository.findByLoginId(id.get()).ifPresentOrElse(m -> {
+            throw new LoginIdDuplicationException("이미 존재하는 회원입니다.");} ,
+                ()-> dto.getLoginDto().setLoginPw(passwordEncoder.encode(dto.getLoginDto().getLoginPw())
+                        )
+                )
+                ,()->{}
+        );
+
 
         return ((Member) memberRepository.save(dto.toEntity())).getId();
     }
@@ -88,18 +112,24 @@ public class MemberService implements UserDetailsService {
     }
 
 
-    public List<Member> findAllMember() {
-        return memberRepository.findAll();
+    public List<MemberResponseDto> findAllMember() {
+        List<Member> members = memberRepository.findAll();
+        List<MemberResponseDto> memberResponseDtoList = new ArrayList<>();
+        for (Member member: members) {
+            memberResponseDtoList.add(MemberResponseDto.builder().name(member.getName()).id(member.getId()).build());
+        }
+        return memberResponseDtoList;
     }
 
     @Transactional
-    public void updateMember(final Long id, final MemberUpdateRequestDto requestDto) throws Throwable {
+    public void updateMember(final Long id, final MemberAllInfoDto requestDto) throws Throwable {
         Member member = (Member) memberRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         member.update(requestDto);
         //그리고 암호화를 해주어야한다
-        String encodedPw = passwordEncoder.encode(member.getLogin().getLoginPw());
-        member.getLogin().setLoginId(encodedPw);
-
+        if(requestDto.getLoginDto()!=null){
+            String encodedPw = passwordEncoder.encode(member.getLogin().getLoginPw());
+            member.getLogin().setLoginPw(encodedPw);
+        }
         if (member instanceof Professor professor) {
             professor.update(requestDto.getDoctorate(), requestDto.getNumber());
         } else if (member instanceof Committee committee) {
@@ -119,6 +149,7 @@ public class MemberService implements UserDetailsService {
         memberRepository.delete(member);
     }
 
+
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         Optional<Member> result = memberRepository.findByLoginId(username);
@@ -135,7 +166,62 @@ public class MemberService implements UserDetailsService {
         return dto;
     }
 
-    public List<Member> findAllByPosition(final String position) {
-        return memberRepository.findAllByPosition(position);
+    public List<?> findAllByPosition(final String position) {
+        List<Member> members = memberRepository.findAllByDtype(firstWordToUpper(position));
+
+        if(position.equals("committee")){
+            List<OneCommitteeResponseDto> dtoList = new ArrayList<>();
+            for (Member member: members) {
+                Committee committee = (Committee) member;
+                dtoList.add(committee.toDto());
+            }
+            return dtoList;
+        }
+        else if(position.equals("graduate")){
+            List<OneGraduateResponseDto> dtoList = new ArrayList<>();
+            for (Member member: members) {
+                Graduate graduate = (Graduate) member;
+                dtoList.add(graduate.toDto());
+            }
+            return dtoList;
+        }
+        else if(position.equals("professor")){
+            List<OneProfessorResponseDto> dtoList = new ArrayList<>();
+            for (Member member: members) {
+                Professor professor = (Professor) member;
+                dtoList.add(professor.toDto());
+            }
+            return dtoList;
+        }
+        else if(position.equals("researcher")){
+            List<OneResearcherResponseDto> dtoList = new ArrayList<>();
+            for (Member member: members) {
+                Researcher researcher = (Researcher) member;
+                dtoList.add(researcher.toDto());
+            }
+            return dtoList;
+        }
+        else if(position.equals("undergraduate")){
+            List<OneUndergraduateResponseDto> dtoList = new ArrayList<>();
+            for (Member member: members) {
+                Undergraduate undergraduate = (Undergraduate) member;
+                dtoList.add(undergraduate.toDto());
+            }
+            return dtoList;
+        }
+        else{
+            throw new TypeNotExistException();
+        }
+
+    }
+
+    public String firstWordToUpper(String str){
+        char[] arr = str.toCharArray();
+        arr[0] = Character.toUpperCase(arr[0]);
+        String newStr = "";
+        for (char c: arr) {
+            newStr += c;
+        }
+        return newStr;
     }
 }

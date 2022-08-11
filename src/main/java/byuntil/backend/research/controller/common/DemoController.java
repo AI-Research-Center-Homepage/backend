@@ -1,7 +1,6 @@
 package byuntil.backend.research.controller.common;
 
 import byuntil.backend.research.domain.entity.Demo;
-import byuntil.backend.research.dto.response.DemoResponseDto;
 import byuntil.backend.research.service.DemoService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -10,8 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
@@ -19,13 +16,8 @@ public class DemoController {
     private final DemoService demoService;
 
     @GetMapping("/demo")
-    public ResponseEntity<?> readDemos() {
-        List<Demo> demos = demoService.findAll();
-        List<DemoDto> demoDtos = demos.stream()
-                .map(DemoDto::new)
-                .toList();
-        DemoResponseDto<DemoDto> response = DemoResponseDto.<DemoDto>builder().demos(demoDtos).build();
-        return ResponseEntity.ok().body(response);
+    public ResponseEntity readDemos() {
+        return ResponseEntity.ok().body(demoService.findAll());
     }
 
     @Getter

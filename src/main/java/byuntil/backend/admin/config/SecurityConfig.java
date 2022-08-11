@@ -21,26 +21,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http)throws Exception{
         //아래의 antMatchers에는 resources/templates하위가 와야하는건가 -> 아님
-
         http.authorizeRequests().antMatchers("/h2-console/**").permitAll()
                 .and().csrf().ignoringAntMatchers("/h2-console/**")
                 .and().headers().frameOptions().sameOrigin();
 
-
         http
-                .csrf().disable()//이거 없으면 403ERROR(권한없음)뜬다
-                .authorizeRequests()
-                .antMatchers("/sample/member").hasRole("ADMIN")//ROLE_이 빠진 이름을 적어주어야한다
-                .antMatchers("/sample/admin").hasRole("ADMIN")
-                .antMatchers("/sample/all").permitAll()
-                .antMatchers("/post/save").permitAll()
-                .anyRequest().permitAll();
+                .authorizeRequests().anyRequest()
+                //.antMatchers("/sample/member").hasRole("ADMIN")
+                //.antMatchers("/sample/admin").hasRole("ADMIN")
+                //.antMatchers("/sample/all")
+                .permitAll();
         http.formLogin();
-
+        http.csrf().disable();
         // /logout으로 들어가면 logout됨 어떤 버튼을 누르면 해당 url로 redirect되도록 설계하면 될듯
         http.logout();
         http.httpBasic();
-
 
         //쿠키(서버가 사용자의 웹브라우저에 저장하는 데아터) 의 만료시간 설정
         http.rememberMe().tokenValiditySeconds(60*60*7).userDetailsService(userDetailsService());//7days

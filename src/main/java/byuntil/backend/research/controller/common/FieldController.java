@@ -1,6 +1,7 @@
 package byuntil.backend.research.controller.common;
 
 import byuntil.backend.research.domain.entity.Field;
+import byuntil.backend.research.dto.request.FieldDto;
 import byuntil.backend.research.dto.response.FieldResponseDto;
 import byuntil.backend.research.service.FieldService;
 import lombok.Getter;
@@ -19,23 +20,10 @@ public class FieldController {
     private final FieldService fieldService;
 
     @GetMapping("/fields")
-    public ResponseEntity<?> readFields() {
-        List<Field> fields = fieldService.findAll();
-        List<FieldDto> fieldDtos = fields.stream().
-                map(FieldDto::new)
-                .toList();
-        FieldResponseDto<FieldDto> response = FieldResponseDto.<FieldDto>builder().fields(fieldDtos).build();
+    public ResponseEntity readFields() {
+        List<FieldDto> fields = fieldService.findAll();
+        FieldResponseDto<FieldDto> response = FieldResponseDto.<FieldDto>builder().fields(fields).build();
         return ResponseEntity.ok().body(response);
     }
 
-    @Getter
-    static class FieldDto {
-        private final String fieldName;
-        private final String description;
-
-        public FieldDto(final Field field) {
-            this.fieldName = field.getName();
-            this.description = field.getDescription();
-        }
-    }
 }

@@ -13,6 +13,6 @@ public interface MemberRepository<T extends Member> extends JpaRepository<T, Lon
     @Query("select m from Member m where m.login.loginId = :loginId")
     Optional<Member> findByLoginId(@Param("loginId") String loginId);
 
-    @Query("SELECT m from Member m where m.dtype = :position")
-    List<Member> findAllByPosition(@Param("position") String position);
+    @Query("select m from Member m where m.dtype = :position")
+    List<Member> findAllByDtype(@Param("position") String position);
 }

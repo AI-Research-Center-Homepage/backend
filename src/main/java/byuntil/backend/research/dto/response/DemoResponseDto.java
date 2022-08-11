@@ -7,6 +7,6 @@ import java.util.List;
 
 @Getter
 @Builder
-public class DemoResponseDto<T> {
-    private final List<T> demos;
+public class DemoResponseDto {
+    private final List<AllDemoGeneralDto> demos;
 }

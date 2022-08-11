@@ -1,6 +1,7 @@
-package byuntil.backend.member.dto.request;
+package byuntil.backend.member.dto.request.save;
 
-import byuntil.backend.admin.controlller.domain.dto.LoginDto;
+import byuntil.backend.admin.controller.domain.Login;
+import byuntil.backend.admin.controller.domain.dto.LoginDto;
 import byuntil.backend.member.domain.entity.member.Graduate;
 import byuntil.backend.member.domain.entity.member.Member;
 import lombok.Builder;
@@ -9,20 +10,26 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Getter
-public class GraduateSaveRequestDto extends MemberSaveRequestDto {
+public class GraduateSaveDto extends MemberSaveDto {
 
     private LocalDateTime admission;
 
     @Builder
-    public GraduateSaveRequestDto(String name, String major, String email, String image,
-                                  LocalDateTime admission, String location, LoginDto loginDto) {
-        super(name, major, email, image, location, loginDto);
+    public GraduateSaveDto(Long id, String name, String major, String email, String image,
+                           LocalDateTime admission, String location, LoginDto loginDto) {
+        super(id, name, major, email, image, location, loginDto);
         this.admission = admission;
     }
 
 
     @Override
     public Member toEntity() {
+        Login login = null;
+
+        if (getLoginDto()!=null){
+            login = getLoginDto().toEntity();
+        }
+
         return Graduate.builder()
                 .name(getName())
                 .major(getMajor())
@@ -30,7 +37,7 @@ public class GraduateSaveRequestDto extends MemberSaveRequestDto {
                 .image(getImage())
                 .admission(admission)
                 .location(getLocation())
-                .login(getLoginDto().toEntity())
+                .login(login)
                 .build();
     }
 }

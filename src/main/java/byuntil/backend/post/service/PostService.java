@@ -10,6 +10,9 @@ import byuntil.backend.post.domain.entity.Post;
 import byuntil.backend.post.domain.repository.BoardRepository;
 import byuntil.backend.post.domain.repository.PostRepository;
 import byuntil.backend.post.dto.PostDto;
+import byuntil.backend.post.dto.response.AttachResponseDto;
+import byuntil.backend.post.dto.response.readAdminAllPostDto;
+import byuntil.backend.post.dto.response.readPostDto;
 import byuntil.backend.s3.domain.FileStatus;
 import byuntil.backend.s3.service.S3ServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -33,15 +36,19 @@ public class PostService {
     //minji
     @Transactional
     public Long save(final PostDto postDto, final List<MultipartFile> fileList) throws IOException {
-        //
-        /*
-        Board board = Board.builder().name("게시판1").build();
-        boardRepository.save(board);
-        */
+        //지워야하는코드
+        Board board1 = Board.builder().name("Notice").build();
+        if(!boardRepository.findByName("Notice").isPresent()) boardRepository.save(board1);
+
+        Board board2 = Board.builder().name("News").build();
+        if(!boardRepository.findByName("News").isPresent()) boardRepository.save(board2);
 
         Post post = postDto.toEntity();
-        List<Attach> attachList = s3Service.uploadReturnAttachList(fileList);
-        post.addAttaches(attachList);
+        if(fileList!=null){
+            List<Attach> attachList = s3Service.uploadReturnAttachList(fileList);
+            post.addAttaches(attachList);
+        }
+
         //보드 이름으로 보드 찾아오는 명령어 수행해야함 없으면 예외터뜨리기
         Board board = boardRepository.findByName(postDto.getBoardName()).orElseThrow(BoardNotFoundException::new);
         //찾아온 board로
@@ -120,28 +127,25 @@ public class PostService {
     }
 
     @Transactional
-    public void updatePost(final Long postId, final PostDto request, final MultipartFile file) {
+    public void updatePost(final Long postId, final PostDto postDto, final List<MultipartFile> files) {
         Optional<Post> postOptional = postRepository.findById(postId);
         postOptional.ifPresent(post -> {
-            post.updatePost(request);
-            fileUpload(file).ifPresent(fileStatus -> {
-                //todo: 이게 표면적으로 지워지긴 하지만 s3에는 지워지지 않음 나중에 추가
-                post.deleteAttaches();
-                String url = fileStatus.fileUrl();
-                Attach build = Attach.builder()
-                        .filePath(url)
-                        .originFileName(file.getName())
-                        .serverFileName(createStoreFilename(file.getName()))
-                        .build();
-                build.addPost(post);
-                post.addAttach(build);
-            });
+            post.updatePost(postDto);
+            changeUrlOfAttach(postDto, post, files);
+            changeUrlOfImageList(postDto, post);
         });
     }
+
 
     @Transactional
     public void deletePost(final Long postId) {
         final Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
+        for (Attach attach: post.getAttaches()) {
+            s3Service.delete(attach.getFileUrl());
+        }
+        for(String url : post.getImageList()){
+            s3Service.delete(url);
+        }
         postRepository.delete(post);
     }
 
@@ -150,7 +154,108 @@ public class PostService {
         return postRepository.updateView(id);
     }
 
-    public Post findById(final Long postId) {
-        return postRepository.findById(postId).orElseThrow(NoSuchElementException::new);
+    public readPostDto readNotice(Long postId){
+        Post post = postRepository.findByBoardNameAndId( "Notice",postId);
+        List<Attach> attaches = post.getAttaches();
+        List<AttachResponseDto> attachResponseDtos = attaches.stream().map(AttachResponseDto::new).toList();
+        readPostDto response = readPostDto.builder()
+                .title(post.getTitle())
+                .content(post.getContent())
+                .viewNum(post.getViewNum())
+                .author(post.getAuthor())
+                .attaches(attachResponseDtos)
+                .createdDate(post.getCreatedDate())
+                .modifiedDate(post.getModifiedDate())
+                .build();
+        updateView(postId);
+        return response;
     }
+
+    public Optional<PostDto> findById(Long id, String boardName){
+        Post post =postRepository.findByBoardNameAndId(boardName, id);
+        PostDto postDto = null;
+        if(Optional.ofNullable(post).isPresent()){
+            postDto = PostDto.builder().title(post.getTitle()).author(post.getAuthor()).content(post.getContent())
+                    .boardName(boardName).images(post.getImageList()).build();
+        }
+        return Optional.ofNullable(postDto);
+    }
+    public Post findById(final Long postId) {
+
+        return  postRepository.findById(postId).
+                orElseThrow(NoSuchElementException::new);
+    }
+
+
+    public List<readAdminAllPostDto> readAllPost(String boardName){
+        List<Post> posts = postRepository.findByBoardName(boardName);
+
+        List<readAdminAllPostDto> noticeResponseDtoList = new ArrayList<>();
+        for (Post post: posts) {
+            noticeResponseDtoList.add(readAdminAllPostDto.builder().title(post.getTitle())
+                    .author(post.getAuthor()).createdDate(post.getCreatedDate())
+                    .modifiedDate(post.getModifiedDate()).viewNum(post.getViewNum()).build());
+        }
+        return noticeResponseDtoList;
+
+    }
+    public void changeUrlOfAttach(PostDto postDto, Post post, List<MultipartFile> files){
+        //1. post의 attach모두 제거
+        Optional.ofNullable(post.getAttaches()).ifPresent(
+                list -> {
+                    for (Attach attach: list) {
+                        s3Service.delete(attach.getFileUrl());
+                    }
+                    post.deleteAttaches();
+                }
+        );
+        //2. files를 모두 post에 넣어주기
+        Optional.ofNullable(files).ifPresent(
+                fileList -> {
+                    List<Attach> attachList = null;
+                    try {
+                        attachList = s3Service.uploadReturnAttachList(fileList);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    post.addAttaches(attachList);
+
+                    Board board = boardRepository.findByName(postDto.getBoardName()).orElseThrow(BoardNotFoundException::new);
+
+                    post.setBoard(board);
+                    postRepository.save(post);
+                }
+        );
+
+
+
+
+    }
+    public void changeUrlOfImageList(PostDto postDto, Post post){
+        if(postDto.getImageList()==null){
+            Optional.ofNullable(post.getImageList()).ifPresent(
+                    list -> {
+                        for (String url: list) {
+                            s3Service.delete(url);
+                        }
+                    }
+            );
+        }
+        else if(post.getImageList() == null){
+            //postDto에 있는 imageList를 추가한다
+            post.setImageList(postDto.getImageList());
+        }
+        else{
+            //비교해봐서 post에 있던 사진이 postDto에 없다면 삭제해주어야함
+            //postDto에 있는 사진들은 이미 추가됐을것이기 때문에 이에 대한 처리는 필요 없음
+            for (String url : postDto.getImageList()) {
+                if(!post.getImageList().contains(url)){
+                    s3Service.delete(url);
+                }
+            }
+
+
+        }
+    }
+
 }

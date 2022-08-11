@@ -1,6 +1,7 @@
 package byuntil.backend.research.domain.entity;
 
 import byuntil.backend.member_thesis.entity.Member_Thesis;
+import byuntil.backend.research.dto.request.MemberDto;
 import byuntil.backend.research.dto.request.ThesisDto;
 import lombok.*;
 
@@ -51,6 +52,10 @@ public class Thesis {
         this.url = url;
     }
 
+    public void deleteMemberThesis(){
+        member_theses.clear();
+    }
+
     //연관관계 설정 메서드
     public void setField(final Field field) {
         this.field = field;
@@ -70,9 +75,15 @@ public class Thesis {
 
     }
 
-    public void toDto() {
-        ThesisDto dto = ThesisDto.builder().title(this.title).koName(this.koName).enName(this.enName).journal(this.journal)
-                .publishDate(this.publishDate).url(this.url).build();
+    public ThesisDto toDto() {
+        List<MemberDto> memberDtoList = new ArrayList<>();
+        for (Member_Thesis memberThesis: member_theses) {
+            Long id = memberThesis.getMember().getId();
+            String name = memberThesis.getMember().getName();
+            memberDtoList.add(MemberDto.builder().id(id).name(name).build());
+        }
+        return ThesisDto.builder().title(this.title).koName(this.koName).enName(this.enName).journal(this.journal)
+                .publishDate(this.publishDate).url(this.url).fieldName(field.getName()).id(id).members(memberDtoList).build();
 
     }
 

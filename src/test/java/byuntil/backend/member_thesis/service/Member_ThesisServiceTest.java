@@ -1,7 +1,7 @@
 package byuntil.backend.member_thesis.service;
 
 import byuntil.backend.member.domain.entity.member.Member;
-import byuntil.backend.member.dto.request.ProfessorSaveRequestDto;
+import byuntil.backend.member.dto.request.save.ProfessorSaveDto;
 import byuntil.backend.member.service.MemberService;
 import byuntil.backend.member_thesis.entity.Member_Thesis;
 import byuntil.backend.research.domain.entity.Thesis;
@@ -31,7 +31,7 @@ class Member_ThesisServiceTest {
     //3. member_thesisService에 멤버-논문 매핑
     public void 멤버가논문쓸때() {
         //given
-        ProfessorSaveRequestDto professor = makeMemberDto();
+        ProfessorSaveDto professor = makeMemberDto();
         ThesisDto thesisDto = makeThesisDto();
 
         //when
@@ -57,8 +57,8 @@ class Member_ThesisServiceTest {
                 .title("제목1").publishDate(LocalDateTime.now()).build();
     }
 
-    public ProfessorSaveRequestDto makeMemberDto() {
-        ProfessorSaveRequestDto professor = ProfessorSaveRequestDto.builder()
+    public ProfessorSaveDto makeMemberDto() {
+        ProfessorSaveDto professor = ProfessorSaveDto.builder()
                 .email("asdfa")
                 .image("asdfasdfa")
                 .name("나승훈")
