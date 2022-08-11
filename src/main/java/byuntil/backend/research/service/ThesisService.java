@@ -8,6 +8,8 @@ import byuntil.backend.research.domain.repository.FieldRepository;
 import byuntil.backend.research.domain.repository.ThesisRepository;
 import byuntil.backend.research.dto.request.MemberDto;
 import byuntil.backend.research.dto.request.ThesisDto;
+import byuntil.backend.research.dto.response.AllThesisResponseDto;
+import byuntil.backend.research.dto.response.OneThesisDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,12 +78,23 @@ public class ThesisService {
         return thesisRepository.findById(id).get().toDto();
     }
 
-    public List<ThesisDto> findAll() {
-        List<ThesisDto> thesisDtoList = new ArrayList<>();
-        for (Thesis thesis:thesisRepository.findAll()) {
-            thesisDtoList.add(thesis.toDto());
-
+    public List<AllThesisResponseDto> findAll() {
+        List<String> fieldNames = new ArrayList<>();
+        List<AllThesisResponseDto> thesisDtoList = new ArrayList<>();
+        for (Field field: fieldRepository.findAll()) {
+            fieldNames.add(field.getName());
         }
+        for (String fieldName: fieldNames) {
+            List<ThesisDto> thesisDtoListByName = findAllByFieldName(fieldName);
+            List<OneThesisDto> oneThesisDtoList = new ArrayList<>();
+            for (ThesisDto thesisDto : thesisDtoListByName) {
+                OneThesisDto one = OneThesisDto.builder().journal(thesisDto.getJournal()).id(thesisDto.getId()).publishDate(thesisDto.getPublishDate())
+                                .title(thesisDto.getTitle()).build();
+                oneThesisDtoList.add(one);
+            }
+            thesisDtoList.add(AllThesisResponseDto.builder().fieldName(fieldName).theses(oneThesisDtoList).build());
+        }
+
         return thesisDtoList;
     }
 

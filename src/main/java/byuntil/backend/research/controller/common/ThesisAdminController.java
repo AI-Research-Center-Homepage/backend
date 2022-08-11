@@ -6,6 +6,7 @@ import byuntil.backend.member.service.MemberService;
 import byuntil.backend.research.dto.request.FieldDto;
 import byuntil.backend.research.dto.request.ProjectDto;
 import byuntil.backend.research.dto.request.ThesisDto;
+import byuntil.backend.research.dto.response.AllThesisResponseDto;
 import byuntil.backend.research.dto.response.MemberFieldDto;
 import byuntil.backend.research.service.FieldService;
 import byuntil.backend.research.service.ThesisService;
@@ -55,7 +56,7 @@ public class ThesisAdminController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("");
     }
     @GetMapping
-    public List<ThesisDto> readAll(){
+    public List<AllThesisResponseDto> readAll(){
         return thesisService.findAll();
     }
     @GetMapping("/{id}")
