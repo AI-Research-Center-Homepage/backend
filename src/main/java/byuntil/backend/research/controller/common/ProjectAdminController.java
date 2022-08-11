@@ -5,6 +5,7 @@ import byuntil.backend.research.domain.entity.Project;
 import byuntil.backend.research.dto.request.DemoDto;
 import byuntil.backend.research.dto.request.FieldDto;
 import byuntil.backend.research.dto.request.ProjectDto;
+import byuntil.backend.research.dto.response.AllProjectResponseDto;
 import byuntil.backend.research.service.FieldService;
 import byuntil.backend.research.service.ProjectService;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +45,7 @@ public class ProjectAdminController
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("");
     }
     @GetMapping
-    public List<ProjectDto> readAll(){
+    public List<AllProjectResponseDto> readAll(){
         return projectService.findAll();
     }
     @GetMapping("/{id}")

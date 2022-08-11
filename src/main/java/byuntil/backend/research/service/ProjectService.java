@@ -7,6 +7,11 @@ import byuntil.backend.research.domain.repository.FieldRepository;
 import byuntil.backend.research.domain.repository.ProjectRepository;
 import byuntil.backend.research.dto.request.FieldDto;
 import byuntil.backend.research.dto.request.ProjectDto;
+import byuntil.backend.research.dto.request.ThesisDto;
+import byuntil.backend.research.dto.response.AllProjectResponseDto;
+import byuntil.backend.research.dto.response.AllThesisResponseDto;
+import byuntil.backend.research.dto.response.OneProjectDto;
+import byuntil.backend.research.dto.response.OneThesisDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,11 +56,23 @@ public class ProjectService {
         return projectRepository.findById(id).get().toDto();
     }
 
-    public List<ProjectDto> findAll() {
-        List<ProjectDto> projectDtoList = new ArrayList<>();
-        for (Project project : projectRepository.findAll()) {
-            projectDtoList.add(project.toDto());
+    public List<AllProjectResponseDto> findAll() {
+        List<String> fieldNames = new ArrayList<>();
+        List<AllProjectResponseDto> projectDtoList = new ArrayList<>();
+        for (Field field: fieldRepository.findAll()) {
+            fieldNames.add(field.getName());
         }
+        for (String fieldName: fieldNames) {
+            List<ProjectDto> projectDtoListByName = findAllByFieldName(fieldName);
+            List<OneProjectDto> oneProjectDtoList = new ArrayList<>();
+            for (ProjectDto projectDto : projectDtoListByName) {
+                OneProjectDto one = OneProjectDto.builder().description(projectDto.getDescription()).title(projectDto.getName())
+                                .id(projectDto.getId()).build();
+                oneProjectDtoList.add(one);
+            }
+            projectDtoList.add(AllProjectResponseDto.builder().fieldName(fieldName).projects(oneProjectDtoList).build());
+        }
+
         return projectDtoList;
     }
 

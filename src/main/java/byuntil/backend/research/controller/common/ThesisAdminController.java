@@ -51,6 +51,7 @@ public class ThesisAdminController {
         return ResponseEntity.status(HttpStatus.CREATED).body(id);
     }
     @DeleteMapping
+
     public ResponseEntity delete(@RequestParam Long id){
         thesisService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("");
