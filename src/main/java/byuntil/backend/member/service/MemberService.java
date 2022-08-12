@@ -167,7 +167,7 @@ public class MemberService implements UserDetailsService {
     }
 
     public List<?> findAllByPosition(String position) {
-        List<Member> members = memberRepository.findAllByDtype(position);
+        List<Member> members = memberRepository.findAllByDtype(firstWordToUpper(position));
 
         position = firstWordToLower(position);
         if(position.equals("committee")){
@@ -219,6 +219,15 @@ public class MemberService implements UserDetailsService {
     public String firstWordToLower(String str){
         char[] arr = str.toCharArray();
         arr[0] = Character.toLowerCase(arr[0]);
+        String newStr = "";
+        for (char c: arr) {
+            newStr += c;
+        }
+        return newStr;
+    }
+    public String firstWordToUpper(String str){
+        char[] arr = str.toCharArray();
+        arr[0] = Character.toUpperCase(arr[0]);
         String newStr = "";
         for (char c: arr) {
             newStr += c;
