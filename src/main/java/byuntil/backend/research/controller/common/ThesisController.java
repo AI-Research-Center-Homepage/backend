@@ -20,7 +20,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
 public class ThesisController {
-    private final FieldService fieldService;
     private final ThesisService thesisService;
 
     @GetMapping("/thesis")
