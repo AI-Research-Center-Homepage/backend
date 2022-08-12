@@ -34,7 +34,7 @@ public class ProjectController {
             List<ProjectDto> projectDtos = projectService.findAllByFieldName(fieldName);
             List<GeneralOneProjectDto> list = new ArrayList<>();
             for (ProjectDto dto: projectDtos) {
-                list.add(GeneralOneProjectDto.builder().name(dto.getName()).id(dto.getId()).participants(dto.getParticipants())
+                list.add(GeneralOneProjectDto.builder().title(dto.getName()).id(dto.getId()).participants(dto.getParticipants())
                         .content(dto.getContent()).description(dto.getDescription()).build());
             }
             projectFieldDtos.add(GeneralProjectDto.builder().fieldName(fieldName).projects(list).build());
