@@ -2,7 +2,7 @@ package byuntil.backend.member.domain.entity.member;
 
 import byuntil.backend.admin.controller.domain.Login;
 import byuntil.backend.member.dto.response.LoginResponseDto;
-import byuntil.backend.member.dto.response.one.OneProfessorResponseDto;
+import byuntil.backend.member.dto.response.one.ProfessorAdminResponseDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,14 +31,14 @@ public class Professor extends Member {
         this.doctorate = doctorate;
         this.number = number;
     }
-    public OneProfessorResponseDto toDto(){
+    public ProfessorAdminResponseDto toDto(){
         if(getLogin()!=null){
             LoginResponseDto loginDto = LoginResponseDto.builder().loginId(getLogin().getLoginId()).loginPw(getLogin().getLoginPw()).deleted(getLogin().getDeleted()).build();
-            return OneProfessorResponseDto.builder().loginDto(loginDto).email(getEmail()).location(getLocation()).image(getImage()).id(getId())
+            return ProfessorAdminResponseDto.builder().loginDto(loginDto).email(getEmail()).location(getLocation()).image(getImage()).id(getId())
                     .doctorate(getDoctorate()).name(getName()).number(getNumber()).major(getMajor()).build();
         }
         else{
-            return OneProfessorResponseDto.builder().email(getEmail()).location(getLocation()).image(getImage()).id(getId())
+            return ProfessorAdminResponseDto.builder().email(getEmail()).location(getLocation()).image(getImage()).id(getId())
                     .doctorate(getDoctorate()).name(getName()).number(getNumber()).major(getMajor()).build();
         }
 

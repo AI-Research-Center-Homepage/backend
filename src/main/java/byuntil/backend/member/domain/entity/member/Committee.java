@@ -2,7 +2,7 @@ package byuntil.backend.member.domain.entity.member;
 
 import byuntil.backend.admin.controller.domain.Login;
 import byuntil.backend.member.dto.response.LoginResponseDto;
-import byuntil.backend.member.dto.response.one.OneCommitteeResponseDto;
+import byuntil.backend.member.dto.response.one.CommitteeAdminResponseDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,14 +27,14 @@ public class Committee extends Member {
         this.position = position;
     }
 
-    public OneCommitteeResponseDto toDto(){
+    public CommitteeAdminResponseDto toDto(){
         if (getLogin()!=null){
             LoginResponseDto loginDto = LoginResponseDto.builder().loginId(getLogin().getLoginId()).loginPw(getLogin().getLoginPw()).deleted(getLogin().getDeleted()).build();
-            return OneCommitteeResponseDto.builder().loginDto(loginDto).email(getEmail()).location(getLocation()).image(getImage()).id(getId())
+            return CommitteeAdminResponseDto.builder().loginDto(loginDto).email(getEmail()).location(getLocation()).image(getImage()).id(getId())
                     .name(getName()).major(getMajor()).position(getPosition()).image(getImage()).build();
         }
         else{
-            return OneCommitteeResponseDto.builder().email(getEmail()).location(getLocation()).image(getImage()).id(getId())
+            return CommitteeAdminResponseDto.builder().email(getEmail()).location(getLocation()).image(getImage()).id(getId())
                     .name(getName()).major(getMajor()).position(getPosition()).image(getImage()).build();
         }
     }

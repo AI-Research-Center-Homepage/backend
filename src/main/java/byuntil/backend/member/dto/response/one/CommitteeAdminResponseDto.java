@@ -5,12 +5,12 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class OneCommitteeResponseDto extends OneMemberResponseDto{
+public class CommitteeAdminResponseDto extends MemberAdminResponseDto {
     private String position;
 
     @Builder
-    public OneCommitteeResponseDto(Long id, String name, String major, String email,
-                                   String image, String position, String location, LoginResponseDto loginDto) {
+    public CommitteeAdminResponseDto(Long id, String name, String major, String email,
+                                     String image, String position, String location, LoginResponseDto loginDto) {
         super(id, name, major, email, image, location, loginDto);
         this.position = position;
     }
