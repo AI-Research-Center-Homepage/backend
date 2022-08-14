@@ -2,6 +2,9 @@ package byuntil.backend.member.controller.common;
 
 import byuntil.backend.member.domain.entity.member.*;
 import byuntil.backend.member.dto.response.*;
+import byuntil.backend.member.dto.response.general.*;
+import byuntil.backend.member.dto.response.general.list.*;
+import byuntil.backend.member.dto.response.one.*;
 import byuntil.backend.member.service.MemberService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -22,123 +26,57 @@ public class MemberController {
 
     @GetMapping("/professor")
     public ResponseEntity readProfessors() {
-        List<ProfessorDto> professorDtos = (List<ProfessorDto>) memberService.findAllByPosition(MemberDtype.Professor.toString());
-        ProfessorResponseDto<ProfessorDto> response = ProfessorResponseDto.<ProfessorDto>builder().professor(professorDtos).build();
-        return ResponseEntity.ok().body(response);
+        List<ProfessorAdminResponseDto> adminDtoList = (List<ProfessorAdminResponseDto>) memberService.findAllByPosition(MemberDtype.Professor.toString());
+        List<ProfessorResponseDto> response = new ArrayList<>();
+        for (ProfessorAdminResponseDto dto: adminDtoList) {
+            response.add(ProfessorResponseDto.builder().name(dto.getName()).id(dto.getId()).email(dto.getEmail()).doctorate(dto.getDoctorate()).number(dto.getNumber())
+                    .major(dto.getMajor()).image(dto.getImage()).location(dto.getLocation()).build());
+        }
+        return ResponseEntity.ok().body(ProfessorResponseListDto.builder().professor(response).build());
     }
 
     @GetMapping("/graduate")
     public ResponseEntity readGraduates() {
-        List<GraduateDto> graduateDtos = (List<GraduateDto>) memberService.findAllByPosition(MemberDtype.Graduate.toString());
-        GraduateResponseDto<GraduateDto> response = GraduateResponseDto.<GraduateDto>builder().graduate(graduateDtos).build();
-        return ResponseEntity.ok().body(response);
+        List<GraduateAdminResponseDto> adminDtoList = (List<GraduateAdminResponseDto>) memberService.findAllByPosition(MemberDtype.Graduate.toString());
+        List<GraduateResponseDto> response = new ArrayList<>();
+        for (GraduateAdminResponseDto dto: adminDtoList) {
+            response.add(GraduateResponseDto.builder().name(dto.getName()).id(dto.getId()).email(dto.getEmail()).admission(dto.getAdmission()).major(dto.getMajor())
+                    .image(dto.getImage()).location(dto.getLocation()).build());
+
+        }
+        return ResponseEntity.ok().body(GraduateResponseListDto.builder().graduate(response).build());
     }
 
     @GetMapping("/undergraduate")
     public ResponseEntity readUnderGraduates() {
-        List<UndergraduateDto> undergraduateDtos = (List<UndergraduateDto>) memberService.findAllByPosition(MemberDtype.Undergraduate.toString());
-        UndergraduateResponseDto<UndergraduateDto> response = UndergraduateResponseDto.<UndergraduateDto>builder().undergraduate(undergraduateDtos).build();
-        return ResponseEntity.ok().body(response);
+        List<UndergraduateAdminResponseDto> adminDtoList = (List<UndergraduateAdminResponseDto>) memberService.findAllByPosition(MemberDtype.Undergraduate.toString());
+        List<UndergraduateReponseDto> response = new ArrayList<>();
+        for (UndergraduateAdminResponseDto dto: adminDtoList) {
+            response.add(UndergraduateReponseDto.builder().name(dto.getName()).id(dto.getId()).email(dto.getEmail()).admission(dto.getAdmission())
+                    .image(dto.getImage()).location(dto.getLocation()).major(dto.getMajor()).build());
+        }
+        return ResponseEntity.ok().body(UndergraduateResponseListDto.builder().undergraduate(response).build());
     }
 
     @GetMapping("/committee")
     public ResponseEntity readCommittee() {
-        List<CommitteeDto> committeeDtos = (List<CommitteeDto>) memberService.findAllByPosition(MemberDtype.Committee.toString());
-        CommitteeResponseDto<CommitteeDto> response = CommitteeResponseDto.<CommitteeDto>builder().committee(committeeDtos).build();
-        return ResponseEntity.ok().body(response);
+        List<CommitteeAdminResponseDto> adminDtoList = (List<CommitteeAdminResponseDto>) memberService.findAllByPosition(MemberDtype.Committee.toString());
+        List<CommitteeResponseDto> response = new ArrayList<>();
+        for (CommitteeAdminResponseDto dto: adminDtoList) {
+            response.add(CommitteeResponseDto.builder().name(dto.getName()).id(dto.getId()).email(dto.getEmail()).image(dto.getImage()).location(dto.getLocation())
+                    .position(dto.getPosition()).major(dto.getMajor()).build());
+        }
+        return ResponseEntity.ok().body(CommitteeResponseListDto.builder().committee(response).build());
     }
 
     @GetMapping("/researcher")
     public ResponseEntity readResearcher() {
-        List<ResearcherDto> researcherDtos  = (List<ResearcherDto>) memberService.findAllByPosition(MemberDtype.Researcher.toString());
-        ResearcherResponseDto<ResearcherDto> response = ResearcherResponseDto.<ResearcherDto>builder().researcher(researcherDtos).build();
-        return ResponseEntity.ok().body(response);
-    }
-
-    @Getter
-    static class ProfessorDto {
-        private final Long id;
-        private final String name;
-        private final String image;
-        private final String location;
-        private final String doctorate;
-        private final String number;
-
-        public ProfessorDto(final Professor professor) {
-            this.id = professor.getId();
-            this.name = professor.getName();
-            this.image = professor.getImage();
-            this.location = professor.getLocation();
-            this.doctorate = professor.getDoctorate();
-            this.number = professor.getNumber();
+        List<ResearcherAdminResponseDto> adminDtoList  = (List<ResearcherAdminResponseDto>) memberService.findAllByPosition(MemberDtype.Researcher.toString());
+        List<ResearcherResponseDto> response = new ArrayList<>();
+        for (ResearcherAdminResponseDto dto: adminDtoList) {
+            response.add(ResearcherResponseDto.builder().name(dto.getName()).id(dto.getId()).email(dto.getEmail()).image(dto.getImage()).location(dto.getLocation())
+                    .major(dto.getMajor()).build());
         }
-    }
-
-    @Getter
-    static class GraduateDto {
-        private final Long id;
-        private final String name;
-        private final String image;
-        private final String location;
-        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-        private final LocalDateTime admission;
-
-        public GraduateDto(final Graduate gradate) {
-            this.id = gradate.getId();
-            this.name = gradate.getName();
-            this.image = gradate.getImage();
-            this.location = gradate.getLocation();
-            this.admission = gradate.getAdmission();
-        }
-    }
-
-    @Getter
-    static class UndergraduateDto {
-        private final Long id;
-        private final String name;
-        private final String image;
-        private final String location;
-        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-        private final LocalDateTime admission;
-
-        public UndergraduateDto(final Undergraduate underGradate) {
-            this.id = underGradate.getId();
-            this.name = underGradate.getName();
-            this.image = underGradate.getImage();
-            this.location = underGradate.getLocation();
-            this.admission = underGradate.getAdmission();
-        }
-    }
-
-    @Getter
-    static class CommitteeDto {
-        private final Long id;
-        private final String name;
-        private final String image;
-        private final String location;
-        private final String position;
-
-        public CommitteeDto(final Committee committee) {
-            this.id = committee.getId();
-            this.name = committee.getName();
-            this.image = committee.getImage();
-            this.location = committee.getLocation();
-            this.position = committee.getPosition();
-        }
-    }
-
-    @Getter
-    static class ResearcherDto {
-        private final Long id;
-        private final String name;
-        private final String image;
-        private final String location;
-
-        public ResearcherDto(final Researcher researcher) {
-            this.id = researcher.getId();
-            this.name = researcher.getName();
-            this.image = researcher.getImage();
-            this.location = researcher.getLocation();
-        }
+        return ResponseEntity.ok().body(ResearcherResponseListDto.builder().researcher(response).build());
     }
 }

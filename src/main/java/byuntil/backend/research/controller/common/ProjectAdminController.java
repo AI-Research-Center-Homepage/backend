@@ -1,11 +1,8 @@
 package byuntil.backend.research.controller.common;
 
-import byuntil.backend.research.domain.entity.Demo;
-import byuntil.backend.research.domain.entity.Project;
-import byuntil.backend.research.dto.request.DemoDto;
 import byuntil.backend.research.dto.request.FieldDto;
 import byuntil.backend.research.dto.request.ProjectDto;
-import byuntil.backend.research.dto.response.AllProjectResponseDto;
+import byuntil.backend.research.dto.response.project.AllProjectResponseDto;
 import byuntil.backend.research.service.FieldService;
 import byuntil.backend.research.service.ProjectService;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController

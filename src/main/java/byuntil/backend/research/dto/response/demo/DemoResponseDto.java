@@ -1,5 +1,6 @@
-package byuntil.backend.research.dto.response;
+package byuntil.backend.research.dto.response.demo;
 
+import byuntil.backend.research.dto.response.demo.AllDemoGeneralDto;
 import lombok.Builder;
 import lombok.Getter;
 

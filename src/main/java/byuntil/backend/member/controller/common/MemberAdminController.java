@@ -36,45 +36,45 @@ public class MemberAdminController {
     @GetMapping("/members/{position}")
     public ResponseEntity readMembersByPosition(@PathVariable String position){
         if(position.equals("committee")){
-            List<OneCommitteeResponseDto> members = (List<OneCommitteeResponseDto>)memberService.findAllByPosition(position);
+            List<CommitteeAdminResponseDto> members = (List<CommitteeAdminResponseDto>)memberService.findAllByPosition(position);
             List<MemberLookupDto> memberLookupDtoList = new ArrayList<>();
-            for (OneCommitteeResponseDto dto: members) {
+            for (CommitteeAdminResponseDto dto: members) {
                 memberLookupDtoList.add(MemberLookupDto.builder().name(dto.getName()).id(dto.getId()).email(dto.getEmail()).major(dto.getMajor()).build());
             }
             MembersLookupDto membersLookupDto = MembersLookupDto.builder().members(memberLookupDtoList).build();
             return ResponseEntity.ok().body(membersLookupDto);
         }
         else if(position.equals("graduate")){
-            List<OneGraduateResponseDto> members = (List<OneGraduateResponseDto>)memberService.findAllByPosition(position);
+            List<GraduateAdminResponseDto> members = (List<GraduateAdminResponseDto>)memberService.findAllByPosition(position);
             List<MemberLookupDto> memberLookupDtoList = new ArrayList<>();
-            for (OneGraduateResponseDto dto: members) {
+            for (GraduateAdminResponseDto dto: members) {
                 memberLookupDtoList.add(MemberLookupDto.builder().name(dto.getName()).id(dto.getId()).email(dto.getEmail()).major(dto.getMajor()).build());
             }
             MembersLookupDto membersLookupDto = MembersLookupDto.builder().members(memberLookupDtoList).build();
             return ResponseEntity.ok().body(membersLookupDto);
         }
         else if(position.equals("professor")){
-            List<OneProfessorResponseDto> members = (List<OneProfessorResponseDto>)memberService.findAllByPosition(position);
+            List<ProfessorAdminResponseDto> members = (List<ProfessorAdminResponseDto>)memberService.findAllByPosition(position);
             List<MemberLookupDto> memberLookupDtoList = new ArrayList<>();
-            for (OneProfessorResponseDto dto: members) {
+            for (ProfessorAdminResponseDto dto: members) {
                 memberLookupDtoList.add(MemberLookupDto.builder().name(dto.getName()).id(dto.getId()).email(dto.getEmail()).major(dto.getMajor()).build());
             }
             MembersLookupDto membersLookupDto = MembersLookupDto.builder().members(memberLookupDtoList).build();
             return ResponseEntity.ok().body(membersLookupDto);
         }
         else if(position.equals("researcher")){
-            List<OneResearcherResponseDto> members = (List<OneResearcherResponseDto>)memberService.findAllByPosition(position);
+            List<ResearcherAdminResponseDto> members = (List<ResearcherAdminResponseDto>)memberService.findAllByPosition(position);
             List<MemberLookupDto> memberLookupDtoList = new ArrayList<>();
-            for (OneResearcherResponseDto dto: members) {
+            for (ResearcherAdminResponseDto dto: members) {
                 memberLookupDtoList.add(MemberLookupDto.builder().name(dto.getName()).id(dto.getId()).email(dto.getEmail()).major(dto.getMajor()).build());
             }
             MembersLookupDto membersLookupDto = MembersLookupDto.builder().members(memberLookupDtoList).build();
             return ResponseEntity.ok().body(membersLookupDto);
         }
         else if(position.equals("undergraduate")){
-            List<OneUndergraduateResponseDto> members = (List<OneUndergraduateResponseDto>)memberService.findAllByPosition(position);
+            List<UndergraduateAdminResponseDto> members = (List<UndergraduateAdminResponseDto>)memberService.findAllByPosition(position);
             List<MemberLookupDto> memberLookupDtoList = new ArrayList<>();
-            for (OneUndergraduateResponseDto dto: members) {
+            for (UndergraduateAdminResponseDto dto: members) {
                 memberLookupDtoList.add(MemberLookupDto.builder().name(dto.getName()).id(dto.getId()).email(dto.getEmail()).major(dto.getMajor()).build());
             }
             MembersLookupDto membersLookupDto = MembersLookupDto.builder().members(memberLookupDtoList).build();
@@ -90,13 +90,13 @@ public class MemberAdminController {
     public ResponseEntity join(@RequestBody CommitteeRequestDto memberDto) {
         if(memberDto.getLoginDto()!=null && !memberDto.getLoginDto().getLoginId().equals("")){
             LoginDto loginDto = createAuth(memberDto.getLoginDto());
-            CommitteeSaveDto dto = CommitteeSaveDto.builder().loginDto(loginDto).email(memberDto.getEmail())
+            CommitteeSaveDto dto = CommitteeSaveDto.builder().loginDto(loginDto).email(memberDto.getEmail()).name(memberDto.getName())
                     .location(memberDto.getLocation()).image(memberDto.getImage()).position(memberDto.getPosition())
                     .major(memberDto.getMajor()).build();
             memberService.saveMember(dto);
         }
         else{
-            CommitteeSaveDto dto = CommitteeSaveDto.builder().email(memberDto.getEmail())
+            CommitteeSaveDto dto = CommitteeSaveDto.builder().email(memberDto.getEmail()).name(memberDto.getName())
                     .location(memberDto.getLocation()).image(memberDto.getImage()).position(memberDto.getPosition())
                     .major(memberDto.getMajor()).build();
             memberService.saveMember(dto);
@@ -188,25 +188,25 @@ public class MemberAdminController {
         Member member = (Member) memberService.findOneMember(id).get();
         String dType = member.getDtype();
         if (dType.equals("Committee")){
-            OneCommitteeResponseDto dto = memberService.findOneCommittee(id).toDto();
+            CommitteeAdminResponseDto dto = memberService.findOneCommittee(id).toDto();
             return ResponseEntity.ok().body(dto);
         }
         else if(dType.equals("Graduate")){
-            OneGraduateResponseDto dto = memberService.findOneGraduate(id).toDto();
+            GraduateAdminResponseDto dto = memberService.findOneGraduate(id).toDto();
             return ResponseEntity.ok().body(dto);
 
         }
         else if(dType.equals("Professor")){
-            OneProfessorResponseDto dto = memberService.findOneProfessor(id).toDto();
+            ProfessorAdminResponseDto dto = memberService.findOneProfessor(id).toDto();
             return ResponseEntity.ok().body(dto);
         }
         else if(dType.equals("Researcher")){
-            OneResearcherResponseDto dto = memberService.findOneResearcher(id).toDto();
+            ResearcherAdminResponseDto dto = memberService.findOneResearcher(id).toDto();
             return ResponseEntity.ok().body(dto);
 
         }
         else if(dType.equals("Undergraduate")){
-            OneUndergraduateResponseDto dto = memberService.findOneUndergraduate(id).toDto();
+            UndergraduateAdminResponseDto dto = memberService.findOneUndergraduate(id).toDto();
             return ResponseEntity.ok().body(dto);
         }
         else{

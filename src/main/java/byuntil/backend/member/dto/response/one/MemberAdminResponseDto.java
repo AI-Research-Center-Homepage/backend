@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public abstract class OneMemberResponseDto {
+public abstract class MemberAdminResponseDto {
     private Long id;
     private String name;
     private String major;

@@ -1,16 +1,15 @@
 package byuntil.backend.research.controller.common;
 
-import byuntil.backend.research.domain.entity.Field;
 import byuntil.backend.research.dto.request.FieldDto;
-import byuntil.backend.research.dto.response.FieldResponseDto;
+import byuntil.backend.research.dto.response.field.GeneralOneFieldDto;
 import byuntil.backend.research.service.FieldService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -22,8 +21,11 @@ public class FieldController {
     @GetMapping("/fields")
     public ResponseEntity readFields() {
         List<FieldDto> fields = fieldService.findAll();
-        FieldResponseDto<FieldDto> response = FieldResponseDto.<FieldDto>builder().fields(fields).build();
-        return ResponseEntity.ok().body(response);
+        List<GeneralOneFieldDto> list = new ArrayList<>();
+        for (FieldDto field: fields) {
+            list.add(GeneralOneFieldDto.builder().name(field.getName()).description(field.getDescription()).build());
+        }
+        return ResponseEntity.ok().body(list);
     }
 
 }

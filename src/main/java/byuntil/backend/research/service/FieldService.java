@@ -56,11 +56,11 @@ public class FieldService {
         return FieldDto.builder().id(field.getId()).description(field.getDescription()).name(field.getName()).build();
     }
 
-    public List<byuntil.backend.research.dto.response.FieldDto> findAllWithName() {
+    public List<byuntil.backend.research.dto.response.field.FieldDto> findAllWithName() {
         List<Field> fields = fieldRepository.findAll();
-        List<byuntil.backend.research.dto.response.FieldDto> fieldDtoList = new ArrayList<>();
+        List<byuntil.backend.research.dto.response.field.FieldDto> fieldDtoList = new ArrayList<>();
         for (Field field: fields) {
-            fieldDtoList.add(byuntil.backend.research.dto.response.FieldDto.builder().fieldName(field.getName()).build());
+            fieldDtoList.add(byuntil.backend.research.dto.response.field.FieldDto.builder().fieldName(field.getName()).build());
         }
         return fieldDtoList;
     }

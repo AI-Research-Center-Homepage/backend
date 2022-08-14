@@ -2,7 +2,7 @@ package byuntil.backend.member.domain.entity.member;
 
 import byuntil.backend.admin.controller.domain.Login;
 import byuntil.backend.member.dto.response.LoginResponseDto;
-import byuntil.backend.member.dto.response.one.OneGraduateResponseDto;
+import byuntil.backend.member.dto.response.one.GraduateAdminResponseDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,14 +28,14 @@ public class Graduate extends Member {
         this.admission = admission;
     }
 
-    public OneGraduateResponseDto toDto(){
+    public GraduateAdminResponseDto toDto(){
         if (getLogin()!=null){
             LoginResponseDto loginDto = LoginResponseDto.builder().loginId(getLogin().getLoginId()).loginPw(getLogin().getLoginPw()).deleted(getLogin().getDeleted()).build();
-            return OneGraduateResponseDto.builder().loginDto(loginDto).email(getEmail()).location(getLocation()).image(getImage()).major(getMajor()).id(getId())
+            return GraduateAdminResponseDto.builder().loginDto(loginDto).email(getEmail()).location(getLocation()).image(getImage()).major(getMajor()).id(getId())
                     .admission(getAdmission()).name(getName()).build();
         }
         else{
-            return OneGraduateResponseDto.builder().email(getEmail()).location(getLocation()).image(getImage()).major(getMajor()).id(getId())
+            return GraduateAdminResponseDto.builder().email(getEmail()).location(getLocation()).image(getImage()).major(getMajor()).id(getId())
                     .admission(getAdmission()).name(getName()).build();
         }
 

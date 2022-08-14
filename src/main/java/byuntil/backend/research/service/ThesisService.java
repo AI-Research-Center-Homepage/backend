@@ -8,8 +8,10 @@ import byuntil.backend.research.domain.repository.FieldRepository;
 import byuntil.backend.research.domain.repository.ThesisRepository;
 import byuntil.backend.research.dto.request.MemberDto;
 import byuntil.backend.research.dto.request.ThesisDto;
-import byuntil.backend.research.dto.response.AllThesisResponseDto;
-import byuntil.backend.research.dto.response.OneThesisDto;
+import byuntil.backend.research.dto.response.thesis.AllThesisResponseDto;
+import byuntil.backend.research.dto.response.thesis.GeneralOneThesisDto;
+import byuntil.backend.research.dto.response.thesis.GeneralThesisDto;
+import byuntil.backend.research.dto.response.thesis.OneThesisDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -78,7 +80,26 @@ public class ThesisService {
         return thesisRepository.findById(id).get().toDto();
     }
 
-    public List<AllThesisResponseDto> findAll() {
+    public List<GeneralThesisDto> findAll(){
+        List<String> fieldNames = new ArrayList<>();
+        List<GeneralThesisDto> list = new ArrayList<>();
+        for (Field field: fieldRepository.findAll()) {
+            fieldNames.add(field.getName());
+        }
+        for (String fieldName: fieldNames) {
+            List<ThesisDto> thesisDtoListByName = findAllByFieldName(fieldName);
+            List<GeneralOneThesisDto> oneThesisDtoList = new ArrayList<>();
+            for (ThesisDto thesisDto : thesisDtoListByName) {
+                GeneralOneThesisDto one = GeneralOneThesisDto.builder().enName(thesisDto.getEnName()).koName(thesisDto.getKoName())
+                        .id(thesisDto.getId()).url(thesisDto.getUrl()).publishDate(thesisDto.getPublishDate()).journal(thesisDto.getJournal())
+                        .title(thesisDto.getTitle()).build();
+                oneThesisDtoList.add(one);
+            }
+            list.add(GeneralThesisDto.builder().fieldName(fieldName).theses(oneThesisDtoList).build());
+        }
+        return list;
+    }
+    public List<AllThesisResponseDto> findAllAdmin() {
         List<String> fieldNames = new ArrayList<>();
         List<AllThesisResponseDto> thesisDtoList = new ArrayList<>();
         for (Field field: fieldRepository.findAll()) {

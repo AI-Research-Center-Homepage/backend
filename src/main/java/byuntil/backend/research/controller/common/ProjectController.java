@@ -1,10 +1,10 @@
 package byuntil.backend.research.controller.common;
 
-import byuntil.backend.research.domain.entity.Field;
-import byuntil.backend.research.domain.entity.Project;
 import byuntil.backend.research.dto.request.FieldDto;
 import byuntil.backend.research.dto.request.ProjectDto;
-import byuntil.backend.research.dto.response.ProjectResponseDto;
+import byuntil.backend.research.dto.response.project.GeneralOneProjectDto;
+import byuntil.backend.research.dto.response.project.GeneralProjectDto;
+import byuntil.backend.research.dto.response.project.ProjectResponseDto;
 import byuntil.backend.research.service.FieldService;
 import byuntil.backend.research.service.ProjectService;
 import lombok.Builder;
@@ -28,23 +28,19 @@ public class ProjectController {
     @GetMapping("/project")
     public ResponseEntity readProjects() {
         List<FieldDto> fields = fieldService.findAll();
-        List<ProjectFieldDto> projectFieldDtos = new ArrayList<>();
+        List<GeneralProjectDto> projectFieldDtos = new ArrayList<>();
         for (FieldDto field : fields) {
             String fieldName = field.getName();
             List<ProjectDto> projectDtos = projectService.findAllByFieldName(fieldName);
-            projectFieldDtos.add(ProjectFieldDto.builder().fieldName(fieldName).projects(projectDtos).build());
+            List<GeneralOneProjectDto> list = new ArrayList<>();
+            for (ProjectDto dto: projectDtos) {
+                list.add(GeneralOneProjectDto.builder().title(dto.getName()).id(dto.getId()).participants(dto.getParticipants())
+                        .content(dto.getContent()).description(dto.getDescription()).build());
+            }
+            projectFieldDtos.add(GeneralProjectDto.builder().fieldName(fieldName).projects(list).build());
         }
 
-        ProjectResponseDto<ProjectFieldDto> response = ProjectResponseDto.<ProjectFieldDto>builder().projects(projectFieldDtos).build();
-
-        return ResponseEntity.ok().body(response);
+        return ResponseEntity.ok().body(projectFieldDtos);
     }
 
-    @Getter
-    @RequiredArgsConstructor
-    @Builder
-    static class ProjectFieldDto {
-        private final String fieldName;
-        private final List<ProjectDto> projects;
-    }
 }

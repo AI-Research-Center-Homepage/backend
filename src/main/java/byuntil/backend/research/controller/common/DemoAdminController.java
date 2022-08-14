@@ -1,8 +1,7 @@
 package byuntil.backend.research.controller.common;
 
-import byuntil.backend.research.domain.entity.Demo;
 import byuntil.backend.research.dto.request.DemoDto;
-import byuntil.backend.research.dto.response.AllDemoResponseDto;
+import byuntil.backend.research.dto.response.demo.AllDemoResponseDto;
 import byuntil.backend.research.service.DemoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

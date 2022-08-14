@@ -1,4 +1,4 @@
-package byuntil.backend.research.dto.response;
+package byuntil.backend.research.dto.response.project;
 
 import lombok.Builder;
 import lombok.Getter;

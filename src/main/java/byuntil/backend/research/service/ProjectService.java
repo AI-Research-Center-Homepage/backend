@@ -5,20 +5,15 @@ import byuntil.backend.research.domain.entity.Field;
 import byuntil.backend.research.domain.entity.Project;
 import byuntil.backend.research.domain.repository.FieldRepository;
 import byuntil.backend.research.domain.repository.ProjectRepository;
-import byuntil.backend.research.dto.request.FieldDto;
 import byuntil.backend.research.dto.request.ProjectDto;
-import byuntil.backend.research.dto.request.ThesisDto;
-import byuntil.backend.research.dto.response.AllProjectResponseDto;
-import byuntil.backend.research.dto.response.AllThesisResponseDto;
-import byuntil.backend.research.dto.response.OneProjectDto;
-import byuntil.backend.research.dto.response.OneThesisDto;
+import byuntil.backend.research.dto.response.project.AllProjectResponseDto;
+import byuntil.backend.research.dto.response.project.OneProjectDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

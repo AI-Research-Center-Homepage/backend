@@ -166,11 +166,12 @@ public class MemberService implements UserDetailsService {
         return dto;
     }
 
-    public List<?> findAllByPosition(final String position) {
+    public List<?> findAllByPosition(String position) {
         List<Member> members = memberRepository.findAllByDtype(firstWordToUpper(position));
 
+        position = firstWordToLower(position);
         if(position.equals("committee")){
-            List<OneCommitteeResponseDto> dtoList = new ArrayList<>();
+            List<CommitteeAdminResponseDto> dtoList = new ArrayList<>();
             for (Member member: members) {
                 Committee committee = (Committee) member;
                 dtoList.add(committee.toDto());
@@ -178,7 +179,7 @@ public class MemberService implements UserDetailsService {
             return dtoList;
         }
         else if(position.equals("graduate")){
-            List<OneGraduateResponseDto> dtoList = new ArrayList<>();
+            List<GraduateAdminResponseDto> dtoList = new ArrayList<>();
             for (Member member: members) {
                 Graduate graduate = (Graduate) member;
                 dtoList.add(graduate.toDto());
@@ -186,7 +187,7 @@ public class MemberService implements UserDetailsService {
             return dtoList;
         }
         else if(position.equals("professor")){
-            List<OneProfessorResponseDto> dtoList = new ArrayList<>();
+            List<ProfessorAdminResponseDto> dtoList = new ArrayList<>();
             for (Member member: members) {
                 Professor professor = (Professor) member;
                 dtoList.add(professor.toDto());
@@ -194,7 +195,7 @@ public class MemberService implements UserDetailsService {
             return dtoList;
         }
         else if(position.equals("researcher")){
-            List<OneResearcherResponseDto> dtoList = new ArrayList<>();
+            List<ResearcherAdminResponseDto> dtoList = new ArrayList<>();
             for (Member member: members) {
                 Researcher researcher = (Researcher) member;
                 dtoList.add(researcher.toDto());
@@ -202,7 +203,7 @@ public class MemberService implements UserDetailsService {
             return dtoList;
         }
         else if(position.equals("undergraduate")){
-            List<OneUndergraduateResponseDto> dtoList = new ArrayList<>();
+            List<UndergraduateAdminResponseDto> dtoList = new ArrayList<>();
             for (Member member: members) {
                 Undergraduate undergraduate = (Undergraduate) member;
                 dtoList.add(undergraduate.toDto());
@@ -215,6 +216,15 @@ public class MemberService implements UserDetailsService {
 
     }
 
+    public String firstWordToLower(String str){
+        char[] arr = str.toCharArray();
+        arr[0] = Character.toLowerCase(arr[0]);
+        String newStr = "";
+        for (char c: arr) {
+            newStr += c;
+        }
+        return newStr;
+    }
     public String firstWordToUpper(String str){
         char[] arr = str.toCharArray();
         arr[0] = Character.toUpperCase(arr[0]);
