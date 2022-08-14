@@ -10,9 +10,7 @@ import byuntil.backend.post.domain.entity.Post;
 import byuntil.backend.post.domain.repository.BoardRepository;
 import byuntil.backend.post.domain.repository.PostRepository;
 import byuntil.backend.post.dto.PostDto;
-import byuntil.backend.post.dto.response.AttachResponseDto;
-import byuntil.backend.post.dto.response.readAdminAllPostDto;
-import byuntil.backend.post.dto.response.readPostDto;
+import byuntil.backend.post.dto.response.*;
 import byuntil.backend.s3.domain.FileStatus;
 import byuntil.backend.s3.service.S3ServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -33,9 +31,9 @@ public class PostService {
     private final BoardRepository boardRepository;
 
 
-    //minji
+    //file이 들어오는 경우
     @Transactional
-    public Long save(final PostDto postDto, final List<MultipartFile> fileList) throws IOException {
+    public FileListResponseDto save(final PostDto postDto, final List<MultipartFile> fileList) throws IOException {
         //지워야하는코드
         Board board1 = Board.builder().name("Notice").build();
         if(!boardRepository.findByName("Notice").isPresent()) boardRepository.save(board1);
@@ -44,11 +42,35 @@ public class PostService {
         if(!boardRepository.findByName("News").isPresent()) boardRepository.save(board2);
 
         Post post = postDto.toEntity();
-        if(fileList!=null){
-            List<Attach> attachList = s3Service.uploadReturnAttachList(fileList);
-            post.addAttaches(attachList);
-        }
+        List<Attach> attachList = s3Service.uploadReturnAttachList(fileList);
+        List<FileResponseDto> fileDtoList = new ArrayList<>();
 
+        post.addAttaches(attachList);
+
+        //보드 이름으로 보드 찾아오는 명령어 수행해야함 없으면 예외터뜨리기
+        Board board = boardRepository.findByName(postDto.getBoardName()).orElseThrow(BoardNotFoundException::new);
+        //찾아온 board로
+        post.setBoard(board);
+        //그럼 cascade설정으로 attach도 같이 저장이 될 것이다
+        postRepository.save(post);
+        //저장한 뒤여야 attach도 id값이 생긴다
+        for (Attach attach: attachList) {
+            fileDtoList.add(FileResponseDto.builder().fileName(attach.getOriginFileName()).id(attach.getId())
+                    .filePath(attach.getFileUrl()).build());
+        }
+        return FileListResponseDto.builder().files(fileDtoList).build();
+    }
+    //minji
+    @Transactional
+    public Long save(final PostDto postDto) throws IOException {
+        //지워야하는코드
+        Board board1 = Board.builder().name("Notice").build();
+        if(!boardRepository.findByName("Notice").isPresent()) boardRepository.save(board1);
+
+        Board board2 = Board.builder().name("News").build();
+        if(!boardRepository.findByName("News").isPresent()) boardRepository.save(board2);
+
+        Post post = postDto.toEntity();
         //보드 이름으로 보드 찾아오는 명령어 수행해야함 없으면 예외터뜨리기
         Board board = boardRepository.findByName(postDto.getBoardName()).orElseThrow(BoardNotFoundException::new);
         //찾아온 board로

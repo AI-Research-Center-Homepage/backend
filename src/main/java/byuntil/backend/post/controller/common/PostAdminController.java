@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,9 +39,19 @@ public class PostAdminController {
 
     //게시글등록
     @PostMapping("/posts")
-    public ResponseEntity createPost(@RequestPart PostDto postDto, @RequestPart(value = "file", required = false) List<MultipartFile> fileList) throws IOException {
+    public ResponseEntity createPost(@RequestPart PostDto postDto,
+                                     @RequestPart(value = "file", required = false) List<MultipartFile> fileList) throws IOException {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(postService.save(postDto, fileList));
+        //만약에 fileList가 들어온다면..
+        if(Optional.ofNullable(fileList).isPresent()){
+            //fileList가 있다면..
+            return ResponseEntity.status(HttpStatus.CREATED).body(postService.save(postDto, fileList));
+
+        }
+        else{
+            return ResponseEntity.status(HttpStatus.CREATED).body(postService.save(postDto));
+        }
+
     }
     //게시글삭제
     @DeleteMapping("/posts")
