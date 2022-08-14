@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 public class readAdminAllPostDto {
+    private Long id;
     private String title;
     private String author;
     private Integer viewNum;;

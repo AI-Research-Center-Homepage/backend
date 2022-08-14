@@ -215,7 +215,7 @@ public class PostService {
         List<readAdminAllPostDto> noticeResponseDtoList = new ArrayList<>();
         for (Post post: posts) {
             noticeResponseDtoList.add(readAdminAllPostDto.builder().title(post.getTitle())
-                    .author(post.getAuthor()).createdDate(post.getCreatedDate())
+                    .author(post.getAuthor()).createdDate(post.getCreatedDate()).id(post.getId())
                     .modifiedDate(post.getModifiedDate()).viewNum(post.getViewNum()).build());
         }
         return noticeResponseDtoList;
