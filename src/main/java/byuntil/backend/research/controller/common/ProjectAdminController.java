@@ -44,7 +44,7 @@ public class ProjectAdminController
     public List<AllProjectResponseDto> readAll(){
         return projectService.findAll();
     }
-    @GetMapping("projectId")
+    @GetMapping("/{projectId}")
     public ResponseEntity readById(@PathVariable("projectId") Long id){
         return ResponseEntity.status(HttpStatus.OK).body(projectService.findById(id));
     }
