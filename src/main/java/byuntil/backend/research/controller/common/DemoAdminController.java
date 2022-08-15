@@ -21,13 +21,13 @@ public class DemoAdminController {
         return ResponseEntity.status(HttpStatus.CREATED).body("");
     }
     @PutMapping
-    public ResponseEntity update(@RequestParam Long id, @RequestBody DemoDto demoDto){
+    public ResponseEntity update(@RequestParam("demoId")Long id, @RequestBody DemoDto demoDto){
         demoDto.setId(id);
         demoService.update(demoDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(id);
     }
     @DeleteMapping
-    public ResponseEntity delete(@RequestParam Long id){
+    public ResponseEntity delete(@RequestParam("demoId") Long id){
         demoService.deleteById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("");
     }
@@ -36,8 +36,8 @@ public class DemoAdminController {
         List<AllDemoResponseDto> demoList = demoService.findAllWithAdmin();
         return ResponseEntity.status(HttpStatus.OK).body(demoList);
     }
-    @GetMapping("/{id}")
-    public ResponseEntity readById(@PathVariable Long id){
+    @GetMapping("/{demoId}")
+    public ResponseEntity readById(@PathVariable("demoId") Long id){
         return ResponseEntity.status(HttpStatus.OK).body(demoService.findById(id));
     }
 

@@ -30,13 +30,13 @@ public class ProjectAdminController
     }
 
     @PutMapping
-    public ResponseEntity update(@RequestParam Long id, @RequestBody ProjectDto projectDto){
+    public ResponseEntity update(@RequestParam("projectId") Long id, @RequestBody ProjectDto projectDto){
         projectDto.setId(id);
         projectService.update(projectDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(id);
     }
     @DeleteMapping
-    public ResponseEntity delete(@RequestParam Long id){
+    public ResponseEntity delete(@RequestParam("projectId") Long id){
         projectService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("");
     }
@@ -44,8 +44,8 @@ public class ProjectAdminController
     public List<AllProjectResponseDto> readAll(){
         return projectService.findAll();
     }
-    @GetMapping("/{id}")
-    public ResponseEntity readById(@PathVariable("id") Long id){
+    @GetMapping("projectId")
+    public ResponseEntity readById(@PathVariable("projectId") Long id){
         return ResponseEntity.status(HttpStatus.OK).body(projectService.findById(id));
     }
 

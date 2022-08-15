@@ -40,15 +40,14 @@ public class ThesisAdminController {
         return ResponseEntity.status(HttpStatus.CREATED).body("");
     }
     @PutMapping
-    public ResponseEntity update(@RequestParam Long id, @RequestBody ThesisDto thesisDto){
+    public ResponseEntity update(@RequestParam("thesisId") Long id, @RequestBody ThesisDto thesisDto){
         thesisDto.setId(id);
         thesisService.update(thesisDto);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(id);
     }
     @DeleteMapping
-
-    public ResponseEntity delete(@RequestParam Long id){
+    public ResponseEntity delete(@RequestParam("thesisId") Long id){
         thesisService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("");
     }
@@ -56,8 +55,8 @@ public class ThesisAdminController {
     public findAllInfoDto readAll(){
         return thesisService.findAllAdmin();
     }
-    @GetMapping("/{id}")
-    public ResponseEntity readById(@PathVariable("id") Long id){
+    @GetMapping("/{thesisId}")
+    public ResponseEntity readById(@PathVariable("thesisId") Long id){
         return ResponseEntity.status(HttpStatus.OK).body(thesisService.findById(id));
     }
 
