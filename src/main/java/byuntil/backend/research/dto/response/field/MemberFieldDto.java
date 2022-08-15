@@ -2,7 +2,6 @@ package byuntil.backend.research.dto.response.field;
 
 
 import byuntil.backend.member.dto.response.MemberResponseDto;
-import byuntil.backend.research.dto.response.field.FieldDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +12,6 @@ import java.util.List;
 @Builder
 @Setter
 public class MemberFieldDto {
-    private List<MemberResponseDto> memberDtoList;
-    private List<FieldDto> fieldDtoList;
+    private List<MemberResponseDto> members;
+    private List<FieldDto> fields;
 }

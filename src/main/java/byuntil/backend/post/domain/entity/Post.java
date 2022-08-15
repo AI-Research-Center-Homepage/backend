@@ -72,6 +72,8 @@ public class Post extends BaseTimeEntity {
 
     public void setBoard(final Board board) {
         this.board = board;
+        //이거 해주어야하지않나? -> cascade 설정되어있어서 괜찮음
+        //board.getPosts().add(this);
     }
 
     public void deleteAttaches() {

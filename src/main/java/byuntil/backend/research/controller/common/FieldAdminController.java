@@ -23,19 +23,17 @@ public class FieldAdminController {
         return ResponseEntity.status(HttpStatus.CREATED).body("");
     }
     @PutMapping
-    public ResponseEntity update(@RequestParam Long id, @RequestBody FieldDto fieldDto){
-        fieldDto.setId(id);
-        fieldService.update(fieldDto);
+    public ResponseEntity update(@RequestParam("fieldId") Long id, @RequestBody FieldDto fieldDto){
+        fieldService.update(fieldDto, id);
         return ResponseEntity.status(HttpStatus.CREATED).body(id);
     }
     @DeleteMapping
-    public ResponseEntity delete(@RequestParam Long id){
+    public ResponseEntity delete(@RequestParam("fieldId") Long id){
         fieldService.deleteById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("");
     }
     @GetMapping
     public ResponseEntity readAll(){
-        List<FieldDto> fieldList = fieldService.findAll();
-        return ResponseEntity.status(HttpStatus.OK).body(fieldList);
+        return ResponseEntity.status(HttpStatus.OK).body(fieldService.findAllAdmin());
     }
 }

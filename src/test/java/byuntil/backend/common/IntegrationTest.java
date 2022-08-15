@@ -100,7 +100,7 @@ public class IntegrationTest {
     }
 
     public FieldDto makeFieldDto() {
-        return FieldDto.builder().name("field").description("" + Math.random()).build();
+        return FieldDto.builder().fieldName("field").description("" + Math.random()).build();
     }
 
     public ThesisDto makeThesisDto() {

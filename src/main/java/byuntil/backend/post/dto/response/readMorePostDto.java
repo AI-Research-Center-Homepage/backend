@@ -6,7 +6,9 @@ import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Getter
 public class readMorePostDto {
@@ -25,10 +27,12 @@ public class readMorePostDto {
         this.content = post.getContent();
         this.author = post.getAuthor();
         this.viewNum = post.getViewNum();
-        attaches = null;
-        for (Attach attach: post.getAttaches()) {
-            AttachResponseDto dto = new AttachResponseDto(attach);
-            attaches.add(dto);
+        attaches = new ArrayList<>();
+        if (Optional.ofNullable(post.getAttaches()).isPresent()){
+            for (Attach attach: post.getAttaches()) {
+                AttachResponseDto dto = new AttachResponseDto(attach);
+                attaches.add(dto);
+            }
         }
         this.createdDate = post.getCreatedDate();
         this.modifiedDate = post.getModifiedDate();

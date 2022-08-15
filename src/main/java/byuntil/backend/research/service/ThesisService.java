@@ -8,10 +8,7 @@ import byuntil.backend.research.domain.repository.FieldRepository;
 import byuntil.backend.research.domain.repository.ThesisRepository;
 import byuntil.backend.research.dto.request.MemberDto;
 import byuntil.backend.research.dto.request.ThesisDto;
-import byuntil.backend.research.dto.response.thesis.AllThesisResponseDto;
-import byuntil.backend.research.dto.response.thesis.GeneralOneThesisDto;
-import byuntil.backend.research.dto.response.thesis.GeneralThesisDto;
-import byuntil.backend.research.dto.response.thesis.OneThesisDto;
+import byuntil.backend.research.dto.response.thesis.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,8 +73,12 @@ public class ThesisService {
         thesisRepository.deleteById(id);
     }
 
-    public ThesisDto findById(final Long id) {
-        return thesisRepository.findById(id).get().toDto();
+    public FieldOneResponseDto findById(final Long id) {
+        ThesisDto thesisDto = thesisRepository.findById(id).get().toDto();
+        return FieldOneResponseDto.builder().fieldName(thesisDto.getFieldName()).enName(thesisDto.getEnName())
+                .members(thesisDto.getMembers()).journal(thesisDto.getJournal()).koName(thesisDto.getKoName())
+                .title(thesisDto.getTitle()).url(thesisDto.getUrl()).publishDate(thesisDto.getPublishDate())
+                .build();
     }
 
     public List<GeneralThesisDto> findAll(){
@@ -99,7 +100,7 @@ public class ThesisService {
         }
         return list;
     }
-    public List<AllThesisResponseDto> findAllAdmin() {
+    public findAllInfoDto findAllAdmin() {
         List<String> fieldNames = new ArrayList<>();
         List<AllThesisResponseDto> thesisDtoList = new ArrayList<>();
         for (Field field: fieldRepository.findAll()) {
@@ -116,7 +117,7 @@ public class ThesisService {
             thesisDtoList.add(AllThesisResponseDto.builder().fieldName(fieldName).theses(oneThesisDtoList).build());
         }
 
-        return thesisDtoList;
+        return findAllInfoDto.builder().fields(thesisDtoList).build();
     }
 
     public List<ThesisDto> findAllByFieldName(final String name) {

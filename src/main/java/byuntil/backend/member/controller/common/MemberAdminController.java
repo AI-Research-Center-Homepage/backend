@@ -184,7 +184,7 @@ public class MemberAdminController {
 
     //멤버조회 /members/{memberId}
     @GetMapping("/members")
-    public ResponseEntity readMember(@RequestParam Long id) {
+    public ResponseEntity readMember(@RequestParam("memberId") Long id) {
         Member member = (Member) memberService.findOneMember(id).get();
         String dType = member.getDtype();
         if (dType.equals("Committee")){
@@ -217,7 +217,7 @@ public class MemberAdminController {
 
     //멤버 탈퇴
     @DeleteMapping("/members")
-    public ResponseEntity resignMember(@RequestParam Long id) throws Throwable {
+    public ResponseEntity resignMember(@RequestParam("memberId") Long id) throws Throwable {
         memberService.secession(id);
         return ResponseEntity.ok().build();
     }

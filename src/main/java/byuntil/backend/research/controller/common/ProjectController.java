@@ -2,13 +2,12 @@ package byuntil.backend.research.controller.common;
 
 import byuntil.backend.research.dto.request.FieldDto;
 import byuntil.backend.research.dto.request.ProjectDto;
+import byuntil.backend.research.dto.response.field.FieldListResponseDto;
+import byuntil.backend.research.dto.response.field.FieldResponseDto;
 import byuntil.backend.research.dto.response.project.GeneralOneProjectDto;
 import byuntil.backend.research.dto.response.project.GeneralProjectDto;
-import byuntil.backend.research.dto.response.project.ProjectResponseDto;
 import byuntil.backend.research.service.FieldService;
 import byuntil.backend.research.service.ProjectService;
-import lombok.Builder;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,10 +26,10 @@ public class ProjectController {
 
     @GetMapping("/project")
     public ResponseEntity readProjects() {
-        List<FieldDto> fields = fieldService.findAll();
+        FieldListResponseDto fieldListDto = fieldService.findAll();
         List<GeneralProjectDto> projectFieldDtos = new ArrayList<>();
-        for (FieldDto field : fields) {
-            String fieldName = field.getName();
+        for (FieldResponseDto field : fieldListDto.getFields()) {
+            String fieldName = field.getFieldName();
             List<ProjectDto> projectDtos = projectService.findAllByFieldName(fieldName);
             List<GeneralOneProjectDto> list = new ArrayList<>();
             for (ProjectDto dto: projectDtos) {

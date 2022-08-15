@@ -7,6 +7,7 @@ import byuntil.backend.research.domain.repository.FieldRepository;
 import byuntil.backend.research.domain.repository.ProjectRepository;
 import byuntil.backend.research.dto.request.ProjectDto;
 import byuntil.backend.research.dto.response.project.AllProjectResponseDto;
+import byuntil.backend.research.dto.response.project.IndividualProjectDto;
 import byuntil.backend.research.dto.response.project.OneProjectDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -47,8 +48,11 @@ public class ProjectService {
         projectRepository.deleteById(id);
     }
 
-    public ProjectDto findById(final Long id) {
-        return projectRepository.findById(id).get().toDto();
+    public IndividualProjectDto findById(final Long id) {
+        ProjectDto dto = projectRepository.findById(id).get().toDto();
+
+        return IndividualProjectDto.builder().content(dto.getContent()).name(dto.getName()).description(dto.getDescription())
+                .fieldName(dto.getFieldName()).participants(dto.getParticipants()).build();
     }
 
     public List<AllProjectResponseDto> findAll() {

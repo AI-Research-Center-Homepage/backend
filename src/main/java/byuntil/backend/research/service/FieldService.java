@@ -4,6 +4,12 @@ import byuntil.backend.common.exception.ExistException;
 import byuntil.backend.research.domain.entity.Field;
 import byuntil.backend.research.domain.repository.FieldRepository;
 import byuntil.backend.research.dto.request.FieldDto;
+import byuntil.backend.research.dto.response.field.FieldAdminResponseDto;
+import byuntil.backend.research.dto.response.field.FieldListAdminResponseDto;
+import byuntil.backend.research.dto.response.field.FieldListResponseDto;
+import byuntil.backend.research.dto.response.field.FieldResponseDto;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,12 +36,12 @@ public class FieldService {
     }
 
     @Transactional
-    public Long update(final FieldDto fieldDto) {
-        Field origin = fieldRepository.findById(fieldDto.getId()).orElseThrow(()
-                -> new IllegalArgumentException("찾는 연구분야가 없습니다. id = " + fieldDto.getId()));
+    public Long update(final FieldDto fieldDto, Long id) {
+        Field origin = fieldRepository.findById(id).orElseThrow(()
+                -> new IllegalArgumentException("찾는 연구분야가 없습니다. id = " + id));
         origin.update(fieldDto);
 
-        return fieldDto.getId();
+        return origin.getId();
 
     }
 
@@ -53,7 +59,7 @@ public class FieldService {
 
     public FieldDto findById(final Long id) {
         Field field = fieldRepository.findById(id).get();
-        return FieldDto.builder().id(field.getId()).description(field.getDescription()).name(field.getName()).build();
+        return FieldDto.builder().description(field.getDescription()).fieldName(field.getName()).build();
     }
 
     public List<byuntil.backend.research.dto.response.field.FieldDto> findAllWithName() {
@@ -64,13 +70,30 @@ public class FieldService {
         }
         return fieldDtoList;
     }
-    public List<FieldDto> findAll(){
+    public FieldListResponseDto findAll(){
         List<Field> fields = fieldRepository.findAll();
-        List<FieldDto> fieldDtoList =  new ArrayList<>();
+        List<FieldResponseDto> dtoList = new ArrayList<>();
         for (Field field: fields) {
-            fieldDtoList.add(FieldDto.builder().name(field.getName()).description(field.getDescription())
-                    .id(field.getId()).build());
+            dtoList.add(FieldResponseDto.builder().fieldName(field.getName()).description(field.getDescription())
+                    .build());
         }
-        return fieldDtoList;
+        return FieldListResponseDto.builder().fields(dtoList).build();
     }
+    public FieldListAdminResponseDto findAllAdmin(){
+        List<Field> fields = fieldRepository.findAll();
+        List<FieldAdminResponseDto> dtoList = new ArrayList<>();
+        for (Field field: fields) {
+            if(field.getThesisList().size()==0 && field.getProjectList().size()==0){
+                dtoList.add(FieldAdminResponseDto.builder().fieldName(field.getName()).description(field.getDescription())
+                        .id(field.getId()).used(false).build());
+            }
+            else{
+                dtoList.add(FieldAdminResponseDto.builder().fieldName(field.getName()).description(field.getDescription())
+                        .id(field.getId()).used(true).build());
+            }
+
+        }
+        return FieldListAdminResponseDto.builder().fields(dtoList).build();
+    }
+
 }
