@@ -4,7 +4,7 @@ import byuntil.backend.member.dto.response.MemberResponseDto;
 import byuntil.backend.member.service.MemberService;
 import byuntil.backend.research.dto.request.FieldDto;
 import byuntil.backend.research.dto.request.ThesisDto;
-import byuntil.backend.research.dto.response.thesis.AllThesisResponseDto;
+import byuntil.backend.research.dto.response.thesis.findAllInfoDto;
 import byuntil.backend.research.dto.response.field.MemberFieldDto;
 import byuntil.backend.research.service.FieldService;
 import byuntil.backend.research.service.ThesisService;
@@ -27,7 +27,7 @@ public class ThesisAdminController {
     public ResponseEntity readMemberField(){
         List<MemberResponseDto> members = memberService.findAllMember();
         List<byuntil.backend.research.dto.response.field.FieldDto> fieldDtoList = fieldService.findAllWithName();
-        MemberFieldDto memberFieldDto = MemberFieldDto.builder().memberDtoList(members).fieldDtoList(fieldDtoList).build();
+        MemberFieldDto memberFieldDto = MemberFieldDto.builder().members(members).fields(fieldDtoList).build();
 
         return ResponseEntity.status(HttpStatus.OK).body(memberFieldDto);
     }
@@ -53,7 +53,7 @@ public class ThesisAdminController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("");
     }
     @GetMapping
-    public List<AllThesisResponseDto> readAll(){
+    public findAllInfoDto readAll(){
         return thesisService.findAllAdmin();
     }
     @GetMapping("/{id}")
