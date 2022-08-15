@@ -10,4 +10,5 @@ public class FieldAdminResponseDto {
     private Long id;
     private String fieldName;
     private String description;
+    private Boolean used;
 }

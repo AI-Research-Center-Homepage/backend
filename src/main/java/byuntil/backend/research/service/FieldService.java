@@ -83,8 +83,15 @@ public class FieldService {
         List<Field> fields = fieldRepository.findAll();
         List<FieldAdminResponseDto> dtoList = new ArrayList<>();
         for (Field field: fields) {
-            dtoList.add(FieldAdminResponseDto.builder().fieldName(field.getName()).description(field.getDescription())
-                    .id(field.getId()).build());
+            if(field.getThesisList().size()==0 && field.getProjectList().size()==0){
+                dtoList.add(FieldAdminResponseDto.builder().fieldName(field.getName()).description(field.getDescription())
+                        .id(field.getId()).used(false).build());
+            }
+            else{
+                dtoList.add(FieldAdminResponseDto.builder().fieldName(field.getName()).description(field.getDescription())
+                        .id(field.getId()).used(true).build());
+            }
+
         }
         return FieldListAdminResponseDto.builder().fields(dtoList).build();
     }
