@@ -48,13 +48,13 @@ public class Field {
     }
 
     public void update(final FieldDto fieldDto) {
-        this.name = fieldDto.getName();
+        this.name = fieldDto.getFieldName();
         this.description = fieldDto.getDescription();
 
     }
 
     public FieldDto toDto() {
-        FieldDto dto = FieldDto.builder().name(name).description(description).build();
+        FieldDto dto = FieldDto.builder().fieldName(name).description(description).build();
         return dto;
 
     }

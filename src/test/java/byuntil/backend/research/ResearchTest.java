@@ -2,7 +2,6 @@ package byuntil.backend.research;
 
 import byuntil.backend.common.exception.ExistException;
 import byuntil.backend.research.domain.entity.Field;
-import byuntil.backend.research.domain.entity.Project;
 import byuntil.backend.research.domain.repository.DemoRepository;
 import byuntil.backend.research.domain.repository.FieldRepository;
 import byuntil.backend.research.domain.repository.ProjectRepository;
@@ -59,11 +58,11 @@ public class ResearchTest {
     }
 
     public FieldDto makeFieldDto() {
-        return FieldDto.builder().name("field1").description("설명1").build();
+        return FieldDto.builder().fieldName("field1").description("설명1").build();
     }
 
     public FieldDto makeETCFieldDto() {
-        return FieldDto.builder().name("field2").description("설명2").build();
+        return FieldDto.builder().fieldName("field2").description("설명2").build();
     }
 
 
@@ -79,7 +78,7 @@ public class ResearchTest {
         fieldRepository.save(fieldDto.toEntity());
         demoService.save(demoDto);
         projectService.save(projectDto);
-        Field field = fieldRepository.findByName(fieldDto.getName()).get();
+        Field field = fieldRepository.findByName(fieldDto.getFieldName()).get();
         //post를 돌아가면서 해당 field에 속하면 모두 삭제하는.. sql을 작성해야할듯?
 
 

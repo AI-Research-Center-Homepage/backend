@@ -24,8 +24,7 @@ public class FieldAdminController {
     }
     @PutMapping
     public ResponseEntity update(@RequestParam Long id, @RequestBody FieldDto fieldDto){
-        fieldDto.setId(id);
-        fieldService.update(fieldDto);
+        fieldService.update(fieldDto, id);
         return ResponseEntity.status(HttpStatus.CREATED).body(id);
     }
     @DeleteMapping
@@ -35,7 +34,6 @@ public class FieldAdminController {
     }
     @GetMapping
     public ResponseEntity readAll(){
-        List<FieldDto> fieldList = fieldService.findAll();
-        return ResponseEntity.status(HttpStatus.OK).body(fieldList);
+        return ResponseEntity.status(HttpStatus.OK).body(fieldService.findAllAdmin());
     }
 }

@@ -22,7 +22,7 @@ public class ProjectAdminController
     @PostMapping("/new")
     public ResponseEntity create(@RequestBody ProjectDto projectDto){
         //TODO : 지워야하는 코드
-        if(!fieldService.findByName("연구분야1").isPresent()) fieldService.save(FieldDto.builder().description("설명").name("연구분야1").build());
+        if(!fieldService.findByName("연구분야1").isPresent()) fieldService.save(FieldDto.builder().description("설명").fieldName("연구분야1").build());
 
 
         projectService.save(projectDto);

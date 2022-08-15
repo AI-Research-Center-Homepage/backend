@@ -34,7 +34,7 @@ public class ThesisAdminController {
     @PostMapping("/new")
     public ResponseEntity create(@RequestBody ThesisDto thesisDto){
         //TODO : 지워야하는 코드
-        if(!fieldService.findByName("연구분야1").isPresent()) fieldService.save(FieldDto.builder().description("설명").name("연구분야1").build());
+        if(!fieldService.findByName("연구분야1").isPresent()) fieldService.save(FieldDto.builder().description("설명").fieldName("연구분야1").build());
 
         thesisService.save(thesisDto);
         return ResponseEntity.status(HttpStatus.CREATED).body("");
