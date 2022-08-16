@@ -20,14 +20,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http)throws Exception{
-        //아래의 antMatchers에는 resources/templates하위가 와야하는건가 -> 아님
+
         /*http.authorizeRequests().antMatchers("/h2-console/**").permitAll()
                 .and().csrf().ignoringAntMatchers("/h2-console/**")
                 .and().headers().frameOptions().sameOrigin();*/
 
         http
                 .authorizeRequests()
-                .antMatchers("/admin").hasRole("ADMIN").anyRequest().permitAll();
+                .antMatchers("/admin/**").hasRole("ADMIN").anyRequest().permitAll();
                 //.antMatchers("/sample/admin").hasRole("ADMIN")
                 //.antMatchers("/sample/all")
         http.formLogin();
