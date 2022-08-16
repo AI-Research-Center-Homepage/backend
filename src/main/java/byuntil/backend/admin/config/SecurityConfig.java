@@ -21,16 +21,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http)throws Exception{
         //아래의 antMatchers에는 resources/templates하위가 와야하는건가 -> 아님
-        http.authorizeRequests().antMatchers("/h2-console/**").permitAll()
+        /*http.authorizeRequests().antMatchers("/h2-console/**").permitAll()
                 .and().csrf().ignoringAntMatchers("/h2-console/**")
-                .and().headers().frameOptions().sameOrigin();
+                .and().headers().frameOptions().sameOrigin();*/
 
         http
-                .authorizeRequests().anyRequest()
-                //.antMatchers("/sample/member").hasRole("ADMIN")
+                .authorizeRequests()
+                .antMatchers("/admin").hasRole("ADMIN").anyRequest().permitAll();
                 //.antMatchers("/sample/admin").hasRole("ADMIN")
                 //.antMatchers("/sample/all")
-                .permitAll();
         http.formLogin();
         http.csrf().disable();
         // /logout으로 들어가면 logout됨 어떤 버튼을 누르면 해당 url로 redirect되도록 설계하면 될듯

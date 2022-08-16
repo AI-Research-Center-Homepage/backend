@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/admin/fields")
+@RequestMapping("/admin/fields")
 public class FieldAdminController {
     private final FieldService fieldService;
 

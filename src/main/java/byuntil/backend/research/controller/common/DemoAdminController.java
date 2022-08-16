@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/admin/demo")
+@RequestMapping("/admin/demo")
 public class DemoAdminController {
     private final DemoService demoService;
     @PostMapping("/new")
