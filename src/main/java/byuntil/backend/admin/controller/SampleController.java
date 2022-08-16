@@ -20,7 +20,7 @@ import java.util.Collection;
 @RequestMapping("/sample/")
 public class SampleController {
     private final MemberService memberService;
-
+/*
 
     @GetMapping("/all")
     public String exAll(){
@@ -51,5 +51,5 @@ public class SampleController {
     public String exAdmin(){
         log.info("exAdmin");
         return "exadmin";
-    }
+    }*/
 }

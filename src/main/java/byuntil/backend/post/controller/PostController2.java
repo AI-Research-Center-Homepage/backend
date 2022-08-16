@@ -45,6 +45,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @RequestMapping("/post")
 public class PostController2 {
+    /*
     private final AttachService attachService;
     private final S3ServiceImpl s3Service;
     private final PostService postService;
@@ -132,13 +133,6 @@ public class PostController2 {
         return success;
     }
 
-    /**
-     * 파일명이 한글인 경우 URL encode이 필요함.
-     * @param request
-     * @param displayFileName
-     * @return
-     * @throws UnsupportedEncodingException
-     */
     private String getEncodedFilename(HttpServletRequest request, String displayFileName) throws UnsupportedEncodingException {
         String header = request.getHeader("User-Agent");
 
@@ -189,5 +183,7 @@ public class PostController2 {
 
         return urlList;
     }
+
+     */
 
 }
