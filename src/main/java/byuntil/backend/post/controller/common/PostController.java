@@ -3,12 +3,14 @@ package byuntil.backend.post.controller.common;
 import byuntil.backend.post.domain.entity.Board;
 import byuntil.backend.post.domain.entity.Post;
 import byuntil.backend.post.dto.response.ArticleAndNewsResponseDto;
+import byuntil.backend.post.dto.response.PostPreviewDto;
 import byuntil.backend.post.dto.response.readPostDto;
 import byuntil.backend.post.dto.response.PostResponseDto;
 import byuntil.backend.post.service.BoardService;
 import byuntil.backend.post.service.PostService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,15 +31,15 @@ public class PostController {
 
     //미리보기
     @GetMapping("/article")
-    public ResponseEntity<PostResponseDto<PostPreviewDto>> readPreviewArticle() {
+    public ResponseEntity<PostResponseDto> readPreviewArticle(Pageable pageable) {
         Board article = boardService.findByName("Article");
         List<Post> posts = article.getPosts();
-
+        postService.findAllForAdmin("Article", )
         return getPostResponseDtoResponseEntity(posts, article.getName());
     }
     //news
     @GetMapping("/news")
-    public ResponseEntity<PostResponseDto<PostPreviewDto>> readPreviewNews() {
+    public ResponseEntity readPreviewNews(Pageable pageable) {
         Board news = boardService.findByName("News");
         List<Post> posts = news.getPosts();
         return getPostResponseDtoResponseEntity(posts, news.getName());
@@ -45,7 +47,7 @@ public class PostController {
 
     //notice
     @GetMapping("/notice")
-    public ResponseEntity<PostResponseDto<PostPreviewDto>> readPreviewNotice() {
+    public ResponseEntity<PostResponseDto> readPreviewNotice(Pageable pageable) {
         Board notice = boardService.findByName("Notice");
         List<Post> posts = notice.getPosts();
         return getPostResponseDtoResponseEntity(posts, notice.getName());
@@ -94,28 +96,4 @@ public class PostController {
         return ResponseEntity.ok().body(response);
     }
 
-    @Getter
-    static class PostPreviewDto {
-        private final Long id;
-        private final String title;
-        private final Integer viewNum;
-        private String image;
-        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-        private final LocalDateTime createdDate;
-        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-        private final LocalDateTime modifiedDate;
-
-        public PostPreviewDto(final Post post) {
-            this.id = post.getId();
-            this.title = post.getTitle();
-            this.viewNum = post.getViewNum();
-            Optional.ofNullable(post.getImageList()).ifPresent(
-                    imageList -> {
-                        if (post.getImageList().size() >= 1) this.image = post.getImageList().get(0);
-                    }
-            );
-            this.createdDate = post.getCreatedDate();
-            this.modifiedDate = post.getModifiedDate();
-        }
-    }
 }

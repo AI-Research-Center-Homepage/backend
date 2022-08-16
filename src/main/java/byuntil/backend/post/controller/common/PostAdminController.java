@@ -5,6 +5,8 @@ import byuntil.backend.post.dto.response.readAdminAllPostDto;
 import byuntil.backend.post.dto.response.readMorePostDto;
 import byuntil.backend.post.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,18 +24,19 @@ public class PostAdminController {
 
 
     @GetMapping("/posts/notice")
-    public ResponseEntity readNotice(){
-        List<readAdminAllPostDto> list = postService.readAllPost("Notice");
+    public ResponseEntity readNotice(Pageable pageable){
+        Page<readAdminAllPostDto> list = postService.findAllForAdmin("Notice", pageable);
         return ResponseEntity.ok().body(list);
+        //return ResponseEntity.ok().bodypostService.findByBoardName("Notice", pageable)();
     }
     @GetMapping("/posts/news")
-    public ResponseEntity readNews(){
-        List<readAdminAllPostDto> list = postService.readAllPost("News");
+    public ResponseEntity readNews(Pageable pageable){
+        Page<readAdminAllPostDto> list = postService.findAllForAdmin("News", pageable);
         return ResponseEntity.ok().body(list);
     }
     @GetMapping("/posts/source")
-    public ResponseEntity readSource(){
-        List<readAdminAllPostDto> list = postService.readAllPost("Source");
+    public ResponseEntity readSource(Pageable pageable){
+        Page<readAdminAllPostDto> list = postService.findAllForAdmin("Source", pageable);
         return ResponseEntity.ok().body(list);
     }
 

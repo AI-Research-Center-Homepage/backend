@@ -14,6 +14,8 @@ import byuntil.backend.post.dto.response.*;
 import byuntil.backend.s3.domain.FileStatus;
 import byuntil.backend.s3.service.S3ServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -144,10 +146,6 @@ public class PostService {
         return newsPostRepository.findAllNews();
     }*/
 
-    public List<Post> findAllPosts() {
-        return postRepository.findAll();
-    }
-
     @Transactional
     public void updatePost(final Long postId, final PostDto postDto, final List<MultipartFile> files) {
         Optional<Post> postOptional = postRepository.findById(postId);
@@ -209,16 +207,20 @@ public class PostService {
     }
 
 
-    public List<readAdminAllPostDto> readAllPost(String boardName){
-        List<Post> posts = postRepository.findByBoardName(boardName);
+    public Page<readAdminAllPostDto> findAllForAdmin(String boardName, Pageable pageable){
+        Page<Post> posts = postRepository.findByBoardNameOrderByBoardId(boardName, pageable);
+        Page<readAdminAllPostDto> list = posts.map(post -> readAdminAllPostDto.builder().title(post.getTitle())
+                .author(post.getAuthor()).createdDate(post.getCreatedDate()).id(post.getId())
+                .modifiedDate(post.getModifiedDate()).viewNum(post.getViewNum()).build());
+        return list;
 
-        List<readAdminAllPostDto> noticeResponseDtoList = new ArrayList<>();
-        for (Post post: posts) {
-            noticeResponseDtoList.add(readAdminAllPostDto.builder().title(post.getTitle())
-                    .author(post.getAuthor()).createdDate(post.getCreatedDate()).id(post.getId())
-                    .modifiedDate(post.getModifiedDate()).viewNum(post.getViewNum()).build());
-        }
-        return noticeResponseDtoList;
+    }
+    public Page<readAdminAllPostDto> findAllForGeneral(String boardName, Pageable pageable){
+        Page<Post> posts = postRepository.findByBoardNameOrderByBoardId(boardName, pageable);
+        Page<readAdminAllPostDto> list = posts.map(post -> readAdminAllPostDto.builder().title(post.getTitle())
+                .author(post.getAuthor()).createdDate(post.getCreatedDate()).id(post.getId())
+                .modifiedDate(post.getModifiedDate()).viewNum(post.getViewNum()).build());
+        return list;
 
     }
     public void changeUrlOfAttach(PostDto postDto, Post post, List<MultipartFile> files){
