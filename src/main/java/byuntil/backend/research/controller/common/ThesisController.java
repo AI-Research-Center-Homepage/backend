@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
 public class ThesisController {
     private final ThesisService thesisService;
 

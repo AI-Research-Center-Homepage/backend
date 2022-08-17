@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
+@RequestMapping("")
 public class ProjectController {
     private final FieldService fieldService;
     private final ProjectService projectService;

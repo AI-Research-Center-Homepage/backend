@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/admin/thesis")
+@RequestMapping("/admin/thesis")
 public class ThesisAdminController {
     private final FieldService fieldService;
     private final ThesisService thesisService;

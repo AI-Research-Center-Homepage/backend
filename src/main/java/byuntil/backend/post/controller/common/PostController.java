@@ -22,7 +22,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
+@RequestMapping("")
 public class PostController {
     private final BoardService boardService;
     private final PostService postService;

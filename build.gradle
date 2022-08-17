@@ -40,6 +40,9 @@ dependencies {
     // https://mvnrepository.com/artifact/io.findify/s3mock
     testImplementation group: 'io.findify', name: 's3mock_2.12', version: '0.2.4'
 
+    // https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client
+    implementation 'org.mariadb.jdbc:mariadb-java-client:2.7.3'
+
 
 
 }

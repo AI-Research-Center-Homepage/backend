@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/admin/project")
+@RequestMapping("/admin/project")
 public class ProjectAdminController
 {
     private final ProjectService projectService;
