@@ -51,7 +51,6 @@ public class PostController {
         return getPostResponseDtoResponseEntity(posts, notice.getName());
     }
 
-
     @GetMapping("/article/{postId}")
     public ResponseEntity<ArticleAndNewsResponseDto> readEachArticle(@PathVariable("postId") final Long postId) {
         postService.findById(postId, "Article").ifPresent(
