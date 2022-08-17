@@ -34,13 +34,6 @@ public class PostService {
     //file이 들어오는 경우
     @Transactional
     public FileListResponseDto save(final PostDto postDto, final List<MultipartFile> fileList) throws IOException {
-        //지워야하는코드
-        Board board1 = Board.builder().name("Notice").build();
-        if(!boardRepository.findByName("Notice").isPresent()) boardRepository.save(board1);
-
-        Board board2 = Board.builder().name("News").build();
-        if(!boardRepository.findByName("News").isPresent()) boardRepository.save(board2);
-
         Post post = postDto.toEntity();
         List<Attach> attachList = s3Service.uploadReturnAttachList(fileList);
         List<FileResponseDto> fileDtoList = new ArrayList<>();
@@ -63,13 +56,6 @@ public class PostService {
     //minji
     @Transactional
     public Long save(final PostDto postDto) throws IOException {
-        //지워야하는코드
-        Board board1 = Board.builder().name("Notice").build();
-        if(!boardRepository.findByName("Notice").isPresent()) boardRepository.save(board1);
-
-        Board board2 = Board.builder().name("News").build();
-        if(!boardRepository.findByName("News").isPresent()) boardRepository.save(board2);
-
         Post post = postDto.toEntity();
         //보드 이름으로 보드 찾아오는 명령어 수행해야함 없으면 예외터뜨리기
         Board board = boardRepository.findByName(postDto.getBoardName()).orElseThrow(BoardNotFoundException::new);
