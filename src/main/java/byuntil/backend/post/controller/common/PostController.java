@@ -22,7 +22,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("")
+@RequestMapping("/api")
 public class PostController {
     private final BoardService boardService;
     private final PostService postService;
@@ -38,7 +38,7 @@ public class PostController {
     //news
     @GetMapping("/news")
     public ResponseEntity<PostResponseDto<PostPreviewDto>> readPreviewNews() {
-        Board news = boardService.findByName("News");
+        Board news = boardService.findByName("Info");
         List<Post> posts = news.getPosts();
         return getPostResponseDtoResponseEntity(posts, news.getName());
     }
@@ -62,7 +62,7 @@ public class PostController {
     }
 
 
-    @GetMapping("/news/{postId}")
+    @GetMapping("/info/{postId}")
     public ResponseEntity<ArticleAndNewsResponseDto> readEachNews(@PathVariable("postId") final Long postId) {
         postService.findById(postId, "News").ifPresent(
                 post -> {postService.updateView(postId);}

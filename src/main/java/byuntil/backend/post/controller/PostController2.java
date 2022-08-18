@@ -63,13 +63,13 @@ public class PostController2 {
                             final List<MultipartFile> multipartFileList) throws IOException {
         System.out.println("===========================ddd===");
         postService.save(postDto, multipartFileList);
-        //TODO : 컴파일타임에 잡을 수 있는 예외를 런타임으로 넘겨버릴 수 있기 때문에 사용을 지양해야한다 제네릭 타입으로 return하기
+        //컴파일타임에 잡을 수 있는 예외를 런타임으로 넘겨버릴 수 있기 때문에 사용을 지양해야한다 제네릭 타입으로 return하기
     }
     @PostMapping(path = "/attach/submit")
     public void saveAttach(@RequestPart(value="file1") MultipartFile file, PostDto postDto) throws IOException {
         System.out.println(file.getOriginalFilename());
         Attach attach =s3Service.uploadReturnAttach(file).get();
-        //TODO: postDto랑 잘 엮어서 attach저장하는 로직
+        // postDto랑 잘 엮어서 attach저장하는 로직
     }
 
     @GetMapping("/download")

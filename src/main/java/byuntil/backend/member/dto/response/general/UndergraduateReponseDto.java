@@ -9,10 +9,9 @@ import java.time.LocalDateTime;
 
 @Getter
 public class UndergraduateReponseDto extends MemberResponseDto{
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime admission;
+    private int admission;
     @Builder
-    public UndergraduateReponseDto(Long id, String name, String major, LocalDateTime admission,
+    public UndergraduateReponseDto(Long id, String name, String major, int admission,
                                          String email, String image, String location) {
         super(id, name, major, email, image, location);
         this.admission = admission;

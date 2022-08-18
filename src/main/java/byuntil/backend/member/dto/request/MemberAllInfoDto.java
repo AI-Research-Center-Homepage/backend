@@ -18,8 +18,7 @@ public class MemberAllInfoDto {
     private String location;
     private LoginDto loginDto;
     private String position;
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime admission;
+    private int admission;
     private String doctorate;
     private String number;
     private String research;

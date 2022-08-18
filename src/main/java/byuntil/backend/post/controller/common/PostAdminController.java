@@ -26,9 +26,9 @@ public class PostAdminController {
         List<readAdminAllPostDto> list = postService.readAllPost("Notice");
         return ResponseEntity.ok().body(list);
     }
-    @GetMapping("/posts/news")
+    @GetMapping("/posts/info")
     public ResponseEntity readNews(){
-        List<readAdminAllPostDto> list = postService.readAllPost("News");
+        List<readAdminAllPostDto> list = postService.readAllPost("Info");
         return ResponseEntity.ok().body(list);
     }
     @GetMapping("/posts/source")

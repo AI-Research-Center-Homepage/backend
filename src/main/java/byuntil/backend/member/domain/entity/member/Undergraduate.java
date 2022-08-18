@@ -15,16 +15,16 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Undergraduate extends Member {
-    private LocalDateTime admission;
+    private int admission;
 
     @Builder
     public Undergraduate(final String name, final String major, final String email, final String image, final String dtype,
-                         LocalDateTime admission, String location, Login login) {
+                         int admission, String location, Login login) {
         super(name, major, email, image, dtype, location, login);
         this.admission = admission;
     }
 
-    public void update(final LocalDateTime admission) {
+    public void update(final int admission) {
         this.admission = admission;
     }
 

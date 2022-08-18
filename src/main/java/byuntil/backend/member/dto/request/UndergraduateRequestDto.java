@@ -16,6 +16,5 @@ public class UndergraduateRequestDto {
     private LoginDto loginDto;
     private String email;
     private String location;
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime admission;
+    private int admission;
 }

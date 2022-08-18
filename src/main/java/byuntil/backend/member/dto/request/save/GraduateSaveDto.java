@@ -12,11 +12,11 @@ import java.time.LocalDateTime;
 @Getter
 public class GraduateSaveDto extends MemberSaveDto {
 
-    private LocalDateTime admission;
+    private int admission;
 
     @Builder
     public GraduateSaveDto(Long id, String name, String major, String email, String image,
-                           LocalDateTime admission, String location, LoginDto loginDto) {
+                           int admission, String location, LoginDto loginDto) {
         super(id, name, major, email, image, location, loginDto);
         this.admission = admission;
     }

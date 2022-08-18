@@ -42,7 +42,7 @@ public class MemberService implements UserDetailsService {
             //여기서 member가 login을 가지고 있는지도 확인해야함
             if(!Optional.ofNullable(member.getLogin()).isPresent()){
                 MemberAllInfoDto dto = MemberAllInfoDto.builder()
-                        .admission(LocalDateTime.now()).email("del").major("del").doctorate("del")
+                        .admission(0).email("del").major("del").doctorate("del")
                         .position("del").number("del").name("del").image("del").location("del").research("del").location("del").build();
                 updateMember(member.getId(), dto);
             }
@@ -59,7 +59,7 @@ public class MemberService implements UserDetailsService {
                         member.getLogin().getLoginPw(), true);
 
                 MemberAllInfoDto dto = MemberAllInfoDto.builder().loginDto(loginDto)
-                        .admission(LocalDateTime.now()).email("del").major("del").doctorate("del")
+                        .admission(0).email("del").major("del").doctorate("del")
                         .position("del").number("del").name("del").image("del").location("del").research("del").location("del").build();
                 updateMember(member.getId(), dto);
             }

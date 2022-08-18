@@ -10,12 +10,11 @@ import java.time.LocalDateTime;
 
 @Getter
 public class GraduateAdminResponseDto extends MemberAdminResponseDto {
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime admission;
+    private int admission;
 
     @Builder
     public GraduateAdminResponseDto(Long id, String name, String major, String email,
-                                    String image, LocalDateTime admission, String location, LoginResponseDto loginDto) {
+                                    String image, int admission, String location, LoginResponseDto loginDto) {
         super(id, name, major, email, image, location, loginDto);
         this.admission = admission;
     }
