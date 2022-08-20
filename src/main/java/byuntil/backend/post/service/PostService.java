@@ -4,6 +4,7 @@ import byuntil.backend.common.exception.ApplicationException;
 import byuntil.backend.common.exception.BoardNotFoundException;
 import byuntil.backend.common.exception.post.PostNotFoundException;
 import byuntil.backend.common.exception.s3.UploadFailException;
+import byuntil.backend.file.FileStore;
 import byuntil.backend.post.domain.entity.Attach;
 import byuntil.backend.post.domain.entity.Board;
 import byuntil.backend.post.domain.entity.Post;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -27,8 +29,7 @@ import java.util.*;
 @Transactional(readOnly = true)
 public class PostService {
     private final PostRepository postRepository;
-    private final AttachService attachService;
-    private final S3ServiceImpl s3Service;
+    private final FileStore fileStore;
     private final BoardRepository boardRepository;
 
 
@@ -58,7 +59,7 @@ public class PostService {
 
 
         if(fileList!=null){
-            List<Attach> attachList = s3Service.uploadReturnAttachList(fileList);
+            List<Attach> attachList = fileStore.storeFiles(fileList);
             List<FileResponseDto> fileDtoList = new ArrayList<>();
 
             post.addAttaches(attachList);
@@ -73,69 +74,6 @@ public class PostService {
         return post.getId();
     }
 
-    /*
-<<<<<<< HEAD
-    성재
-    1. file 하나가 아니라 여러개가 들어가야해
-    2. dto안에 entity가 들어가면 안될것같아
-    3. board도 처리해야해!
-=======
-    문제 1. file 하나가 아니라 여러개가 들어가야한다는점
-    2. dto안에 entity가 들어가면 안됨
-    3. board도 처리해야함
->>>>>>> 6f63700fdae2fa7eaba629c57d15c19aa6791d56
-    @Transactional
-    public Long save(PostDto postDto, MultipartFile file) {
-        Post post = postDto.toEntity();
-        Optional<FileStatus> fileStatusOptional = fileUpload(file);
-        fileStatusOptional.ifPresent(fileStatus -> {
-            String url = fileStatus.fileUrl();
-            Attach attach = Attach.builder()
-                    .filePath(url)
-                    .originFileName(file.getName())
-                    .serverFileName(createStoreFilename(file.getName()))
-                    .build();
-            attach.addPost(post);
-        });
-        return postRepository.save(post).getId();
-    }*/
-
-    private Optional<FileStatus> fileUpload(final MultipartFile file) {
-        if (Objects.isNull(file)) {
-            return Optional.empty();
-        } else if (file.isEmpty()) {
-            return Optional.empty();
-        }
-
-        try {
-            return s3Service.uploadPostFile(file);
-        } catch (ApplicationException e) {
-            e.printStackTrace();
-            throw e;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new UploadFailException();
-        }
-    }
-
-    private String createStoreFilename(final String originalFilename) {
-        String uuid = UUID.randomUUID().toString();
-        /*String ext = extractExt(originalFilename);
-        String storeFilename = uuid + ext;*/
-        String storeFilename = uuid + originalFilename;
-
-        return storeFilename;
-    }
-
-    private String extractExt(final String originalFilename) {
-        int idx = originalFilename.lastIndexOf(".");
-        String ext = originalFilename.substring(idx);
-        return ext;
-    }
-
-    /*public List<NewsAndNoticePreviewMapping> findAllNewsPost() {
-        return newsPostRepository.findAllNews();
-    }*/
 
     public List<Post> findAllPosts() {
         return postRepository.findAll();
@@ -145,22 +83,26 @@ public class PostService {
     public void updatePost(final Long postId, final PostDto postDto, final List<MultipartFile> files) {
         Optional<Post> postOptional = postRepository.findById(postId);
         postOptional.ifPresent(post -> {
-            post.updatePost(postDto);
             post.setModifiedDate(LocalDateTime.now());
             changeUrlOfAttach(postDto, post, files);
-            changeUrlOfImageList(postDto, post);
+            try {
+                changeUrlOfImageList(postDto, post);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            post.updatePost(postDto);
         });
     }
 
 
     @Transactional
-    public void deletePost(final Long postId) {
+    public void deletePost(final Long postId) throws UnsupportedEncodingException {
         final Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
         for (Attach attach: post.getAttaches()) {
-            s3Service.delete(attach.getFileUrl());
+            fileStore.deleteFile(attach.getServerFileName());
         }
         for(String url : post.getImageList()){
-            s3Service.delete(url);
+            fileStore.deleteFile(url);
         }
         postRepository.delete(post);
     }
@@ -220,7 +162,11 @@ public class PostService {
         Optional.ofNullable(post.getAttaches()).ifPresent(
                 list -> {
                     for (Attach attach: list) {
-                        s3Service.delete(attach.getFileUrl());
+                        try {
+                            fileStore.deleteFile(attach.getServerFileName());
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
                     }
                     post.deleteAttaches();
                 }
@@ -230,7 +176,7 @@ public class PostService {
                 fileList -> {
                     List<Attach> attachList = null;
                     try {
-                        attachList = s3Service.uploadReturnAttachList(fileList);
+                        attachList = fileStore.storeFiles(fileList);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -247,12 +193,16 @@ public class PostService {
 
 
     }
-    public void changeUrlOfImageList(PostDto postDto, Post post){
+    public void changeUrlOfImageList(PostDto postDto, Post post) throws UnsupportedEncodingException {
         if(postDto.getImageList()==null){
             Optional.ofNullable(post.getImageList()).ifPresent(
                     list -> {
                         for (String url: list) {
-                            s3Service.delete(url);
+                            try {
+                                fileStore.deleteFile(url);
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
             );
@@ -266,7 +216,7 @@ public class PostService {
             //postDto에 있는 사진들은 이미 추가됐을것이기 때문에 이에 대한 처리는 필요 없음
             for (String url : postDto.getImageList()) {
                 if(!post.getImageList().contains(url)){
-                    s3Service.delete(url);
+                    fileStore.deleteFile(url);
                 }
             }
 

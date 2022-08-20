@@ -1,7 +1,10 @@
 package byuntil.backend.post.controller.common;
 
+import byuntil.backend.file.FileStore;
+import byuntil.backend.post.domain.entity.Attach;
 import byuntil.backend.post.domain.entity.Board;
 import byuntil.backend.post.domain.entity.Post;
+import byuntil.backend.post.domain.repository.AttachRepository;
 import byuntil.backend.post.dto.response.ArticleAndNewsResponseDto;
 import byuntil.backend.post.dto.response.readPostDto;
 import byuntil.backend.post.dto.response.PostResponseDto;
@@ -9,13 +12,19 @@ import byuntil.backend.post.service.BoardService;
 import byuntil.backend.post.service.PostService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriUtils;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.net.MalformedURLException;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +35,8 @@ import java.util.Optional;
 public class PostController {
     private final BoardService boardService;
     private final PostService postService;
+    private final AttachRepository attachRepository;
+    private final FileStore fileStore;
 
     //미리보기
     @GetMapping("/article")
@@ -74,6 +85,30 @@ public class PostController {
     public ResponseEntity<readPostDto> readEachNotice(@PathVariable("postId") final Long postId) {
         readPostDto response = postService.readNotice(postId);
         return ResponseEntity.ok().body(response);
+    }
+
+    //get image, produces 옵션 없으면 byte코드가 그대로 나오게 된다
+    @ResponseBody
+    @GetMapping(value = "/images/{filename}", produces = MediaType.IMAGE_PNG_VALUE)
+    public byte[] downloadImage(@PathVariable String filename) throws MalformedURLException {
+        return fileStore.readImage(filename);
+    }
+
+    //file download
+    @GetMapping("/attach/{itemId}")
+    public ResponseEntity<Resource> downloadAttach(@PathVariable Long itemId) throws MalformedURLException {
+        Attach attach = attachRepository.getById(itemId);
+        String storeFileName =  attach.getServerFileName();
+        String uploadFileName = attach.getOriginFileName();
+
+        UrlResource resource = new UrlResource("file:" + fileStore.getFullPath(storeFileName));
+
+        String encodedUploadFileName = UriUtils.encode(uploadFileName, StandardCharsets.UTF_8);
+        String contentDisposition = "attachment; filename=\"" + encodedUploadFileName + "\"";
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
+                .body(resource);
     }
 
     private ResponseEntity<PostResponseDto<PostPreviewDto>> getPostResponseDtoResponseEntity(final List<Post> posts, final String boardName) {

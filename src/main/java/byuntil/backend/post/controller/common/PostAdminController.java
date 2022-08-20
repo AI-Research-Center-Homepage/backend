@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +20,6 @@ import java.util.Optional;
 @RequestMapping("/api/admin")
 public class PostAdminController {
     private final PostService postService;
-
 
     @GetMapping("/posts/notice")
     public ResponseEntity readNotice(){
@@ -47,7 +47,7 @@ public class PostAdminController {
     }
     //게시글삭제
     @DeleteMapping("/posts")
-    public ResponseEntity deletePost(@RequestParam Long id){
+    public ResponseEntity deletePost(@RequestParam Long id) throws UnsupportedEncodingException {
         postService.deletePost(id);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("");

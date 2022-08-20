@@ -5,8 +5,11 @@
     <title>Title</title>
     <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
 </head>
+<resources mapping="/image/**" location="file:///C:/Users/User/Desktop/aihomepage_fileTest/" />
 <body>
 <h1>TEST ToastUI</h1>
+<img src="/image/98b02d1d-1f03-4b06-95cb-c5d8f1e77c60.jpg" width="300" height="300"/>
+<img src="/98b02d1d-1f03-4b06-95cb-c5d8f1e77c60.jpg" width="300" height="300"/>
 <div id="editor"></div>
 <form name = "testform" action="/post/submit" method="post" onsubmit="return submitFunc()" >
     <input  type="hidden" name="content">
