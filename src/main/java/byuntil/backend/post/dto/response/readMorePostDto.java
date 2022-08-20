@@ -2,6 +2,7 @@ package byuntil.backend.post.dto.response;
 
 import byuntil.backend.post.domain.entity.Attach;
 import byuntil.backend.post.domain.entity.Post;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -17,9 +18,9 @@ public class readMorePostDto {
     private final String author;
     private final int viewNum;
     private final List<AttachResponseDto> attaches;
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss:")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
     private final LocalDateTime createdDate;
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss:")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
     private final LocalDateTime modifiedDate;
 
     public readMorePostDto(Post post) {
