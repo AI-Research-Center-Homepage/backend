@@ -42,15 +42,7 @@ public class PostAdminController {
     public ResponseEntity createPost(@RequestPart PostDto postDto,
                                      @RequestPart(value = "file", required = false) List<MultipartFile> fileList) throws IOException {
 
-        //만약에 fileList가 들어온다면..
-        if(Optional.ofNullable(fileList).isPresent()){
-            //fileList가 있다면..
-            return ResponseEntity.status(HttpStatus.CREATED).body(postService.save(postDto, fileList));
-
-        }
-        else{
-            return ResponseEntity.status(HttpStatus.CREATED).body(postService.save(postDto));
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(postService.save(postDto, fileList));
 
     }
     //게시글삭제
