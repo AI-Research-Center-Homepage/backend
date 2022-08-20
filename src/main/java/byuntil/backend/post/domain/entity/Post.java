@@ -5,8 +5,10 @@ import byuntil.backend.post.dto.response.readMorePostDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +28,10 @@ public class Post extends BaseTimeEntity {
     private String content;
 
     private String author;
+
+    private LocalDateTime createdDate;
+
+    private LocalDateTime modifiedDate;
 
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(
@@ -47,13 +53,16 @@ public class Post extends BaseTimeEntity {
     private Board board;
 
     @Builder
-    public Post(final Long id, final String title, final List<String> images, final String content, final int viewNum, String author) {
+    public Post(final Long id, final String title, final List<String> images,
+                final String content, final int viewNum, final String author, final LocalDateTime createdDate, final LocalDateTime modifiedDate) {
         this.id = id;
         this.title = title;
         this.imageList = images;
         this.content = content;
         this.viewNum = viewNum;
         this.author = author;
+        this.modifiedDate = modifiedDate;
+        this.createdDate = createdDate;
     }
 
     public void addAttach(final Attach attach) {
@@ -68,6 +77,12 @@ public class Post extends BaseTimeEntity {
         for (Attach attach : attachList) {
             attach.addPost(this);
         }
+    }
+    public void setCreatedDate(final LocalDateTime createdDate){
+        this.createdDate = createdDate;
+    }
+    public void setModifiedDate(final LocalDateTime modifiedDate){
+        this.modifiedDate = modifiedDate;
     }
 
     public void setBoard(final Board board) {

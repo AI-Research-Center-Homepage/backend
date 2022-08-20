@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -33,7 +34,7 @@ public class PostService {
 
     //file이 들어오는 경우
     @Transactional
-    public FileListResponseDto save(final PostDto postDto, final List<MultipartFile> fileList) throws IOException {
+    public Long save(final PostDto postDto, final List<MultipartFile> fileList) throws IOException {
 
         //지워야하는코드
         Board board1 = Board.builder().name("Notice").build();
@@ -47,47 +48,29 @@ public class PostService {
 
 
         Post post = postDto.toEntity();
-        List<Attach> attachList = s3Service.uploadReturnAttachList(fileList);
-        List<FileResponseDto> fileDtoList = new ArrayList<>();
-
-        post.addAttaches(attachList);
-
-
-
         //보드 이름으로 보드 찾아오는 명령어 수행해야함 없으면 예외터뜨리기
         Board board = boardRepository.findByName(postDto.getBoardName()).orElseThrow(BoardNotFoundException::new);
         //찾아온 board로
         post.setBoard(board);
+        post.setCreatedDate(LocalDateTime.now());
         //그럼 cascade설정으로 attach도 같이 저장이 될 것이다
         postRepository.save(post);
-        //저장한 뒤여야 attach도 id값이 생긴다
-        for (Attach attach: attachList) {
-            fileDtoList.add(FileResponseDto.builder().fileName(attach.getOriginFileName()).id(attach.getId())
-                    .filePath(attach.getFileUrl()).build());
+
+
+        if(fileList!=null){
+            List<Attach> attachList = s3Service.uploadReturnAttachList(fileList);
+            List<FileResponseDto> fileDtoList = new ArrayList<>();
+
+            post.addAttaches(attachList);
+
+            //저장한 뒤여야 attach도 id값이 생긴다
+            for (Attach attach: attachList) {
+                fileDtoList.add(FileResponseDto.builder().fileName(attach.getOriginFileName()).id(attach.getId())
+                        .filePath(attach.getFileUrl()).build());
+            }
         }
-        return FileListResponseDto.builder().files(fileDtoList).build();
-    }
-    //minji
-    @Transactional
-    public Long save(final PostDto postDto) throws IOException {
-        //지워야하는코드
-        Board board1 = Board.builder().name("Notice").build();
-        if(!boardRepository.findByName("Notice").isPresent()) boardRepository.save(board1);
 
-        Board board2 = Board.builder().name("Info").build();
-        if(!boardRepository.findByName("Info").isPresent()) boardRepository.save(board2);
-
-        Board board3 = Board.builder().name("Article").build();
-        if(!boardRepository.findByName("Article").isPresent()) boardRepository.save(board3);
-
-        Post post = postDto.toEntity();
-        //보드 이름으로 보드 찾아오는 명령어 수행해야함 없으면 예외터뜨리기
-        Board board = boardRepository.findByName(postDto.getBoardName()).orElseThrow(BoardNotFoundException::new);
-        //찾아온 board로
-        post.setBoard(board);
-        //그럼 cascade설정으로 attach도 같이 저장이 될 것이다
-        return postRepository.save(post).getId();
-
+        return post.getId();
     }
 
     /*
@@ -163,6 +146,7 @@ public class PostService {
         Optional<Post> postOptional = postRepository.findById(postId);
         postOptional.ifPresent(post -> {
             post.updatePost(postDto);
+            post.setModifiedDate(LocalDateTime.now());
             changeUrlOfAttach(postDto, post, files);
             changeUrlOfImageList(postDto, post);
         });
