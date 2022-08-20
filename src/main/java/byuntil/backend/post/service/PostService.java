@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -58,6 +59,7 @@ public class PostService {
         Board board = boardRepository.findByName(postDto.getBoardName()).orElseThrow(BoardNotFoundException::new);
         //찾아온 board로
         post.setBoard(board);
+        post.setCreatedDate(LocalDateTime.now());
         //그럼 cascade설정으로 attach도 같이 저장이 될 것이다
         postRepository.save(post);
         //저장한 뒤여야 attach도 id값이 생긴다
@@ -81,6 +83,7 @@ public class PostService {
         if(!boardRepository.findByName("Article").isPresent()) boardRepository.save(board3);
 
         Post post = postDto.toEntity();
+        post.setCreatedDate(LocalDateTime.now());
         //보드 이름으로 보드 찾아오는 명령어 수행해야함 없으면 예외터뜨리기
         Board board = boardRepository.findByName(postDto.getBoardName()).orElseThrow(BoardNotFoundException::new);
         //찾아온 board로
@@ -163,6 +166,7 @@ public class PostService {
         Optional<Post> postOptional = postRepository.findById(postId);
         postOptional.ifPresent(post -> {
             post.updatePost(postDto);
+            post.setModifiedDate(LocalDateTime.now());
             changeUrlOfAttach(postDto, post, files);
             changeUrlOfImageList(postDto, post);
         });

@@ -17,9 +17,9 @@ public class readMorePostDto {
     private final String author;
     private final int viewNum;
     private final List<AttachResponseDto> attaches;
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss:")
     private final LocalDateTime createdDate;
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss:")
     private final LocalDateTime modifiedDate;
 
     public readMorePostDto(Post post) {
