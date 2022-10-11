@@ -217,8 +217,8 @@ public class MemberAdminController {
 
     //멤버 탈퇴
     @DeleteMapping("/members")
-    public ResponseEntity resignMember(@RequestParam("memberId") Long id) throws Throwable {
-        memberService.secession(id);
+    public ResponseEntity deleteMember(@RequestParam("memberId") Long id) throws Throwable {
+        memberService.delete(id);
         return ResponseEntity.ok().build();
     }
 

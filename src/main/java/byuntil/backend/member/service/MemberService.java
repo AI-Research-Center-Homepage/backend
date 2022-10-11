@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -30,42 +29,6 @@ import java.util.*;
 public class MemberService implements UserDetailsService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-
-    //탈퇴
-    @Transactional
-    public void secession(final Long id) throws Throwable {
-        //존재하지 않는 회원을 탈퇴시키려고 하는 경우 error 발생해야함
-        if (memberRepository.findById(id).isEmpty()) {
-            throw new IdNotExistException("존재하지 않는 id입니다");
-        } else {
-            Member member = (Member) memberRepository.findById(id).get();
-            //여기서 member가 login을 가지고 있는지도 확인해야함
-            if(!Optional.ofNullable(member.getLogin()).isPresent()){
-                MemberAllInfoDto dto = MemberAllInfoDto.builder()
-                        .admission(0).email("del").major("del").doctorate("del")
-                        .position("del").number("del").name("del").image("del").location("del").research("del").location("del").build();
-                updateMember(member.getId(), dto);
-            }
-            else{
-                member.getLogin().setDeleted(true);
-
-                byte[] array = new byte[7]; // length is bounded by 7
-                new Random().nextBytes(array);
-                String generatedString = new String(array, StandardCharsets.UTF_8);
-
-                member.getLogin().setLoginId(generatedString);
-
-                LoginDto loginDto = new LoginDto(member.getLogin().getLoginId(),
-                        member.getLogin().getLoginPw(), true);
-
-                MemberAllInfoDto dto = MemberAllInfoDto.builder().loginDto(loginDto)
-                        .admission(0).email("del").major("del").doctorate("del")
-                        .position("del").number("del").name("del").image("del").location("del").research("del").location("del").build();
-                updateMember(member.getId(), dto);
-            }
-
-        }
-    }
 
     @Transactional
     public Long saveMember(final MemberSaveDto dto) {
@@ -145,8 +108,13 @@ public class MemberService implements UserDetailsService {
 
     @Transactional
     public void delete(final Long id) throws Throwable {
-        Member member = (Member) memberRepository.findById(id).get();
-        memberRepository.delete(member);
+        if (memberRepository.findById(id).isEmpty()) {
+            throw new IdNotExistException("존재하지 않는 id입니다");
+        } else {
+            Member member = (Member) memberRepository.findById(id).get();
+            memberRepository.delete(member);
+        }
+
     }
 
 
