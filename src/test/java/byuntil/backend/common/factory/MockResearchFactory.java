@@ -44,10 +44,6 @@ public class MockResearchFactory {
         return projects;
     }
 
-    public static List<ProjectDto> createMockProjectDtos(List<Project> projects) {
-        return projects.stream().map(ProjectDto::new).toList();
-    }
-
     //Theis
     public static Thesis createMockThesis(Field field, ThesisVO thesisVO) {
         Thesis thesis = Thesis.builder()
@@ -84,9 +80,6 @@ public class MockResearchFactory {
         return theses;
     }
 
-    public static List<ThesisDto> createMockThesisDtos(List<Thesis> theses) {
-        return theses.stream().map(ThesisDto::new).toList();
-    }
 
     public static Demo createMockDemo(int count) {
         return Demo.builder()
@@ -107,9 +100,6 @@ public class MockResearchFactory {
         return list;
     }
 
-    public static List<DemoDto> createMockDemoDtos(List<Demo> demos) {
-        return demos.stream().map(DemoDto::new).toList();
-    }
 
     @Getter
     @Builder

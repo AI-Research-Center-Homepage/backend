@@ -1,6 +1,7 @@
 package byuntil.backend.research;
 
 import byuntil.backend.common.exception.ExistException;
+import byuntil.backend.research.domain.entity.Demo;
 import byuntil.backend.research.domain.entity.Field;
 import byuntil.backend.research.domain.repository.DemoRepository;
 import byuntil.backend.research.domain.repository.FieldRepository;
@@ -66,50 +67,22 @@ public class ResearchTest {
     }
 
 
-    @Test
-    @Transactional
-    @Commit
-    public void 삭제테스트() {
-        //given
-        FieldDto fieldDto = makeFieldDto();
-        DemoDto demoDto = makeDemoDto();
-        ProjectDto projectDto = makeProjectDto();
-        //when
-        fieldRepository.save(fieldDto.toEntity());
-        demoService.save(demoDto);
-        projectService.save(projectDto);
-        Field field = fieldRepository.findByName(fieldDto.getFieldName()).get();
-        //post를 돌아가면서 해당 field에 속하면 모두 삭제하는.. sql을 작성해야할듯?
-
-
-        thesisRepository.deleteByFieldName(field.getName());
-        projectRepository.deleteByFieldName(field.getName());
-        fieldRepository.deleteByName(field.getName());
-
-        em.flush();
-        em.clear();//이거 없으면 영속성컨텍스트에서 가져오기때문에 테스트 실패
-
-        //then
-        assertThat(fieldService.findById(field.getId())).isNotPresent();
-    }
-
-    @Test
-    @Transactional
-    public void 삭제시예외() {
-        //given
-        FieldDto fieldDto = makeFieldDto();
-        ProjectDto projectDto = makeProjectDto();
-        //when
-        fieldRepository.save(fieldDto.toEntity());
-        Long projectId = projectService.save(projectDto);
-        ProjectDto projectDto2 = projectService.findById(projectId);
-        Field field = fieldRepository.findByName(projectDto.getFieldName()).get();
-
-        //then
-        Assertions.assertThrows(ExistException.class, () -> {
-            fieldService.deleteById(fieldService.findByName(projectDto2.getFieldName()).get().getId());
-        });
-    }
+   @Test
+   @Transactional
+   public void test(){
+        Demo d = Demo.builder().title("제목1").build();
+        demoRepository.save(d);//1차 캐시에 저장
+       //jpql 실행 전 flush실행 -> db에 커밋을 날림
+       //디비에 현재 제목1에 대한 demo가 저장된 상태
+       em.createQuery("update Demo d set d.title=:title where d.id=:id")
+               .setParameter("id", d.getId())
+               .setParameter("title", "새제목")
+               .executeUpdate();
+       //업데이트쿼리를 날림. jpql은 디비에 있는 데이터에 대해 update쿼리를 날림
+       //조회를 하면 1차캐시에서 부터 찾기때문에 update쿼리의 영향을 안받은 "제목1"의 demo 엔티티를 가져오게됨
+       Demo newDemo = demoRepository.getById(d.getId());
+       System.out.println(newDemo.getTitle());
+   }
 
     @Test
     @Transactional

@@ -31,7 +31,7 @@ public class DemoService {
         Demo demo = demoRepository.findById(id).orElseThrow(()-> {
             throw new IdNotExistException();
         });
-        return IndividualDemoDto.builder().content(demo.getContent()).name(demo.getTitle()).participants(demo.getParticipants())
+        return IndividualDemoDto.builder().content(demo.getContent()).title(demo.getTitle()).participants(demo.getParticipants())
                 .url(demo.getUrl()).description(demo.getDescription()).build();
     }
 

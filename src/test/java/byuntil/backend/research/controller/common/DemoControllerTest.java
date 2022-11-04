@@ -29,15 +29,4 @@ class DemoControllerTest {
     @MockBean
     DemoService demoService;
 
-    @Test
-    @DisplayName("데모 전체 조회 테스트")
-    void readDemos() throws Exception {
-        List<Demo> mockDemos = createMockDemos(5);
-        when(demoService.findAll()).thenReturn(mockDemos);
-
-        mockMvc.perform(get("/api/v1/demo")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andDo(print());
-    }
 }

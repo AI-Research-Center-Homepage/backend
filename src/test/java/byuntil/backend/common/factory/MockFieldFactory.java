@@ -21,7 +21,4 @@ public class MockFieldFactory {
         return list;
     }
 
-    public static List<FieldDto> createMockFieldDtos(List<Field> fields) {
-        return fields.stream().map(FieldDto::new).toList();
-    }
 }
